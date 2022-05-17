@@ -14,6 +14,8 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import csvParser  from 'csv-parser';
+import fs from 'fs'
 
 export default class AppUpdater {
   constructor() {
@@ -30,6 +32,41 @@ ipcMain.on('ipc-example', async (event, arg) => {
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
 });
+
+
+ipcMain.on('csv-file-read', async (event: any, filePath: string) => {
+
+
+    const records = await new Promise<FileRecords>((res, rej) => {
+      let recordArray: FileRecord[] = [];
+
+      fs.createReadStream(filePath, "utf8")
+        .on("error", (err: Error) => {
+          rej(err);
+        })
+        .pipe(csvParser({ separator: "\t" }))
+        .on("data", (row: any) => {
+          delete row.id;
+          let record: FileRecord = row;
+
+          recordArray.push(record);
+        })
+        .on("end", () => {
+          const result: FileRecords = {
+            fileName: filePath,
+            records: recordArray,
+          };
+
+          res(result);
+
+        });
+    });
+
+    console.log(records)
+    event.reply('csv-file-read-reply', records);
+  })
+
+
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
