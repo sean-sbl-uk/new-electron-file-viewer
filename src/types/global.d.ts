@@ -22,19 +22,43 @@ declare type FileRecords = {
   records: FileRecord[];
 };
 
+declare type Bacteria = {
+  name: string;
+  taxId: string;
+  recoverdAmount: number;
+  estimatedTotalAmount: number;
+};
 
-  interface Window {
-    electron: {
-      ipcRenderer: {
-        sendMessage(channel: any, args: unknown[] | any): void;
-        on(
-          channel: string,
-          func: (...args: unknown[] | any) => void
-        ): (() => void) | undefined;
-        once(channel: string, func: (...args: unknown[]) => void): void;
+declare type Spikes = {
+  fileName: string;
+  taxId: string;
+  cellsPerMl: number;
+  genomeSize: number;
+};
 
-        sendSync(channel: any, args: unknown[] | any): void
-      };
+declare type ProcessedFileData = {
+  name: string;
+  data: Bacteria[];
+};
+
+// interface Data {
+//   fileName: string;
+//   taxId: String;
+//   cellsPerMl: number;
+//   genomeSize: number;
+// }
+
+interface Window {
+  electron: {
+    ipcRenderer: {
+      sendMessage(channel: any, args: unknown[] | any): void;
+      on(
+        channel: string,
+        func: (...args: unknown[] | any) => void
+      ): (() => void) | undefined;
+      once(channel: string, func: (...args: unknown[]) => void): void;
+
+      sendSync(channel: any, args: unknown[] | any): void;
     };
-  }
-
+  };
+}

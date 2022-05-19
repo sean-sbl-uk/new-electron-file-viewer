@@ -1,17 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+type SpikeDataSliceState = {
+  data: Spikes[];
+}
+
+const initialState: SpikeDataSliceState = {
+  data: []
+}
 //Slice
 export const spikeDataSlice = createSlice({
   name: "spikeData",
-  initialState: {
-    data: {},
-  },
+  initialState,
   reducers: {
     setSpikeData: (state, action: PayloadAction<any>) => {
       state.data = action.payload;
     },
     resetSpikeData: (state) => {
-      state.data = {};
+      state.data = [];
     },
   },
 });

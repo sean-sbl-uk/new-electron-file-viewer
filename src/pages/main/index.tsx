@@ -9,7 +9,7 @@ import { setRecords } from "../../redux/records";
 import { readCSVFile } from "../../utils";
 import { FileWithPath } from "react-dropzone";
 import { createAction } from "@reduxjs/toolkit";
-import { setRecords } from "../../redux/records";
+
 
 
 const Main = () => {
@@ -48,9 +48,6 @@ const Main = () => {
 
         const fileRecords: FileRecords = args;
 
-        // const action = createAction('setRecor')
-
-        // console.log(fileRecords)
         dispatch(setRecords(fileRecords));
       })
 

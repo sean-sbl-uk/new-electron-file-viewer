@@ -60,7 +60,7 @@ const Modal: React.FC<Props> = (props) => {
   };
   const onFormChange = (e: any) => {
     const id: string = e.target.id;
-    const fileName: string = id.split("/")[1];
+    const fileName: string = id.split("/")[1].trim();
     const key: "" = e.target.name;
 
     //   setFormData({

@@ -53,7 +53,7 @@ ipcMain.on('csv-file-read', async (event: any, filePath: string) => {
         })
         .on("end", () => {
           const result: FileRecords = {
-            fileName: filePath,
+            fileName: filePath.trim(),
             records: recordArray,
           };
 
@@ -62,7 +62,6 @@ ipcMain.on('csv-file-read', async (event: any, filePath: string) => {
         });
     });
 
-    console.log(records)
     event.reply('csv-file-read-reply', records);
   })
 
