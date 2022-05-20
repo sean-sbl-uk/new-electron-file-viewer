@@ -87,11 +87,9 @@ export const processAllFiles = (
       let data = processEachFile(spikes, records);
 
       const processedFileData: ProcessedFileData = {
-        name: fileName,
+        fileName: fileName,
         data: data,
       };
-
-      // console.log(processedFileData);
 
       processedDataArray.push(processedFileData);
     }

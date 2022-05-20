@@ -37,7 +37,7 @@ declare type Spikes = {
 };
 
 declare type ProcessedFileData = {
-  name: string;
+  fileName: string;
   data: Bacteria[];
 };
 

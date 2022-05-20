@@ -4,11 +4,7 @@ import { Container } from 'react-bootstrap';
 import Loader from '../../components/loader/Loader';
 import { RootState } from '../../redux/store';
 import { processAllFiles } from 'utils';
-
-// interface ProcessedFileData {
-//   name: string;
-//   data: Bacteria[];
-// }
+import Heatmap from 'components/heatmap/Heatmap';
 
 const Results = () => {
   const [loading, setLoading] = useState(true);
@@ -17,9 +13,6 @@ const Results = () => {
   const allFileRecords = useSelector((state: RootState) => state.records.data);
   const allSpikeData = useSelector((state: RootState) => state.spikeData.data);
 
-  // console.log(allFileRecords);
-  // console.log(allSpikeData);
-  console.log(results);
   useEffect(() => {
     (async () => {
       const processedDataArray = await processAllFiles(
@@ -29,7 +22,6 @@ const Results = () => {
 
       if (processedDataArray.length > 0) {
         setResults(processedDataArray);
-        setLoading(false);
       }
     })();
 
@@ -44,7 +36,7 @@ const Results = () => {
             <h1 className="my-4 main-color">Results</h1>
 
             {loading && <Loader />}
-            {results && <div>Heatmap</div>}
+            {results && <Heatmap results={results} setLoading={setLoading} />}
           </div>
         </Container>
       </div>
