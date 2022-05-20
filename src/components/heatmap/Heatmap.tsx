@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Heatmap as ReavizHeatmap } from 'reaviz';
+import {
+  Heatmap as ReavizHeatmap,
+  SequentialLegend,
+  HeatmapSeries,
+} from 'reaviz';
 import PropTypes from 'prop-types';
 
 interface DataObj {
@@ -44,15 +48,31 @@ const Heatmap: React.FC<Props> = (props) => {
   useEffect(() => {
     setData(mapToHeatmapData(results));
 
-    if (data) setLoading(false);
+    setLoading(false);
   }, [results]);
 
   // let data: HeatmapData[] = mapToHeatmapData(results);
 
+  // const color = select()
+
   return (
-    <div style={{ margin: '55px', textAlign: 'center' }}>
-      {data && <ReavizHeatmap height={350} width={350} data={data} />}
-    </div>
+    <>
+      {data && (
+        <div className="text-center row m-auto chart-background">
+          <ReavizHeatmap
+            height={400}
+            width={400}
+            data={data}
+            style={{}}
+            series={<HeatmapSeries animated={true} />}
+          />
+          <SequentialLegend
+            data={data}
+            style={{ height: '350px', marginLeft: '10px' }}
+          />
+        </div>
+      )}
+    </>
   );
 };
 

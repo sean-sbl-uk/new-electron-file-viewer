@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 type Props = {
   children: React.ReactNode;
@@ -12,15 +12,15 @@ const Dropzone: React.FC<Props> = (props) => {
     setFiles(e.target.files);
   };
   return (
-    <div className="container my-2">
+    <div className="container">
       <div className="row">
-        <h1 className="my-4 main-color">File Upload</h1>
-        <div className="col-md-6 mx-auto">
+        <h1 className="main-color">File Upload</h1>
+        <div className="mx-auto">
           <form data-testid="dropzone">
             <div className="form-group color files my-2">
               <label></label>
               <input
-                type={"file"}
+                type={'file'}
                 className="form-control "
                 accept=".csv"
                 multiple

@@ -79,7 +79,15 @@ export const processAllFiles = (
       file.fileName.lastIndexOf('/') + 1
     );
 
-    let spikes = allSpikeData.find((spike) => spike.fileName === fileName);
+    //if spikes > 1 do below.
+    let spikes =
+      allSpikeData.length > 1
+        ? allSpikeData.find((spike) => spike.fileName === fileName)
+        : allSpikeData[0];
+    // let spikes = allSpikeData.find((spike) => spike.fileName === fileName);
+
+    //else spike is the same for each file, first in array
+
     let records = file.records;
     // if(allSpikeData.some(spike => spike.fileName === fileName)) {}
 

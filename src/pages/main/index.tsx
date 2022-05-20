@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button, Container, Stack } from "react-bootstrap";
-import Dropzone from "../../components/dropzone/Dropzone";
-import Modal from "../../components/modal/Modal";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { setRecords } from "../../redux/records";
-import { readCSVFile } from "../../utils";
-import { FileWithPath } from "react-dropzone";
-import { createAction } from "@reduxjs/toolkit";
-
-
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button, Stack } from 'react-bootstrap';
+import Dropzone from '../../components/dropzone/Dropzone';
+import Modal from '../../components/modal/Modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { setRecords } from '../../redux/records';
+import { FileWithPath } from 'react-dropzone';
+import { createAction } from '@reduxjs/toolkit';
+import Container from 'components/container/Container';
 
 const Main = () => {
   const [files, setFiles] = useState([]);
@@ -41,20 +39,18 @@ const Main = () => {
   const analyseOnClick = () => {
     //Process each file
     Array.from(files).forEach((fileObject: FileWithPath) => {
-
-      const filePath = fileObject.path
+      const filePath = fileObject.path;
 
       ipcRenderer.on('csv-file-read-reply', (args: any) => {
-
         const fileRecords: FileRecords = args;
 
         dispatch(setRecords(fileRecords));
-      })
+      });
 
-      ipcRenderer.sendMessage("csv-file-read", filePath);
+      ipcRenderer.sendMessage('csv-file-read', filePath);
     });
 
-    navigate("/results", { replace: true });
+    navigate('/results', { replace: true });
   };
 
   const analyseButton = spikesSet ? (
@@ -81,7 +77,7 @@ const Main = () => {
   return (
     <section className="background">
       <div className="light-overlay">
-        <Container className="">
+        <Container>
           <div className="text-center row ">
             <Dropzone setFiles={setFiles}>
               <Stack gap={2}>

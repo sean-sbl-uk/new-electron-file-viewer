@@ -87,6 +87,17 @@ a:hover {
   text-align: center;
 }
 
+.container-inner {
+  height: 100%;
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
 .dark-overlay {
   background-color: rgba(0, 21, 37, 0.3);
   position: absolute;
@@ -105,7 +116,7 @@ a:hover {
   height: 100%;
 }
 
-.btn {
+/* .btn {
   display: inline-block;
   background: teal;
   color: white;
@@ -116,9 +127,9 @@ a:hover {
   margin-right: 0.5rem;
   transition: opacity 0.2s ease-in;
   outline: none;
-  /* Own additions */
+
   border-radius: 2px;
-}
+} */
 
 .btn-link-outline {
   text-decoration: none;
@@ -189,4 +200,12 @@ a:hover {
 
 .main-color {
   color: #566;
+}
+
+.chart-background {
+  background-color: rgba(255, 255, 255, 0.568);
+  border-radius: 4px;
+  display: 'flex';
+  margin-bottom: '2px';
+  text-align: 'center';
 }
