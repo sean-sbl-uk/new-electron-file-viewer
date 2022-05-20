@@ -49,7 +49,11 @@ const Heatmap: React.FC<Props> = (props) => {
 
   // let data: HeatmapData[] = mapToHeatmapData(results);
 
-  return <>{data && <ReavizHeatmap height={350} width={350} data={data} />}</>;
+  return (
+    <div style={{ margin: '55px', textAlign: 'center' }}>
+      {data && <ReavizHeatmap height={350} width={350} data={data} />}
+    </div>
+  );
 };
 
 export default Heatmap;
