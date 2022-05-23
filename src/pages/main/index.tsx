@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Stack } from 'react-bootstrap';
+import Container from '../../components/container/Container';
 import Dropzone from '../../components/dropzone/Dropzone';
 import Modal from '../../components/modal/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { setRecords } from '../../redux/records';
 import { FileWithPath } from 'react-dropzone';
-import { createAction } from '@reduxjs/toolkit';
-import Container from 'components/container/Container';
 
 const Main = () => {
   const [files, setFiles] = useState([]);

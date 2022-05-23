@@ -1,24 +1,3 @@
-import { FileWithPath } from 'react-dropzone';
-
-const ipcRenderer = window.electron.ipcRenderer;
-
-// export const readCSVFile = (fileObject: FileWithPath): any => {
-
-//   const filePath = fileObject.path;
-
-//   let result;
-
-//   ipcRenderer.on('csv-file-read-reply', (args) => {
-//     console.log(args)
-
-//     result = args;
-//     // return args;
-//   })
-
-//   ipcRenderer.sendMessage("csv-file-read", filePath);
-
-// };
-
 export const processEachFile = (
   spikeData: Spikes,
   records: FileRecord[]

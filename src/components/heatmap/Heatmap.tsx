@@ -4,7 +4,6 @@ import {
   SequentialLegend,
   HeatmapSeries,
 } from 'reaviz';
-import PropTypes from 'prop-types';
 
 interface DataObj {
   key: string;

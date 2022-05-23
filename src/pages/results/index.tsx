@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-// import { Container } from 'react-bootstrap';
 import Loader from '../../components/loader/Loader';
 import { RootState } from '../../redux/store';
-import { processAllFiles } from 'utils';
-import Heatmap from 'components/heatmap/Heatmap';
+import { processAllFiles } from '../../utils';
+import Heatmap from '../../components/heatmap/Heatmap';
 import Container from 'components/container/Container';
 import { Button, Stack } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Filters from 'components/filters/Filters';
 
 const Results = () => {

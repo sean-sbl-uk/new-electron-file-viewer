@@ -33,8 +33,6 @@ const Modal: React.FC<Props> = (props) => {
   const [formData, setFormData] = useState<Data[]>([]);
   const [validated, setValidated] = useState(false);
 
-  // console.log(files);
-
   const dispatch = useDispatch();
 
   const handleSubmit = (e: any) => {
@@ -51,7 +49,7 @@ const Modal: React.FC<Props> = (props) => {
       //reset modal
       setMultipleSpikes(false);
     } else {
-      console.log('invalid form');
+      //Maybe show alert
     }
     setValidated(true);
   };
