@@ -4,10 +4,10 @@ import Loader from '../../components/loader/Loader';
 import { RootState } from '../../redux/store';
 import { processAllFiles } from '../../utils';
 import Heatmap from '../../components/heatmap/Heatmap';
-import Container from 'components/container/Container';
+import Container from '../../components/container/Container';
 import { Button, Stack } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import Filters from 'components/filters/Filters';
+import Filters from '../../components/filters/Filters';
 
 const Results = () => {
   const [loading, setLoading] = useState(true);
