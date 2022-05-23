@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Modal as BootstrapModal,
   Button,
   Form,
   Row,
   Col,
-} from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { setSpikeData } from "../../redux/spikes";
+} from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { setSpikeData } from '../../redux/spikes';
 
 type file = {
   name: string;
@@ -49,7 +49,7 @@ const Modal: React.FC<Props> = (props) => {
       //reset modal
       setMultipleSpikes(false);
     } else {
-      console.log("invalid form");
+      //Maybe show alert
     }
     setValidated(true);
   };
@@ -60,8 +60,8 @@ const Modal: React.FC<Props> = (props) => {
   };
   const onFormChange = (e: any) => {
     const id: string = e.target.id;
-    const fileName: string = id.split("/")[1].trim();
-    const key: "" = e.target.name;
+    const fileName: string = id.split('/')[1].trim();
+    const key: '' = e.target.name;
 
     //   setFormData({
     //     ...formData,
@@ -85,15 +85,15 @@ const Modal: React.FC<Props> = (props) => {
     let tempElement = { ...tempState[index] };
 
     switch (key as any) {
-      case "taxId":
+      case 'taxId':
         tempElement.fileName = fileName;
         tempElement.taxId = e.target.value;
         break;
-      case "cellsPerMl":
+      case 'cellsPerMl':
         tempElement.fileName = fileName;
         tempElement.cellsPerMl = e.target.value;
         break;
-      case "genomeSize":
+      case 'genomeSize':
         tempElement.fileName = fileName;
         tempElement.genomeSize = e.target.value;
         break;
@@ -171,26 +171,27 @@ const Modal: React.FC<Props> = (props) => {
     );
   };
 
-  const formInputs = multipleSpikes ? (
-    Array.from(files).map((file) => {
-      let index = Array.from(files).indexOf(file);
+  const formInputs =
+    multipleSpikes && files ? (
+      Array.from(files).map((file) => {
+        let index = Array.from(files).indexOf(file);
 
-      return (
-        <div key={index} className="main-color">
-          <Form.Label
-            data-testid={`label-${file.name}`}
-            className="col-form-label-lg"
-          >
-            {file.name}
-          </Form.Label>
+        return (
+          <div key={index} className="main-color">
+            <Form.Label
+              data-testid={`label-${file.name}`}
+              className="col-form-label-lg"
+            >
+              {file.name}
+            </Form.Label>
 
-          {inputFields(file.name)}
-        </div>
-      );
-    })
-  ) : (
-    <div className="main-color">{inputFields("none")}</div>
-  );
+            {inputFields(file.name)}
+          </div>
+        );
+      })
+    ) : files[0] ? (
+      <div className="main-color">{inputFields(files[0].name)}</div>
+    ) : null;
 
   return (
     <BootstrapModal
@@ -228,7 +229,7 @@ const Modal: React.FC<Props> = (props) => {
           <Button type="submit" variant="outline-secondary">
             Save Changes
           </Button>
-        </BootstrapModal.Footer>{" "}
+        </BootstrapModal.Footer>{' '}
       </Form>
     </BootstrapModal>
   );

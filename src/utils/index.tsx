@@ -1,24 +1,3 @@
-import { FileWithPath } from 'react-dropzone';
-
-const ipcRenderer = window.electron.ipcRenderer;
-
-// export const readCSVFile = (fileObject: FileWithPath): any => {
-
-//   const filePath = fileObject.path;
-
-//   let result;
-
-//   ipcRenderer.on('csv-file-read-reply', (args) => {
-//     console.log(args)
-
-//     result = args;
-//     // return args;
-//   })
-
-//   ipcRenderer.sendMessage("csv-file-read", filePath);
-
-// };
-
 export const processEachFile = (
   spikeData: Spikes,
   records: FileRecord[]
@@ -79,7 +58,15 @@ export const processAllFiles = (
       file.fileName.lastIndexOf('/') + 1
     );
 
-    let spikes = allSpikeData.find((spike) => spike.fileName === fileName);
+    //if spikes > 1 do below.
+    let spikes =
+      allSpikeData.length > 1
+        ? allSpikeData.find((spike) => spike.fileName === fileName)
+        : allSpikeData[0];
+    // let spikes = allSpikeData.find((spike) => spike.fileName === fileName);
+
+    //else spike is the same for each file, first in array
+
     let records = file.records;
     // if(allSpikeData.some(spike => spike.fileName === fileName)) {}
 
@@ -87,11 +74,9 @@ export const processAllFiles = (
       let data = processEachFile(spikes, records);
 
       const processedFileData: ProcessedFileData = {
-        name: fileName,
+        fileName: fileName,
         data: data,
       };
-
-      // console.log(processedFileData);
 
       processedDataArray.push(processedFileData);
     }
