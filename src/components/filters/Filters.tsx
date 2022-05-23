@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Modal as BootstrapModal,
-  Form,
-  Button,
-  Row,
-  Col,
-} from 'react-bootstrap';
+import { Modal as BootstrapModal, Form, Button } from 'react-bootstrap';
 
 type Props = {
   handleCloseFiltering: () => void;
@@ -17,6 +11,7 @@ const Filters: React.FC<Props> = (props) => {
 
   const handleSubmit = (e: any) => {
     console.log('Apply filter options');
+    console.log(e.target);
   };
 
   return (
