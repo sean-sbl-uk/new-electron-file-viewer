@@ -20,6 +20,10 @@ const Filters: React.FC<Props> = (props) => {
     console.log(e.target);
   };
 
+  const spikeSwitchOnChange = () => {};
+
+  const hitThresholdOnChange = () => {};
+
   return (
     <BootstrapModal centered show={show} onHide={handleCloseFiltering}>
       <BootstrapModal.Header>
@@ -27,19 +31,37 @@ const Filters: React.FC<Props> = (props) => {
       </BootstrapModal.Header>
       <Form onSubmit={handleSubmit}>
         <BootstrapModal.Body>
-          <Form.Control></Form.Control>
-          {/*  Top hits per cell select menu  */}
-          <Form.Select defaultValue={'Top hits per cell'}>
-            <option className="d-none" value="">
-              {' '}
-              Top hits/cells per ml
-            </option>
-            {selectOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
+          <Form.Check
+            type="switch"
+            id="spike-switch"
+            label="Spikes On/Off"
+            onChange={spikeSwitchOnChange}
+            className="mb-3"
+            data-testid="spike-switch"
+            disabled
+          ></Form.Check>
+          <Form.Group className="mb-3">
+            <Form.Select defaultValue={'Top hits per cell'}>
+              <option className="d-none form-text" value="">
+                {' '}
+                Top hits/cells per ml
               </option>
-            ))}
-          </Form.Select>
+              {selectOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Control
+              name="hitThreshold"
+              type="number"
+              placeholder="Min hit Threshold"
+              disabled
+              onChange={hitThresholdOnChange}
+            ></Form.Control>
+          </Form.Group>
         </BootstrapModal.Body>
         <BootstrapModal.Footer>
           <Button variant="secondary" onClick={handleCloseFiltering}>
@@ -49,6 +71,7 @@ const Filters: React.FC<Props> = (props) => {
             Apply
           </Button>
         </BootstrapModal.Footer>
+        {/* </Form.Control> */}
       </Form>
     </BootstrapModal>
   );

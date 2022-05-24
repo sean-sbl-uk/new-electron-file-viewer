@@ -18,8 +18,7 @@ export default function App() {
           <Route path="/main" element={<Main />} />
           <Route path="results" element={<Results />} />
         </Routes>
-      </Router>
-      //{' '}
+      </Router>{' '}
     </Provider>
   );
 }
