@@ -16,6 +16,7 @@ const Results = () => {
 
   const allFileRecords = useSelector((state: RootState) => state.records.data);
   const allSpikeData = useSelector((state: RootState) => state.spikeData.data);
+  // pull down filter state from store
 
   const navigate = useNavigate();
 
@@ -26,6 +27,8 @@ const Results = () => {
         allSpikeData
       );
 
+      // have filter method in utils filterResults(results, filters)
+      // run through filter then set as results
       if (processedDataArray.length > 0) {
         setResults(processedDataArray);
       }
@@ -46,6 +49,16 @@ const Results = () => {
     setShowFiltering(false);
   };
 
+  //Change name
+  const handleFilterSubmit = (filters: any) => {
+    setLoading(true);
+    setShowFiltering(false);
+    console.log(filters);
+    // have filter method in utils filterResults(results, filters)
+    // run through filter then set as results
+    setLoading(false);
+  };
+
   return (
     <section className="background">
       <div className="light-overlay">
@@ -54,25 +67,30 @@ const Results = () => {
             <h1 className="my-4 main-color">Results</h1>
 
             {loading && <Loader />}
-            {results && <Heatmap results={results} setLoading={setLoading} />}
+            {results && !loading && (
+              <>
+                <Heatmap results={results} setLoading={setLoading} />
 
-            <Stack className="my-2" gap={2}>
-              <Button variant="secondary" onClick={handleOpenFiltering}>
-                Filtering
-              </Button>
+                <Stack className="my-2" gap={2}>
+                  <Button variant="secondary" onClick={handleOpenFiltering}>
+                    Filtering
+                  </Button>
 
-              <Button
-                className="btn-hover"
-                variant="outline-secondary"
-                onClick={handleBackOnClick}
-              >
-                Back
-              </Button>
-            </Stack>
+                  <Button
+                    className="btn-hover"
+                    variant="outline-secondary"
+                    onClick={handleBackOnClick}
+                  >
+                    Back
+                  </Button>
+                </Stack>
+              </>
+            )}
 
             <Filters
               show={showFiltering}
               handleCloseFiltering={handleCloseFiltering}
+              handleFilterSubmit={handleFilterSubmit}
             />
           </div>
         </Container>
