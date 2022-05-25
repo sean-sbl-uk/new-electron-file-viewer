@@ -27,6 +27,7 @@ declare type Bacteria = {
   taxId: string;
   recoverdAmount: number;
   estimatedTotalAmount: number;
+  subjectLength: number;
 };
 
 declare type Spikes = {

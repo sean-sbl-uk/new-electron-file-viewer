@@ -19,7 +19,7 @@ const Filters: React.FC<Props> = (props) => {
 
   const [filterFormData, setFilterFormData] = useState<FilterData | any>(null);
 
-  console.log(filterFormData);
+  // console.log(filterFormData);
 
   const selectOptions = ['10', '20', '50', 'All'];
 

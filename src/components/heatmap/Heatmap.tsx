@@ -36,7 +36,7 @@ const mapToHeatmapData = (results: ProcessedFileData[]): HeatmapData[] => {
     };
   });
 
-  console.log(heatmapData);
+  // console.log(heatmapData);
   return heatmapData;
 };
 

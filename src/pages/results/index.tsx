@@ -31,6 +31,7 @@ const Results = () => {
       // run through filter then set as results
       if (processedDataArray.length > 0) {
         setResults(processedDataArray);
+        setLoading(false);
       }
     })();
 
@@ -54,6 +55,7 @@ const Results = () => {
     setLoading(true);
     setShowFiltering(false);
     console.log(filters);
+
     // have filter method in utils filterResults(results, filters)
     // run through filter then set as results
     setLoading(false);
@@ -64,11 +66,10 @@ const Results = () => {
       <div className="light-overlay">
         <Container>
           <div className="text-center row">
-            <h1 className="my-4 main-color">Results</h1>
-
             {loading && <Loader />}
             {results && !loading && (
               <>
+                <h1 className="my-4 main-color">Results</h1>
                 <Heatmap results={results} setLoading={setLoading} />
 
                 <Stack className="my-2" gap={2}>

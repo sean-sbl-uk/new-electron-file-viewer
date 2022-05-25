@@ -1,23 +1,30 @@
+/**
+ * Main logic for calculating amount of bacteria in each file
+ * @param spikeData
+ * @param records
+ * @returns
+ */
 export const processEachFile = (
   spikeData: Spikes,
   records: FileRecord[]
 ): Bacteria[] => {
   let bacteriaArray: Bacteria[] = [];
-
   let spikeTaxId: string = spikeData.taxId;
-  let spikeDNAIn: number = spikeData.cellsPerMl * spikeData.genomeSize;
-  let spikeDNAOut: number = 0;
+  let spikeDNAInBp: number = spikeData.cellsPerMl * spikeData.genomeSize;
+  let spikeDNAOutBp: number = 0;
 
   records.forEach((record) => {
     // count up all records for given spike
     if (record.taxId === spikeTaxId) {
-      spikeDNAOut += record.queryLen;
+      let spikeTotal: number = +spikeDNAOutBp + +record.queryLen;
+      spikeDNAOutBp = spikeTotal;
     } else {
       //if not spike see if exists in bac array
       if (!bacteriaArray.some((bacteria) => bacteria.taxId === record.taxId)) {
         let newBacteria: Bacteria = {
           name: record.subjectTitle,
           taxId: record.taxId,
+          subjectLength: record.subjectLen,
           recoverdAmount: record.queryLen,
           estimatedTotalAmount: 0,
         };
@@ -27,24 +34,33 @@ export const processEachFile = (
         let bacteriaIndex = bacteriaArray.findIndex(
           (bacteria) => bacteria.taxId === record.taxId
         );
-        bacteriaArray[bacteriaIndex].recoverdAmount += record.queryLen;
+        let bacTotal =
+          +bacteriaArray[bacteriaIndex].recoverdAmount + +record.queryLen;
+        bacteriaArray[bacteriaIndex].recoverdAmount = bacTotal;
+        console.log(bacteriaArray[bacteriaIndex].recoverdAmount);
       }
     }
   });
 
-  // calculate recovery ratio
-  let recoveryRatio = (spikeDNAIn / spikeDNAOut) * 100;
-  let multiplier = 1 / recoveryRatio;
+  let recoveryRatio = (spikeDNAOutBp / spikeDNAInBp) * 100.0;
+  let multiplier = 100.0 / recoveryRatio;
 
   // use recovery ratio to estimate cells in other species
   bacteriaArray.forEach(
     (bacteria) =>
-      (bacteria.estimatedTotalAmount = bacteria.recoverdAmount * multiplier)
+      (bacteria.estimatedTotalAmount =
+        (bacteria.recoverdAmount * multiplier) / bacteria.subjectLength)
   );
 
   return bacteriaArray;
 };
 
+/**
+ *
+ * @param allFileRecords
+ * @param allSpikeData
+ * @returns ProcessedFileData[]
+ */
 export const processAllFiles = (
   allFileRecords: FileRecords[],
   allSpikeData: Spikes[]
@@ -84,3 +100,5 @@ export const processAllFiles = (
 
   return Promise.resolve(processedDataArray);
 };
+
+// export const filterResults = (results, filters) => {};
