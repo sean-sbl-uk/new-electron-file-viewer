@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Heatmap as ReavizHeatmap,
   SequentialLegend,
+  Heatmap as ReavizHeatmap,
   HeatmapSeries,
 } from 'reaviz';
 
@@ -16,7 +16,7 @@ interface HeatmapData {
 }
 
 type Props = {
-  results: ProcessedFileData[];
+  results: ProcessedFileData[] | any;
   setLoading: (arg: boolean) => void;
 };
 
@@ -36,7 +36,6 @@ const mapToHeatmapData = (results: ProcessedFileData[]): HeatmapData[] => {
     };
   });
 
-  // console.log(heatmapData);
   return heatmapData;
 };
 
@@ -63,7 +62,8 @@ const Heatmap: React.FC<Props> = (props) => {
             width={400}
             data={data}
             style={{}}
-            series={<HeatmapSeries animated={true} />}
+            series={<HeatmapSeries padding={0.05} animated={true} />}
+            data-testid={'heatmap'}
           />
           <SequentialLegend
             data={data}

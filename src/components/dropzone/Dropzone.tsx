@@ -20,9 +20,10 @@ const Dropzone: React.FC<Props> = (props) => {
             <div className="form-group color files my-2">
               <label></label>
               <input
+                data-testid="dropzone-input"
                 type={'file'}
                 className="form-control "
-                accept=".csv"
+                accept=".csv, .blast, .tsv"
                 multiple
                 onChange={onChangeHandler}
               ></input>

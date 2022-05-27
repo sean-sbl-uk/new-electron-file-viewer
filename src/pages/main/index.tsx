@@ -49,6 +49,10 @@ const Main = () => {
       ipcRenderer.sendMessage('csv-file-read', filePath);
     });
 
+    //process results here?
+    //send to store?
+    //then navigate?
+
     navigate('/results', { replace: true });
   };
 

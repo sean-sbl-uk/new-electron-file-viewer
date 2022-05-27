@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../components/loader/Loader';
-import { RootState } from '../../redux/store';
-import { processAllFiles } from '../../utils';
+import store, { RootState } from '../../redux/store';
+import { processAllFiles, filterResults } from '../../utils';
 import Heatmap from '../../components/heatmap/Heatmap';
 import Container from '../../components/container/Container';
 import { Button, Stack } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Filters from '../../components/filters/Filters';
+import { setResultsData } from '../../redux/results';
 
 const Results = () => {
   const [loading, setLoading] = useState(true);
@@ -16,9 +17,11 @@ const Results = () => {
 
   const allFileRecords = useSelector((state: RootState) => state.records.data);
   const allSpikeData = useSelector((state: RootState) => state.spikeData.data);
+  // const fullResults = useSelector((state: RootState) => state.results.data);
   // pull down filter state from store
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
@@ -27,10 +30,13 @@ const Results = () => {
         allSpikeData
       );
 
-      // have filter method in utils filterResults(results, filters)
-      // run through filter then set as results
+      // have filter method in utils filterResults(results, filters)?
+      // run through filter then set as results?
+
       if (processedDataArray.length > 0) {
         setResults(processedDataArray);
+        // send to store here
+        dispatch(setResultsData(processedDataArray));
         setLoading(false);
       }
     })();
@@ -50,15 +56,19 @@ const Results = () => {
     setShowFiltering(false);
   };
 
-  //Change name
   const handleFilterSubmit = (filters: any) => {
     setLoading(true);
     setShowFiltering(false);
-    console.log(filters);
 
-    // have filter method in utils filterResults(results, filters)
-    // run through filter then set as results
-    setLoading(false);
+    const state = store.getState();
+
+    const fullResults = state?.results?.data;
+
+    if (fullResults) {
+      let filteredResults = filterResults(fullResults, filters);
+      setResults(filteredResults);
+      setLoading(false);
+    }
   };
 
   return (

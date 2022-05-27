@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Modal as BootstrapModal, Form, Button } from 'react-bootstrap';
-import spikes from 'redux/spikes';
 
 type Props = {
   handleCloseFiltering: () => void;
   handleFilterSubmit: (filterData: any) => void;
+
   show: boolean;
 };
 
@@ -19,12 +19,9 @@ const Filters: React.FC<Props> = (props) => {
 
   const [filterFormData, setFilterFormData] = useState<FilterData | any>(null);
 
-  // console.log(filterFormData);
-
   const selectOptions = ['10', '20', '50', 'All'];
 
   const handleSubmit = (e: any) => {
-    const form = e.currentTarget;
     e.preventDefault();
     e.stopPropagation();
 
@@ -36,10 +33,6 @@ const Filters: React.FC<Props> = (props) => {
     setFilterFormData({ ...filterFormData, [filterFormData.spikesOn]: value });
   };
 
-  // const topHitsPerCellOnChange = (e: any) => {};
-
-  // const hitThresholdOnChange = () => {};
-
   const onFormChange = (e: any) => {
     setFilterFormData({
       ...filterFormData,
@@ -48,7 +41,12 @@ const Filters: React.FC<Props> = (props) => {
   };
 
   return (
-    <BootstrapModal centered show={show} onHide={handleCloseFiltering}>
+    <BootstrapModal
+      data-testid={'filter-modal'}
+      centered
+      show={show}
+      onHide={handleCloseFiltering}
+    >
       <BootstrapModal.Header>
         <BootstrapModal.Title>Filters</BootstrapModal.Title>
       </BootstrapModal.Header>
@@ -66,7 +64,7 @@ const Filters: React.FC<Props> = (props) => {
           ></Form.Check>
           <Form.Group className="mb-3">
             <Form.Select
-              defaultValue={'Top hits per cell'}
+              defaultValue={'Top hits/cells per ml'}
               onChange={onFormChange}
               name="topHits"
             >

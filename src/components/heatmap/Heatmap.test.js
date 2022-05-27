@@ -6,6 +6,13 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import Results from 'pages/results';
 
+jest.mock('reaviz', () => ({
+  __esModule: true,
+  Heatmap: (props) => <div {...props}> Hello</div>,
+  SequentialLegend: (props) => <div {...props}> Hello</div>,
+  HeatmapSeries: () => <div> Hello</div>,
+}));
+
 describe('Heatmap', () => {
   const data = [
     {
@@ -33,12 +40,16 @@ describe('Heatmap', () => {
     { fileName: 'file 3', data: data },
   ];
   const mockFunc = jest.fn();
+  const mockStore = configureStore();
+  const initialState = {};
 
   it('should render', () => {
+    const store = mockStore(initialState);
     const { getByTestId } = render(
-      <Provider>
+      <Provider store={store}>
         <Heatmap results={results} setLoading={mockFunc} />
       </Provider>
     );
+    expect(getByTestId('heatmap')).toBeInTheDocument();
   });
 });

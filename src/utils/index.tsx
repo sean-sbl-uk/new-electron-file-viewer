@@ -37,7 +37,6 @@ export const processEachFile = (
         let bacTotal =
           +bacteriaArray[bacteriaIndex].recoverdAmount + +record.queryLen;
         bacteriaArray[bacteriaIndex].recoverdAmount = bacTotal;
-        console.log(bacteriaArray[bacteriaIndex].recoverdAmount);
       }
     }
   });
@@ -79,12 +78,8 @@ export const processAllFiles = (
       allSpikeData.length > 1
         ? allSpikeData.find((spike) => spike.fileName === fileName)
         : allSpikeData[0];
-    // let spikes = allSpikeData.find((spike) => spike.fileName === fileName);
-
-    //else spike is the same for each file, first in array
 
     let records = file.records;
-    // if(allSpikeData.some(spike => spike.fileName === fileName)) {}
 
     if (spikes && records) {
       let data = processEachFile(spikes, records);
@@ -101,4 +96,48 @@ export const processAllFiles = (
   return Promise.resolve(processedDataArray);
 };
 
-// export const filterResults = (results, filters) => {};
+/**
+ * Runs all the filters on the data set
+ * @param results
+ * @param filters
+ * @returns
+ */
+export const filterResults = (
+  results: ProcessedFileData[],
+  filters: any
+): ProcessedFileData[] => {
+  const result: ProcessedFileData[] = [];
+
+  results = topHitsFilter(filters, results);
+
+  return result;
+};
+
+/**
+ * Filters out bacteria not in the top no of hits
+ * @param filters
+ * @param results
+ * @returns
+ */
+const topHitsFilter = (
+  filters: any,
+  results: ProcessedFileData[]
+): ProcessedFileData[] => {
+  if (filters.topHits == 'All') return results;
+
+  results.forEach((file) => {
+    let topHits: Bacteria[] = [];
+
+    let sortedData = file.data.sort(
+      (a, b) => b.estimatedTotalAmount - a.estimatedTotalAmount
+    );
+
+    topHits =
+      sortedData > filters.topHits
+        ? file.data.slice(0, +filters.topHits + 1)
+        : file.data;
+
+    file.data = topHits;
+  });
+  return results;
+};
