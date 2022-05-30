@@ -8,13 +8,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { setRecords } from '../../redux/records';
 import { FileWithPath } from 'react-dropzone';
+import { setReduxStoreFiles } from '../../redux/files';
 
 const Main = () => {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState<FileWithPath[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [spikesSet, setSpikesSet] = useState(false);
 
   const spikeData = useSelector((state: RootState) => state.spikeData.data);
+
+  // console.log(files);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -35,24 +38,35 @@ const Main = () => {
     setShowModal(false);
   };
 
-  const analyseOnClick = () => {
+  const analyseOnClick = async () => {
     //Process each file
-    Array.from(files).forEach((fileObject: FileWithPath) => {
-      const filePath = fileObject.path;
+    // Array.from(files).forEach((fileObject: FileWithPath) => {
+    //   const filePath = fileObject.path;
 
-      ipcRenderer.on('csv-file-read-reply', (args: any) => {
-        const fileRecords: FileRecords = args;
+    //   ipcRenderer.on('csv-file-read-reply', (args: any) => {
 
-        dispatch(setRecords(fileRecords));
-      });
+    //     //should now recieve results instead
 
-      ipcRenderer.sendMessage('csv-file-read', filePath);
+    //     const fileRecords: FileRecords = args;
+
+    //     dispatch(setRecords(fileRecords));
+    //   });
+
+    //   ipcRenderer.sendMessage('csv-file-read', filePath);
+    // });
+
+    //need to convert file objs to serializable before dispatch
+    let fileArray: any[] = Array.from(files).map((file) => {
+      return {
+        lastModified: file.lastModified,
+        name: file.name,
+        path: file.path,
+        size: file.size,
+        type: file.type,
+      };
     });
 
-    //process results here?
-    //send to store?
-    //then navigate?
-
+    await dispatch(setReduxStoreFiles(fileArray));
     navigate('/results', { replace: true });
   };
 

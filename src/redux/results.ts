@@ -13,9 +13,7 @@ export const resultsDataSlice = createSlice({
   initialState,
   reducers: {
     setResultsData: (state, action: PayloadAction<ProcessedFileData[]>) => {
-      console.log(action.payload);
       state.data = action.payload;
-      console.log(state.data);
     },
     resetResultsData: (state) => {
       state.data = [];

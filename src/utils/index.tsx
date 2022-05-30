@@ -9,15 +9,22 @@ export const processEachFile = (
   records: FileRecord[]
 ): Bacteria[] => {
   let bacteriaArray: Bacteria[] = [];
+
   let spikeTaxId: string = spikeData.taxId;
-  let spikeDNAInBp: number = spikeData.cellsPerMl * spikeData.genomeSize;
+  let spikeDNAInBp: number =
+    Number(spikeData.cellsPerMl) * Number(spikeData.genomeSize);
+
   let spikeDNAOutBp: number = 0;
+  let spikeSubjectLen = 0;
+
+  //count up spikes separtely
 
   records.forEach((record) => {
     // count up all records for given spike
     if (record.taxId === spikeTaxId) {
-      let spikeTotal: number = +spikeDNAOutBp + +record.queryLen;
-      spikeDNAOutBp = spikeTotal;
+      spikeSubjectLen = Number(record.subjectLen);
+      // let spikeTotal: number = Number(spikeDNAOutBp) + Number(record.queryLen);
+      spikeDNAOutBp += Number(record.queryLen);
     } else {
       //if not spike see if exists in bac array
       if (!bacteriaArray.some((bacteria) => bacteria.taxId === record.taxId)) {
@@ -25,7 +32,7 @@ export const processEachFile = (
           name: record.subjectTitle,
           taxId: record.taxId,
           subjectLength: record.subjectLen,
-          recoverdAmount: record.queryLen,
+          recoveredAmount: Number(record.queryLen),
           estimatedTotalAmount: 0,
         };
         bacteriaArray.push(newBacteria);
@@ -35,20 +42,31 @@ export const processEachFile = (
           (bacteria) => bacteria.taxId === record.taxId
         );
         let bacTotal =
-          +bacteriaArray[bacteriaIndex].recoverdAmount + +record.queryLen;
-        bacteriaArray[bacteriaIndex].recoverdAmount = bacTotal;
+          Number(bacteriaArray[bacteriaIndex].recoveredAmount) +
+          Number(record.queryLen);
+        bacteriaArray[bacteriaIndex].recoveredAmount = bacTotal;
       }
     }
   });
 
+  //If spikeDNAOutbp is 0 spike not in record
+
+  //use recovery ratio for multiple spikes then find the average.
+
   let recoveryRatio = (spikeDNAOutBp / spikeDNAInBp) * 100.0;
   let multiplier = 100.0 / recoveryRatio;
+
+  console.log('spike DNA out: ' + spikeDNAOutBp);
+  console.log('spike DNA in: ' + spikeDNAInBp);
+  console.log('spike subject len ' + spikeSubjectLen);
+  console.log('R.R :' + recoveryRatio);
+  console.log('multiplier: ' + multiplier);
 
   // use recovery ratio to estimate cells in other species
   bacteriaArray.forEach(
     (bacteria) =>
       (bacteria.estimatedTotalAmount =
-        (bacteria.recoverdAmount * multiplier) / bacteria.subjectLength)
+        (bacteria.recoveredAmount * multiplier) / bacteria.subjectLength)
   );
 
   return bacteriaArray;
@@ -66,18 +84,17 @@ export const processAllFiles = (
 ): Promise<ProcessedFileData[]> => {
   const processedDataArray: ProcessedFileData[] = [];
 
-  // for each file
   allFileRecords.forEach((file) => {
     // remove path to get file name
     let fileName: string = file.fileName.substring(
       file.fileName.lastIndexOf('/') + 1
     );
 
-    //if spikes > 1 do below.
     let spikes =
       allSpikeData.length > 1
         ? allSpikeData.find((spike) => spike.fileName === fileName)
-        : allSpikeData[0];
+        : // ? allSpikeData.filter((spike) => spike.fileName === fileName)
+          allSpikeData[0];
 
     let records = file.records;
 

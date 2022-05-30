@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../components/loader/Loader';
 import store, { RootState } from '../../redux/store';
-import { processAllFiles, filterResults } from '../../utils';
+import { filterResults } from '../../utils';
 import Heatmap from '../../components/heatmap/Heatmap';
 import Container from '../../components/container/Container';
 import { Button, Stack } from 'react-bootstrap';
@@ -23,26 +23,47 @@ const Results = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const ipcRenderer = window.electron.ipcRenderer;
+  const state = store.getState();
+
   useEffect(() => {
-    (async () => {
-      const processedDataArray = await processAllFiles(
-        allFileRecords,
-        allSpikeData
-      );
+    const fileArray = Array.from(state?.files?.data);
 
-      // have filter method in utils filterResults(results, filters)?
-      // run through filter then set as results?
+    const args = {
+      fileArray,
+      allSpikeData,
+    };
 
-      if (processedDataArray.length > 0) {
-        setResults(processedDataArray);
-        // send to store here
-        dispatch(setResultsData(processedDataArray));
-        setLoading(false);
-      }
-    })();
+    ipcRenderer.on('analyse-files-reply', (args: any) => {
+      console.log(args);
+      dispatch(setResultsData(args));
+      setResults(args);
+      // setLoading(false)
+    });
 
-    return () => {};
-  }, [allSpikeData, allFileRecords]);
+    ipcRenderer.sendMessage('analyse-files', args);
+  }, []);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const processedDataArray = await processAllFiles(
+  //       allFileRecords,
+  //       allSpikeData
+  //     );
+
+  //     // have filter method in utils filterResults(results, filters)?
+  //     // run through filter then set as results?
+
+  //     if (processedDataArray.length > 0) {
+  //       setResults(processedDataArray);
+  //       // send to store here
+  //       dispatch(setResultsData(processedDataArray));
+  //       setLoading(false);
+  //     }
+  //   })();
+
+  //   return () => {};
+  // }, [allSpikeData, allFileRecords]);
 
   const handleBackOnClick = () => {
     navigate('/main', { replace: true });
@@ -60,7 +81,7 @@ const Results = () => {
     setLoading(true);
     setShowFiltering(false);
 
-    const state = store.getState();
+    // const state = store.getState();
 
     const fullResults = state?.results?.data;
 

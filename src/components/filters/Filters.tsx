@@ -64,7 +64,7 @@ const Filters: React.FC<Props> = (props) => {
           ></Form.Check>
           <Form.Group className="mb-3">
             <Form.Select
-              defaultValue={'Top hits/cells per ml'}
+              defaultValue={'Top hits per cell'}
               onChange={onFormChange}
               name="topHits"
             >

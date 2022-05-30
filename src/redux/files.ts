@@ -1,21 +1,27 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+type FilesSliceState = {
+  data: any;
+};
+
+const initialState: FilesSliceState = {
+  data: {},
+};
 
 //for File objects
 export const filesSlice = createSlice({
-  name: "files",
-  initialState: {
-    data: null,
-  },
+  name: 'files',
+  initialState,
   reducers: {
-    setFiles: (state, action: PayloadAction<any>) => {
+    setReduxStoreFiles: (state, action: PayloadAction<any>) => {
       state.data = action.payload;
     },
-    resetFiles: (state) => {
-      state.data = null;
+    resetReduxStoreFiles: (state) => {
+      state.data = {};
     },
   },
 });
 
-export const { setFiles, resetFiles } = filesSlice.actions;
+export const { setReduxStoreFiles, resetReduxStoreFiles } = filesSlice.actions;
 
 export default filesSlice.reducer;

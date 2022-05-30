@@ -25,7 +25,7 @@ declare type FileRecords = {
 declare type Bacteria = {
   name: string;
   taxId: string;
-  recoverdAmount: number;
+  recoveredAmount: number;
   estimatedTotalAmount: number;
   subjectLength: number;
 };
