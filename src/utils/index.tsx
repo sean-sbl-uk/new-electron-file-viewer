@@ -184,6 +184,7 @@ export const processAllFiles = (
           data: data,
         };
 
+        // console.log(processedFileData);
         processedDataArray.push(processedFileData);
       }
     }
@@ -224,9 +225,9 @@ const topHitsFilter = (
   results.forEach((file) => {
     let topHits: Bacteria[] = [];
 
-    let sortedData = file.data.sort(
-      (a, b) => b.estimatedTotalAmount - a.estimatedTotalAmount
-    );
+    let sortedData = file.data
+      .slice()
+      .sort((a, b) => b.estimatedTotalAmount - a.estimatedTotalAmount);
 
     topHits =
       sortedData > filters.topHits

@@ -98,6 +98,8 @@ ipcMain.on(
 
     const { fileArray, allSpikeData } = args;
 
+    // console.log(fileArray);
+
     //process each file
     let results = await Promise.all(
       fileArray.map(async (fileObject: FileWithPath | any) => {
@@ -133,6 +135,8 @@ ipcMain.on(
         return fileRecords;
       })
     );
+
+    // console.log(results);
 
     //perform logic on array of file records
     let processedFileData: ProcessedFileData[] = await processAllFiles(

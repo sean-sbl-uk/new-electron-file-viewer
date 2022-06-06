@@ -25,7 +25,7 @@ const Main = () => {
     }
 
     // dispatch(resetReduxStoreFiles());
-    setFiles([]);
+    // setFiles([]);
   }, [spikeData]);
 
   const handleOpenModal = () => {
@@ -38,6 +38,7 @@ const Main = () => {
 
   const analyseOnClick = async () => {
     //convert file objs to serializable to dispatch
+    console.log(files);
     let fileArray: any[] = Array.from(files).map((file) => {
       return {
         lastModified: file.lastModified,

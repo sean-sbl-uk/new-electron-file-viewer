@@ -43,10 +43,18 @@ const Results = () => {
       allSpikeData,
     };
 
-    ipcRenderer.on('analyse-files-reply', (args: any) => {
-      console.log(args);
+    ipcRenderer.on('analyse-files-reply', async (args: any) => {
+      // console.log(args);
       dispatch(setResultsData(args));
-      setResults(args);
+
+      //filter top 20 hits per file by default
+      let filter = {
+        topHits: 10,
+      };
+      let filtered = await filterResults(args, filter);
+      console.log(filtered);
+      // setResults(args);
+      setResults(filtered);
       setLoading(false);
     });
 
