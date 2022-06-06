@@ -5,13 +5,14 @@ import Heatmap from './Heatmap';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import Results from 'pages/results';
+import { renderWithMockStore } from '../../utils/testUtils';
 
-jest.mock('reaviz', () => ({
-  __esModule: true,
-  Heatmap: (props) => <div {...props}> Hello</div>,
-  SequentialLegend: (props) => <div {...props}> Hello</div>,
-  HeatmapSeries: () => <div> Hello</div>,
-}));
+// jest.mock('reaviz', () => ({
+//   __esModule: true,
+//   Heatmap: (props) => <div {...props}> Hello</div>,
+//   SequentialLegend: (props) => <div {...props}> Hello</div>,
+//   HeatmapSeries: () => <div> Hello</div>,
+// }));
 
 describe('Heatmap', () => {
   const data = [
@@ -40,15 +41,19 @@ describe('Heatmap', () => {
     { fileName: 'file 3', data: data },
   ];
   const mockFunc = jest.fn();
-  const mockStore = configureStore();
-  const initialState = {};
+  // const mockStore = configureStore();
+  // const initialState = {};
 
   it('should render', () => {
-    const store = mockStore(initialState);
-    const { getByTestId } = render(
-      <Provider store={store}>
-        <Heatmap results={results} setLoading={mockFunc} />
-      </Provider>
+    // const store = mockStore(initialState);
+    // const { getByTestId } = render(
+    //   <Provider store={store}>
+    //     <Heatmap results={results} setLoading={mockFunc} />
+    //   </Provider>
+    // );
+
+    const { getByTestId } = renderWithMockStore(
+      <Heatmap results={results} setLoading={mockFunc} />
     );
     expect(getByTestId('heatmap')).toBeInTheDocument();
   });

@@ -94,12 +94,12 @@ let mainWindow: BrowserWindow | null = null;
 ipcMain.on(
   'analyse-files',
   async (event: any, args: { fileArray: any[]; allSpikeData: Spikes[] }) => {
-    let allFileRecords: FileRecords[] = [];
+    // let allFileRecords: FileRecords[] = [];
 
     const { fileArray, allSpikeData } = args;
 
     //process each file
-    await Promise.all(
+    let results = await Promise.all(
       fileArray.map(async (fileObject: FileWithPath | any) => {
         let filePath = fileObject.path;
 
@@ -109,6 +109,7 @@ ipcMain.on(
 
           fs.createReadStream(filePath, 'utf8')
             .on('error', (err: Error) => {
+              console.log(err);
               rej(err);
             })
             .pipe(csvParser({ separator: '\t' }))
@@ -128,13 +129,14 @@ ipcMain.on(
             });
         });
 
-        allFileRecords.push(fileRecords);
+        // allFileRecords.push(fileRecords);
+        return fileRecords;
       })
     );
 
     //perform logic on array of file records
     let processedFileData: ProcessedFileData[] = await processAllFiles(
-      allFileRecords,
+      results,
       allSpikeData
     );
 

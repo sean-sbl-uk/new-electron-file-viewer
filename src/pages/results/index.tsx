@@ -5,7 +5,14 @@ import store, { RootState } from '../../redux/store';
 import { filterResults } from '../../utils';
 import Heatmap from '../../components/heatmap/Heatmap';
 import Container from '../../components/container/Container';
-import { Button, Stack } from 'react-bootstrap';
+import {
+  Button,
+  Row,
+  Col,
+  Dropdown,
+  DropdownButton,
+  Stack,
+} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Filters from '../../components/filters/Filters';
 import { setResultsData } from '../../redux/results';
@@ -14,6 +21,7 @@ const Results = () => {
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState<ProcessedFileData[]>();
   const [showFiltering, setShowFiltering] = useState(false);
+  const [dataVisualization, setDataVisualization] = useState<string>('heatmap');
 
   const allFileRecords = useSelector((state: RootState) => state.records.data);
   const allSpikeData = useSelector((state: RootState) => state.spikeData.data);
@@ -27,6 +35,7 @@ const Results = () => {
   const state = store.getState();
 
   useEffect(() => {
+    console.log(state);
     const fileArray = Array.from(state?.files?.data);
 
     const args = {
@@ -38,32 +47,11 @@ const Results = () => {
       console.log(args);
       dispatch(setResultsData(args));
       setResults(args);
-      // setLoading(false)
+      setLoading(false);
     });
 
     ipcRenderer.sendMessage('analyse-files', args);
   }, []);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const processedDataArray = await processAllFiles(
-  //       allFileRecords,
-  //       allSpikeData
-  //     );
-
-  //     // have filter method in utils filterResults(results, filters)?
-  //     // run through filter then set as results?
-
-  //     if (processedDataArray.length > 0) {
-  //       setResults(processedDataArray);
-  //       // send to store here
-  //       dispatch(setResultsData(processedDataArray));
-  //       setLoading(false);
-  //     }
-  //   })();
-
-  //   return () => {};
-  // }, [allSpikeData, allFileRecords]);
 
   const handleBackOnClick = () => {
     navigate('/main', { replace: true });
@@ -92,30 +80,64 @@ const Results = () => {
     }
   };
 
+  const handleDropdownSelect = (e: any) => {
+    setDataVisualization(e);
+  };
+
   return (
-    <section className="background">
+    <section data-testid="results" className="background">
       <div className="light-overlay">
         <Container>
-          <div className="text-center row">
+          {/* <div className="text-center row"> */}
+          <div className="text-center">
             {loading && <Loader />}
             {results && !loading && (
               <>
                 <h1 className="my-4 main-color">Results</h1>
                 <Heatmap results={results} setLoading={setLoading} />
+                {/* <Stack className="my-2" gap={2}> */}
 
-                <Stack className="my-2" gap={2}>
-                  <Button variant="secondary" onClick={handleOpenFiltering}>
-                    Filtering
-                  </Button>
+                {/* <Container> */}
+                <div className="mt-2">
+                  <Row>
+                    <Col>
+                      <Button
+                        className="btn-hover brn-block"
+                        variant="outline-secondary"
+                        onClick={handleBackOnClick}
+                        style={{ width: '100%' }}
+                      >
+                        Back
+                      </Button>{' '}
+                    </Col>
+                    <Col>
+                      <Button
+                        className="mr-1 btn-block"
+                        variant="secondary"
+                        onClick={handleOpenFiltering}
+                        style={{ width: '100%' }}
+                      >
+                        Filtering
+                      </Button>{' '}
+                    </Col>
 
-                  <Button
-                    className="btn-hover"
-                    variant="outline-secondary"
-                    onClick={handleBackOnClick}
-                  >
-                    Back
-                  </Button>
-                </Stack>
+                    <Col>
+                      <DropdownButton
+                        data-testid="result-dropdown"
+                        title="Data Visulazation"
+                        onSelect={handleDropdownSelect}
+                        variant="secondary"
+                      >
+                        <Dropdown.Item eventKey="heatmap">
+                          Heatmap
+                        </Dropdown.Item>
+                        <Dropdown.Item disabled>Line Chart</Dropdown.Item>
+                      </DropdownButton>
+                    </Col>
+                  </Row>
+                </div>
+                {/* </Stack> */}
+                {/* </Container> */}
               </>
             )}
 
@@ -125,6 +147,17 @@ const Results = () => {
               handleFilterSubmit={handleFilterSubmit}
             />
           </div>
+
+          {/* <Button variant="secondary" onClick={handleOpenFiltering}>
+            Filtering
+          </Button>{' '}
+          <Button
+            className="btn-hover"
+            variant="outline-secondary"
+            onClick={handleBackOnClick}
+          >
+            Back
+          </Button>{' '} */}
         </Container>
       </div>
     </section>

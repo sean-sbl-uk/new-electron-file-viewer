@@ -30,7 +30,20 @@ const Modal: React.FC<Props> = (props) => {
   const { show, handleCloseModal, files } = props;
 
   const [multipleSpikes, setMultipleSpikes] = useState<boolean>(false);
-  const [formData, setFormData] = useState<Data[]>([]);
+  const [formData, setFormData] = useState<Data[]>([
+    {
+      fileName: 'spike1',
+      taxId: '570278',
+      cellsPerMl: 20000000,
+      genomeSize: 2639468,
+    },
+    {
+      fileName: 'spike2',
+      taxId: '946077',
+      cellsPerMl: 20000000,
+      genomeSize: 3105306,
+    },
+  ]);
   const [validated, setValidated] = useState(false);
 
   const dispatch = useDispatch();
@@ -111,20 +124,9 @@ const Modal: React.FC<Props> = (props) => {
   const inputFields = (fileName: string) => {
     return (
       <Row className="mb-3">
-        {/*<Form.Group>
-          <Form.Control
-            name="fileName"
-            value={fileName}
-            // {...fileName}
-            // readOnly={fileName}
-            hidden
-            ref={ref}
-          ></Form.Control>
-    </Form.Group>*/}
-
         <Form.Group as={Col}>
           <Form.Control
-            required
+            // required
             name="taxId"
             type="text"
             // {...fileName}
@@ -140,7 +142,7 @@ const Modal: React.FC<Props> = (props) => {
 
         <Form.Group as={Col}>
           <Form.Control
-            required
+            // required
             name="cellsPerMl"
             type="number"
             // {...fileName}
@@ -155,7 +157,7 @@ const Modal: React.FC<Props> = (props) => {
 
         <Form.Group as={Col}>
           <Form.Control
-            required
+            // required
             name="genomeSize"
             type="number"
             // {...fileName}
@@ -186,11 +188,17 @@ const Modal: React.FC<Props> = (props) => {
             </Form.Label>
 
             {inputFields(file.name)}
+            {/* Button here */}
+            {/* onclick adds another input row? */}
           </div>
         );
       })
     ) : files[0] ? (
-      <div className="main-color">{inputFields(files[0].name)}</div>
+      // <div className="main-color">{inputFields(files[0].name)}</div>
+      <>
+        <div className="main-color">{inputFields('Spike1')}</div>
+        <div className="main-color">{inputFields('Spike2')}</div>
+      </>
     ) : null;
 
   return (

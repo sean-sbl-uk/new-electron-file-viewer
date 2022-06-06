@@ -4,69 +4,144 @@
  * @param records
  * @returns
  */
-export const processEachFile = (
-  spikeData: Spikes,
+//  export const processEachFile = (
+//   spikeData: Spikes,
+//   records: FileRecord[]
+// ): Bacteria[] => {
+//   let bacteriaArray: Bacteria[] = [];
+
+//   let spikeTaxId: string = spikeData.taxId;
+//   let spikeDNAInBp: number =
+//     Number(spikeData.cellsPerMl) * Number(spikeData.genomeSize);
+
+//   let spikeDNAOutBp: number = 0;
+//   let spikeSubjectLen = 0;
+
+//   records.forEach((record) => {
+//     // count up all records for given spike
+//     if (record.taxId === spikeTaxId) {
+//       spikeSubjectLen = Number(record.subjectLen);
+//       // let spikeTotal: number = Number(spikeDNAOutBp) + Number(record.queryLen);
+//       spikeDNAOutBp += Number(record.queryLen);
+//     } else {
+//       //if not spike see if exists in bac array
+//       if (!bacteriaArray.some((bacteria) => bacteria.taxId === record.taxId)) {
+//         let newBacteria: Bacteria = {
+//           name: record.subjectTitle,
+//           taxId: record.taxId,
+//           subjectLength: record.subjectLen,
+//           recoveredAmount: Number(record.queryLen),
+//           estimatedTotalAmount: 0,
+//         };
+//         bacteriaArray.push(newBacteria);
+//       } else {
+//         // count up all records for other species
+//         let bacteriaIndex = bacteriaArray.findIndex(
+//           (bacteria) => bacteria.taxId === record.taxId
+//         );
+//         let bacTotal =
+//           Number(bacteriaArray[bacteriaIndex].recoveredAmount) +
+//           Number(record.queryLen);
+//         bacteriaArray[bacteriaIndex].recoveredAmount = bacTotal;
+//       }
+//     }
+//   });
+
+//   //If spikeDNAOutbp is 0 spike not in record
+
+//   //use recovery ratio for multiple spikes then find the average.
+
+//   let recoveryRatio = (spikeDNAOutBp / spikeDNAInBp) * 100.0;
+//   let multiplier = 100.0 / recoveryRatio;
+
+//   console.log('spike DNA out: ' + spikeDNAOutBp);
+//   console.log('spike DNA in: ' + spikeDNAInBp);
+//   console.log('spike subject len ' + spikeSubjectLen);
+//   console.log('R.R :' + recoveryRatio);
+//   console.log('multiplier: ' + multiplier + '\n');
+
+//   // use recovery ratio to estimate cells in other species
+//   bacteriaArray.forEach(
+//     (bacteria) =>
+//       (bacteria.estimatedTotalAmount =
+//         (bacteria.recoveredAmount * multiplier) / bacteria.subjectLength)
+//   );
+
+//   return bacteriaArray;
+// };
+
+/**
+ *
+ * @param spikeData
+ * @param records
+ * @returns Bacteria[]
+ */
+export const processEachFileMultipleSpikes = (
+  spikeData: Spikes[],
   records: FileRecord[]
 ): Bacteria[] => {
   let bacteriaArray: Bacteria[] = [];
 
-  let spikeTaxId: string = spikeData.taxId;
-  let spikeDNAInBp: number =
-    Number(spikeData.cellsPerMl) * Number(spikeData.genomeSize);
-
-  let spikeDNAOutBp: number = 0;
-  let spikeSubjectLen = 0;
+  let spikeDNAIn: number = 0;
+  let spikeDNAOut: number = 0;
 
   //count up spikes separtely
+  spikeData.forEach((spike) => {
+    const spikeRecords = records.filter(
+      (record) => record.taxId === spike.taxId
+    );
 
-  records.forEach((record) => {
-    // count up all records for given spike
-    if (record.taxId === spikeTaxId) {
-      spikeSubjectLen = Number(record.subjectLen);
-      // let spikeTotal: number = Number(spikeDNAOutBp) + Number(record.queryLen);
-      spikeDNAOutBp += Number(record.queryLen);
-    } else {
-      //if not spike see if exists in bac array
-      if (!bacteriaArray.some((bacteria) => bacteria.taxId === record.taxId)) {
-        let newBacteria: Bacteria = {
-          name: record.subjectTitle,
-          taxId: record.taxId,
-          subjectLength: record.subjectLen,
-          recoveredAmount: Number(record.queryLen),
-          estimatedTotalAmount: 0,
-        };
-        bacteriaArray.push(newBacteria);
-      } else {
-        // count up all records for other species
-        let bacteriaIndex = bacteriaArray.findIndex(
-          (bacteria) => bacteria.taxId === record.taxId
-        );
-        let bacTotal =
-          Number(bacteriaArray[bacteriaIndex].recoveredAmount) +
-          Number(record.queryLen);
-        bacteriaArray[bacteriaIndex].recoveredAmount = bacTotal;
-      }
+    if (spikeRecords) {
+      spikeDNAIn += spike.cellsPerMl * spike.genomeSize;
+      spikeRecords.forEach(
+        (record) => (spikeDNAOut += Number(record.queryLen))
+      );
     }
   });
 
-  //If spikeDNAOutbp is 0 spike not in record
+  //No spike found in records
+  if (spikeDNAOut === 0) {
+    return bacteriaArray;
+  }
 
-  //use recovery ratio for multiple spikes then find the average.
+  //calculate recovery ratio
+  const recoveryRatio: number = spikeDNAIn / spikeDNAOut;
 
-  let recoveryRatio = (spikeDNAOutBp / spikeDNAInBp) * 100.0;
-  let multiplier = 100.0 / recoveryRatio;
+  //loop over records and count up all species
+  records.forEach((record) => {
+    if (!bacteriaArray.some((bacteria) => bacteria.taxId === record.taxId)) {
+      let newBacteria: Bacteria = {
+        name: record.subjectTitle,
+        taxId: record.taxId,
+        subjectLength: Number(record.subjectLen),
+        recoveredAmount: Number(record.queryLen),
+        estimatedTotalAmount: 0,
+      };
+      bacteriaArray.push(newBacteria);
+    } else {
+      // count up all records for other species
+      let bacteriaIndex = bacteriaArray.findIndex(
+        (bacteria) => bacteria.taxId === record.taxId
+      );
+      let bacTotal =
+        Number(bacteriaArray[bacteriaIndex].recoveredAmount) +
+        Number(record.queryLen);
+      bacteriaArray[bacteriaIndex].recoveredAmount = bacTotal;
+    }
+  });
 
-  console.log('spike DNA out: ' + spikeDNAOutBp);
-  console.log('spike DNA in: ' + spikeDNAInBp);
-  console.log('spike subject len ' + spikeSubjectLen);
-  console.log('R.R :' + recoveryRatio);
-  console.log('multiplier: ' + multiplier);
-
-  // use recovery ratio to estimate cells in other species
   bacteriaArray.forEach(
     (bacteria) =>
       (bacteria.estimatedTotalAmount =
-        (bacteria.recoveredAmount * multiplier) / bacteria.subjectLength)
+        (bacteria.recoveredAmount * recoveryRatio) / bacteria.subjectLength)
+  );
+
+  //remove bad records
+  bacteriaArray = bacteriaArray.filter(
+    (bacteria) => bacteria.subjectLength > 0
+    // bacteria.name.length > 0 ||
+    // bacteria.taxId !== '0' ||
+    // bacteria.estimatedTotalAmount !== Infinity
   );
 
   return bacteriaArray;
@@ -91,22 +166,26 @@ export const processAllFiles = (
     );
 
     let spikes =
-      allSpikeData.length > 1
-        ? allSpikeData.find((spike) => spike.fileName === fileName)
-        : // ? allSpikeData.filter((spike) => spike.fileName === fileName)
-          allSpikeData[0];
+      allSpikeData.length > 2
+        ? // ? allSpikeData.find((spike) => spike.fileName === fileName)
+          // :  allSpikeData[0];
+          allSpikeData.filter((spike) => spike.fileName === fileName)
+        : allSpikeData;
 
     let records = file.records;
 
     if (spikes && records) {
-      let data = processEachFile(spikes, records);
+      // let data = processEachFile(spikes, records);
+      let data = processEachFileMultipleSpikes(spikes, records);
 
-      const processedFileData: ProcessedFileData = {
-        fileName: fileName,
-        data: data,
-      };
+      if (data.length > 0) {
+        const processedFileData: ProcessedFileData = {
+          fileName: fileName,
+          data: data,
+        };
 
-      processedDataArray.push(processedFileData);
+        processedDataArray.push(processedFileData);
+      }
     }
   });
 
