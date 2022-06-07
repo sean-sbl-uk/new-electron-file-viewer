@@ -5,14 +5,15 @@ import Heatmap from './Heatmap';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import Results from 'pages/results';
-import { renderWithMockStore } from '../../utils/testUtils';
+import { renderWithStore } from '../../utils/testUtils';
 
-// jest.mock('reaviz', () => ({
-//   __esModule: true,
-//   Heatmap: (props) => <div {...props}> Hello</div>,
-//   SequentialLegend: (props) => <div {...props}> Hello</div>,
-//   HeatmapSeries: () => <div> Hello</div>,
-// }));
+window.ResizeObserver =
+  window.ResizeObserver ||
+  jest.fn().mockImplementation(() => ({
+    disconnect: jest.fn(),
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+  }));
 
 describe('Heatmap', () => {
   const data = [
@@ -52,7 +53,11 @@ describe('Heatmap', () => {
     //   </Provider>
     // );
 
-    const { getByTestId } = renderWithMockStore(
+    // const { getByTestId } = renderWithMockStore(
+    //   <Heatmap results={results} setLoading={mockFunc} />
+    // );
+
+    const { getByTestId } = renderWithStore(
       <Heatmap results={results} setLoading={mockFunc} />
     );
     expect(getByTestId('heatmap')).toBeInTheDocument();
