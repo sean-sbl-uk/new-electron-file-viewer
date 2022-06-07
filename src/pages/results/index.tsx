@@ -44,16 +44,15 @@ const Results = () => {
     };
 
     ipcRenderer.on('analyse-files-reply', async (args: any) => {
-      // console.log(args);
       dispatch(setResultsData(args));
 
-      //filter top 20 hits per file by default
+      //filter top 10 hits per file by default
       let filter = {
         topHits: 10,
       };
+
       let filtered = await filterResults(args, filter);
-      console.log(filtered);
-      // setResults(args);
+
       setResults(filtered);
       setLoading(false);
     });

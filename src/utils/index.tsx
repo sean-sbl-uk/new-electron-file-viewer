@@ -199,13 +199,13 @@ export const processAllFiles = (
  * @param filters
  * @returns
  */
-export const filterResults = (
+export const filterResults = async (
   results: ProcessedFileData[],
   filters: any
-): ProcessedFileData[] => {
-  const result: ProcessedFileData[] = [];
+): Promise<ProcessedFileData[]> => {
+  let result: ProcessedFileData[] = [];
 
-  results = topHitsFilter(filters, results);
+  result = await topHitsFilter(filters, results);
 
   return result;
 };
@@ -222,19 +222,28 @@ const topHitsFilter = (
 ): ProcessedFileData[] => {
   if (filters.topHits == 'All') return results;
 
-  results.forEach((file) => {
+  // results.forEach((file) => {
+  results = results.map((file) => {
     let topHits: Bacteria[] = [];
 
-    let sortedData = file.data
-      .slice()
-      .sort((a, b) => b.estimatedTotalAmount - a.estimatedTotalAmount);
+    let copy: Bacteria[] = [...file.data];
+
+    let sortedData = copy.sort(
+      (a, b) => b.estimatedTotalAmount - a.estimatedTotalAmount
+    );
 
     topHits =
-      sortedData > filters.topHits
-        ? file.data.slice(0, +filters.topHits + 1)
-        : file.data;
+      sortedData.length > filters.topHits
+        ? sortedData.slice(0, filters.topHits)
+        : sortedData;
 
-    file.data = topHits;
+    let result: ProcessedFileData = {
+      fileName: file.fileName,
+      data: topHits,
+    };
+
+    return result;
   });
+
   return results;
 };
