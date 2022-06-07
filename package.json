@@ -104,6 +104,9 @@
     "testPathIgnorePatterns": [
       "release/app/dist"
     ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)"
+    ],
     "transform": {
       "\\.(ts|tsx|js|jsx)$": "ts-jest"
     }

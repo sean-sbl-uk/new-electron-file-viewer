@@ -72,7 +72,7 @@ const Results = () => {
     setShowFiltering(false);
   };
 
-  const handleFilterSubmit = (filters: any) => {
+  const handleFilterSubmit = async (filters: any) => {
     setLoading(true);
     setShowFiltering(false);
 
@@ -81,7 +81,7 @@ const Results = () => {
     const fullResults = state?.results?.data;
 
     if (fullResults) {
-      let filteredResults = filterResults(fullResults, filters);
+      let filteredResults = await filterResults(fullResults, filters);
       setResults(filteredResults);
       setLoading(false);
     }
