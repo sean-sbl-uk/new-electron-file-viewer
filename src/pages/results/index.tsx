@@ -43,7 +43,7 @@ const Results = () => {
       allSpikeData,
     };
 
-    ipcRenderer.on('analyse-files-reply', async (args: any) => {
+    ipcRenderer.on('analyse-files-reply', async (args: ProcessedFileData[]) => {
       dispatch(setResultsData(args));
 
       //filter top 10 hits per file by default
@@ -53,7 +53,56 @@ const Results = () => {
 
       let filtered = await filterResults(args, filter);
 
-      setResults(filtered);
+      //After filtering add up all bacteria to set/unique list
+      let bacteriaSet: Set<string> = new Set();
+
+      filtered.forEach((file) => {
+        file.data.forEach((bacteria) => {
+          bacteriaSet.add(bacteria.name);
+        });
+      });
+
+      let reformatedDataArray: ReformatedData[] = [];
+
+      //For each bacteria
+      bacteriaSet.forEach((bacteria) => {
+        let dataArr: FileWithBacteriaAmount[] = [];
+
+        //for each file
+        args.forEach((fileData) => {
+          //does the file have the bacteria
+          let fileBacteriaObj: Bacteria | undefined = fileData.data.find(
+            (fileBac) => fileBac.name === bacteria
+          );
+
+          //create obj
+          let fileWithBacteriaAmount: FileWithBacteriaAmount =
+            fileBacteriaObj == undefined
+              ? {
+                  fileName: fileData.fileName,
+                  amount: 0,
+                }
+              : {
+                  fileName: fileData.fileName,
+                  amount: fileBacteriaObj.estimatedTotalAmount,
+                };
+
+          //add to array
+          dataArr.push(fileWithBacteriaAmount);
+        });
+
+        //create final obj
+        let reformedDataElement: ReformatedData = {
+          bacteria: bacteria,
+          data: dataArr,
+        };
+
+        //add to array
+        reformatedDataArray.push(reformedDataElement);
+      });
+
+      console.log(reformatedDataArray);
+      // setResults(filtered);
       setLoading(false);
     });
 
@@ -101,11 +150,51 @@ const Results = () => {
             {results && !loading && (
               <>
                 <h1 className="my-4 main-color">Results</h1>
+                <div className="mt-4 mb-4">
+                  <Row>
+                    <Col>
+                      <Button
+                        className="btn-hover btn-block"
+                        variant="outline-secondary"
+                        onClick={handleBackOnClick}
+                        style={{ width: '100%' }}
+                      >
+                        Back
+                      </Button>{' '}
+                    </Col>
+                    <Col>
+                      <Button
+                        className="mr-1 btn-block"
+                        variant="secondary"
+                        onClick={handleOpenFiltering}
+                        style={{ width: '100%' }}
+                      >
+                        Filtering
+                      </Button>{' '}
+                    </Col>
+
+                    <Col>
+                      <DropdownButton
+                        className="btn-block"
+                        data-testid="result-dropdown"
+                        title="Data Visulazation"
+                        onSelect={handleDropdownSelect}
+                        variant="secondary"
+                        style={{ width: '100%' }}
+                      >
+                        <Dropdown.Item eventKey="heatmap">
+                          Heatmap
+                        </Dropdown.Item>
+                        <Dropdown.Item disabled>Line Chart</Dropdown.Item>
+                      </DropdownButton>
+                    </Col>
+                  </Row>
+                </div>
                 <Heatmap results={results} setLoading={setLoading} />
                 {/* <Stack className="my-2" gap={2}> */}
 
                 {/* <Container> */}
-                <div className="mt-2">
+                {/* <div className="mt-2">
                   <Row>
                     <Col>
                       <Button
@@ -142,7 +231,7 @@ const Results = () => {
                       </DropdownButton>
                     </Col>
                   </Row>
-                </div>
+                </div> */}
                 {/* </Stack> */}
                 {/* </Container> */}
               </>

@@ -42,6 +42,19 @@ declare type ProcessedFileData = {
   data: Bacteria[];
 };
 
+/**
+ * data is just a list of filenames. go into each one and pull out the estimatedTotalValue for the bacteria
+ */
+declare type ReformatedData = {
+  bacteria: string;
+  data: string[];
+};
+
+declare type FileWithBacteriaAmount = {
+  fileName: string;
+  amount: number;
+};
+
 // interface Data {
 //   fileName: string;
 //   taxId: String;

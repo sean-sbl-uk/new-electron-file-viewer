@@ -42,21 +42,8 @@ describe('Heatmap', () => {
     { fileName: 'file 3', data: data },
   ];
   const mockFunc = jest.fn();
-  // const mockStore = configureStore();
-  // const initialState = {};
 
   it('should render', () => {
-    // const store = mockStore(initialState);
-    // const { getByTestId } = render(
-    //   <Provider store={store}>
-    //     <Heatmap results={results} setLoading={mockFunc} />
-    //   </Provider>
-    // );
-
-    // const { getByTestId } = renderWithMockStore(
-    //   <Heatmap results={results} setLoading={mockFunc} />
-    // );
-
     const { getByTestId } = renderWithStore(
       <Heatmap results={results} setLoading={mockFunc} />
     );

@@ -8,8 +8,8 @@ import React, { useEffect, useState } from 'react';
 import { ResponsiveHeatMapCanvas } from '@nivo/heatmap';
 
 interface DataObj {
-  x: string;
-  y: number;
+  x: number;
+  y: string;
 }
 
 interface HeatmapData {
@@ -30,8 +30,10 @@ const mapToHeatmapData = (results: ProcessedFileData[]): HeatmapData[] => {
       return {
         // key: bac.name,
         // data: bac.estimatedTotalAmount,
-        x: bac.name,
-        y: bac.estimatedTotalAmount,
+        // x: bac.name,
+        // y: bac.estimatedTotalAmount,
+        x: bac.estimatedTotalAmount,
+        y: bac.name,
       };
     });
     return {
@@ -49,7 +51,7 @@ const Heatmap: React.FC<Props> = (props: any) => {
   const { results, setLoading } = props;
   const [data, setData] = useState<HeatmapData[]>();
 
-  console.log(results);
+  // console.log(results);
 
   useEffect(() => {
     setData(mapToHeatmapData(results));
@@ -417,26 +419,27 @@ const Heatmap: React.FC<Props> = (props: any) => {
               forceSquare
               margin={{ top: 70, right: 60, bottom: 20, left: 80 }}
               valueFormat=">-.2s"
-              axisTop={{
+              axisTop={null}
+              axisBottom={{
                 tickSize: 5,
                 tickPadding: 5,
-                tickRotation: -90,
+                tickRotation: -70,
                 legend: '',
                 legendOffset: 46,
               }}
-              axisRight={{
+              axisLeft={{
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: 'country',
+                legend: '',
                 legendPosition: 'middle',
                 legendOffset: 40,
               }}
-              axisLeft={null}
+              axisRight={null}
               colors={{
                 type: 'quantize',
                 scheme: 'red_yellow_blue',
-                steps: 10,
+                steps: 16,
                 minValue: -100000,
                 maxValue: 100000,
               }}
@@ -446,8 +449,8 @@ const Heatmap: React.FC<Props> = (props: any) => {
               enableLabels={false}
               legends={[
                 {
-                  anchor: 'left',
-                  translateX: -50,
+                  anchor: 'top-right',
+                  translateX: 20,
                   translateY: 0,
                   length: 200,
                   thickness: 10,
