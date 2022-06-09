@@ -8,8 +8,10 @@ import React, { useEffect, useState } from 'react';
 import { ResponsiveHeatMapCanvas } from '@nivo/heatmap';
 
 interface DataObj {
-  x: number;
-  y: string;
+  x: string;
+  y: number;
+  // y: string;
+  // x: number;
 }
 
 interface HeatmapData {
@@ -18,34 +20,56 @@ interface HeatmapData {
 }
 
 type Props = {
-  results: ProcessedFileData[] | any;
+  // results: ProcessedFileData[] | any;
+  results: ReformatedData[] | any;
   setLoading: (arg: boolean) => void;
 };
 
-const mapToHeatmapData = (results: ProcessedFileData[]): HeatmapData[] => {
+const mapToHeatmapData = (results: ReformatedData[]): HeatmapData[] => {
   let heatmapData: HeatmapData[] = [];
 
-  heatmapData = results.map((file) => {
-    let dataArr: DataObj[] = file.data.map((bac) => {
+  heatmapData = results.map((bacteria) => {
+    let dataArr: DataObj[] = bacteria.data.map((file) => {
       return {
-        // key: bac.name,
-        // data: bac.estimatedTotalAmount,
-        // x: bac.name,
-        // y: bac.estimatedTotalAmount,
-        x: bac.estimatedTotalAmount,
-        y: bac.name,
+        x: file.fileName,
+        y: file.amount,
       };
     });
     return {
-      // key: file.fileName,
-      // data: dataArr,
-      id: file.fileName,
+      id: bacteria.bacteria,
       data: dataArr,
     };
   });
 
   return heatmapData;
 };
+
+// const mapToHeatmapData = (results: ProcessedFileData[]): HeatmapData[] => {
+//   let heatmapData: HeatmapData[] = [];
+
+//   heatmapData = results.map((file) => {
+//     let dataArr: DataObj[] = file.data.map((bac) => {
+//       return {
+//         // key: bac.name,
+//         // data: bac.estimatedTotalAmount,
+//         x: bac.name,
+//         y: bac.estimatedTotalAmount,
+//         // x: bac.estimatedTotalAmount,
+//         // y: bac.name,
+//       };
+//     });
+//     return {
+//       // key: file.fileName,
+//       // data: dataArr,
+//       id: file.fileName,
+//       data: dataArr,
+//     };
+//   });
+
+//   return heatmapData;
+// };
+
+// const mapToReformatedHeatmapData = (results: ReformatedData)
 
 const Heatmap: React.FC<Props> = (props: any) => {
   const { results, setLoading } = props;

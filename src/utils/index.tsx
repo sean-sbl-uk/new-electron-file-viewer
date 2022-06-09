@@ -247,3 +247,48 @@ const topHitsFilter = (
 
   return results;
 };
+
+export const reformatData = (
+  bacteriaSet: Set<string>,
+  processedFileDataArr: ProcessedFileData[]
+): Promise<ReformatedData[]> => {
+  let reformatedDataArray: ReformatedData[] = [];
+
+  bacteriaSet.forEach((bacteria) => {
+    let dataArr: FileWithBacteriaAmount[] = [];
+
+    //for each file
+    processedFileDataArr.forEach((fileData) => {
+      //does the file have the bacteria
+      let fileBacteriaObj: Bacteria | undefined = fileData.data.find(
+        (fileBac) => fileBac.name === bacteria
+      );
+
+      //create obj
+      let fileWithBacteriaAmount: FileWithBacteriaAmount =
+        fileBacteriaObj == undefined
+          ? {
+              fileName: fileData.fileName,
+              amount: 0,
+            }
+          : {
+              fileName: fileData.fileName,
+              amount: fileBacteriaObj.estimatedTotalAmount,
+            };
+
+      //add to array
+      dataArr.push(fileWithBacteriaAmount);
+    });
+
+    //create final obj
+    let reformedDataElement: ReformatedData = {
+      bacteria: bacteria,
+      data: dataArr,
+    };
+
+    //add to array
+    reformatedDataArray.push(reformedDataElement);
+  });
+
+  return Promise.resolve(reformatedDataArray);
+};

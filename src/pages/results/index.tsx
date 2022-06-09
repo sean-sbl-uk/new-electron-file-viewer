@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../components/loader/Loader';
 import store, { RootState } from '../../redux/store';
-import { filterResults } from '../../utils';
+import { filterResults, reformatData } from '../../utils';
 import Heatmap from '../../components/heatmap/Heatmap';
 import Container from '../../components/container/Container';
 import {
@@ -19,7 +19,8 @@ import { setResultsData } from '../../redux/results';
 
 const Results = () => {
   const [loading, setLoading] = useState(true);
-  const [results, setResults] = useState<ProcessedFileData[]>();
+  // const [results, setResults] = useState<ProcessedFileData[]>();
+  const [results, setResults] = useState<ReformatedData[]>();
   const [showFiltering, setShowFiltering] = useState(false);
   const [dataVisualization, setDataVisualization] = useState<string>('heatmap');
 
@@ -62,47 +63,53 @@ const Results = () => {
         });
       });
 
-      let reformatedDataArray: ReformatedData[] = [];
+      // let reformatedDataArray: ReformatedData[] = [];
 
       //For each bacteria
-      bacteriaSet.forEach((bacteria) => {
-        let dataArr: FileWithBacteriaAmount[] = [];
+      // bacteriaSet.forEach((bacteria) => {
+      //   let dataArr: FileWithBacteriaAmount[] = [];
 
-        //for each file
-        args.forEach((fileData) => {
-          //does the file have the bacteria
-          let fileBacteriaObj: Bacteria | undefined = fileData.data.find(
-            (fileBac) => fileBac.name === bacteria
-          );
+      //   //for each file
+      //   args.forEach((fileData) => {
+      //     //does the file have the bacteria
+      //     let fileBacteriaObj: Bacteria | undefined = fileData.data.find(
+      //       (fileBac) => fileBac.name === bacteria
+      //     );
 
-          //create obj
-          let fileWithBacteriaAmount: FileWithBacteriaAmount =
-            fileBacteriaObj == undefined
-              ? {
-                  fileName: fileData.fileName,
-                  amount: 0,
-                }
-              : {
-                  fileName: fileData.fileName,
-                  amount: fileBacteriaObj.estimatedTotalAmount,
-                };
+      //     //create obj
+      //     let fileWithBacteriaAmount: FileWithBacteriaAmount =
+      //       fileBacteriaObj == undefined
+      //         ? {
+      //             fileName: fileData.fileName,
+      //             amount: 0,
+      //           }
+      //         : {
+      //             fileName: fileData.fileName,
+      //             amount: fileBacteriaObj.estimatedTotalAmount,
+      //           };
 
-          //add to array
-          dataArr.push(fileWithBacteriaAmount);
-        });
+      //     //add to array
+      //     dataArr.push(fileWithBacteriaAmount);
+      //   });
 
-        //create final obj
-        let reformedDataElement: ReformatedData = {
-          bacteria: bacteria,
-          data: dataArr,
-        };
+      //   //create final obj
+      //   let reformedDataElement: ReformatedData = {
+      //     bacteria: bacteria,
+      //     data: dataArr,
+      //   };
 
-        //add to array
-        reformatedDataArray.push(reformedDataElement);
-      });
+      //   //add to array
+      //   reformatedDataArray.push(reformedDataElement);
+      // });
+
+      let reformatedDataArray: ReformatedData[] = await reformatData(
+        bacteriaSet,
+        args
+      );
 
       console.log(reformatedDataArray);
       // setResults(filtered);
+      setResults(reformatedDataArray);
       setLoading(false);
     });
 
@@ -131,7 +138,9 @@ const Results = () => {
 
     if (fullResults) {
       let filteredResults = await filterResults(fullResults, filters);
-      setResults(filteredResults);
+
+      //TODO !!
+      // setResults(filteredResults);
       setLoading(false);
     }
   };
