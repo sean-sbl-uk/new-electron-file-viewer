@@ -14,8 +14,10 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import csvParser  from 'csv-parser';
-import fs from 'fs'
+import csvParser from 'csv-parser';
+import fs from 'fs';
+import { processAllFiles } from '../utils/index';
+import { FileWithPath } from 'react-dropzone';
 
 export default class AppUpdater {
   constructor() {
@@ -25,47 +27,64 @@ export default class AppUpdater {
   }
 }
 
-let mainWindow: BrowserWindow | null = null;
-
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
+let mainWindow: BrowserWindow | null = null;
 
-ipcMain.on('csv-file-read', async (event: any, filePath: string) => {
+//Reads and performs calculations all in one function
+ipcMain.on(
+  'analyse-files',
+  async (event: any, args: { fileArray: any[]; allSpikeData: Spikes[] }) => {
+    const { fileArray, allSpikeData } = args;
 
+    //process each file
+    let results = await Promise.all(
+      fileArray.map(async (fileObject: FileWithPath | any) => {
+        let filePath = fileObject.path;
 
-    const records = await new Promise<FileRecords>((res, rej) => {
-      let recordArray: FileRecord[] = [];
+        //Read each file with csv parser
+        let fileRecords = await new Promise<FileRecords>((res, rej) => {
+          let recordArray: FileRecord[] = [];
 
-      fs.createReadStream(filePath, "utf8")
-        .on("error", (err: Error) => {
-          rej(err);
-        })
-        .pipe(csvParser({ separator: "\t" }))
-        .on("data", (row: any) => {
-          delete row.id;
-          let record: FileRecord = row;
+          fs.createReadStream(filePath, 'utf8')
+            .on('error', (err: Error) => {
+              console.log(err);
+              rej(err);
+            })
+            .pipe(csvParser({ separator: '\t' }))
+            .on('data', (row: any) => {
+              delete row.id;
+              let record: FileRecord = row;
 
-          recordArray.push(record);
-        })
-        .on("end", () => {
-          const result: FileRecords = {
-            fileName: filePath.trim(),
-            records: recordArray,
-          };
+              recordArray.push(record);
+            })
+            .on('end', () => {
+              const result: FileRecords = {
+                fileName: filePath.trim(),
+                records: recordArray,
+              };
 
-          res(result);
-
+              res(result);
+            });
         });
-    });
 
-    event.reply('csv-file-read-reply', records);
-  })
+        return fileRecords;
+      })
+    );
 
+    //perform logic on array of file records
+    let processedFileData: ProcessedFileData[] = await processAllFiles(
+      results,
+      allSpikeData
+    );
 
+    event.reply('analyse-files-reply', processedFileData);
+  }
+);
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
