@@ -17,7 +17,11 @@ type FilterData = {
 const Filters: React.FC<Props> = (props) => {
   const { handleCloseFiltering, handleFilterSubmit, show } = props;
 
-  const [filterFormData, setFilterFormData] = useState<FilterData | any>(null);
+  const [filterFormData, setFilterFormData] = useState<FilterData>({
+    spikesOn: true,
+    topHits: '10',
+    minHitThreshold: 1,
+  });
 
   const selectOptions = ['10', '20', '50', 'All'];
 
@@ -29,8 +33,9 @@ const Filters: React.FC<Props> = (props) => {
   };
 
   const spikeSwitchOnChange = () => {
-    let value = !filterFormData.spikesOn;
-    setFilterFormData({ ...filterFormData, [filterFormData.spikesOn]: value });
+    let value: boolean = !filterFormData.spikesOn;
+
+    setFilterFormData({ ...filterFormData, spikesOn: value });
   };
 
   const onFormChange = (e: any) => {
@@ -60,7 +65,8 @@ const Filters: React.FC<Props> = (props) => {
             onChange={spikeSwitchOnChange}
             className="mb-3"
             data-testid="spike-switch"
-            disabled
+            checked={filterFormData.spikesOn}
+            // disabled
           ></Form.Check>
           <Form.Group className="mb-3">
             <Form.Select
