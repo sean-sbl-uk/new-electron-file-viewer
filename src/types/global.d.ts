@@ -47,7 +47,7 @@ declare type ProcessedFileData = {
  */
 declare type ReformatedData = {
   bacteria: string;
-  data: string[];
+  data: FileWithBacteriaAmount[];
 };
 
 declare type FileWithBacteriaAmount = {

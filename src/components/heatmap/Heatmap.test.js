@@ -18,28 +18,32 @@ window.ResizeObserver =
 describe('Heatmap', () => {
   const data = [
     {
-      name: 'bacteria',
-      taxId: '12345',
-      recoverdAmount: 12345,
-      estimatedTotalAmount: 12345,
+      fileName: 'file1',
+      amount: 12345,
     },
     {
-      name: 'bacteria',
-      taxId: '12345',
-      recoverdAmount: 12345,
-      estimatedTotalAmount: 12345,
+      fileName: 'file2',
+      amount: 12345,
     },
     {
-      name: 'bacteria',
-      taxId: '12345',
-      recoverdAmount: 12345,
-      estimatedTotalAmount: 12345,
+      fileName: 'file3',
+      amount: 12345,
     },
   ];
+
   const results = [
-    { fileName: 'file 1', data: data },
-    { fileName: 'file 2', data: data },
-    { fileName: 'file 3', data: data },
+    {
+      bacteria: 'bacteria1',
+      data: data,
+    },
+    {
+      bacteria: 'bacteria2',
+      data: data,
+    },
+    {
+      bacteria: 'bacteria3',
+      data: data,
+    },
   ];
   const mockFunc = jest.fn();
 
