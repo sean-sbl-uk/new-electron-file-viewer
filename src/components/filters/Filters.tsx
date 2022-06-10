@@ -99,7 +99,11 @@ const Filters: React.FC<Props> = (props) => {
           <Button variant="secondary" onClick={handleCloseFiltering}>
             Close
           </Button>
-          <Button type="submit" variant="outline-secondary">
+          <Button
+            type="submit"
+            variant="outline-secondary"
+            onClick={handleSubmit}
+          >
             Apply
           </Button>
         </BootstrapModal.Footer>

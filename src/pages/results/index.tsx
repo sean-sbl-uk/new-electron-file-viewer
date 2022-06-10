@@ -41,6 +41,11 @@ const Results = () => {
         topHits: 10,
       };
 
+      // let spikes: Spikes[] = [{
+      //   fileName:
+      // }]
+
+      //make spikes an optional parameter
       let filtered = await filterResults(args, filter);
 
       //After filtering add up all bacteria to set/unique list
@@ -85,14 +90,15 @@ const Results = () => {
   };
 
   // TODO
-  const handleFilterSubmit = async (filters: any) => {
+  const handleFilterSubmit = async (filters: FilterData) => {
     setLoading(true);
     setShowFiltering(false);
 
-    const fullResults = state?.results?.data;
+    const fullResults: ProcessedFileData[] = state?.results?.data;
+    const spikes: Spikes[] = state?.spikeData?.data;
 
     if (fullResults) {
-      let filtered = await filterResults(fullResults, filters);
+      let filtered = await filterResults(fullResults, spikes, filters);
 
       let reformatedDataArray: ReformatedData[] = await format(filtered);
 

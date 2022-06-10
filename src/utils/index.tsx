@@ -122,11 +122,42 @@ export const processAllFiles = (
  */
 export const filterResults = async (
   results: ProcessedFileData[],
-  filters: any
+  spikes: Spikes[],
+  filters: FilterData
 ): Promise<ProcessedFileData[]> => {
   let result: ProcessedFileData[] = [];
 
   result = await topHitsFilter(filters, results);
+  result = filters.spikesOn
+    ? result
+    : await spikesOnFilter(filters, spikes, results);
+
+  return result;
+};
+
+/**
+ * Filters out spikes from results
+ * @param filters
+ * @param spikes
+ * @param results
+ * @returns
+ */
+const spikesOnFilter = (
+  filters: any,
+  spikes: Spikes[],
+  results: ProcessedFileData[]
+): ProcessedFileData[] | any[] => {
+  let result: ProcessedFileData[] = results.map((file) => {
+    let data: Bacteria[] = file.data.filter((bacteria) => {
+      spikes.some((spike) => {
+        spike.taxId !== bacteria.taxId;
+      });
+    });
+    return {
+      fileName: file.fileName,
+      data: data,
+    };
+  });
 
   return result;
 };
