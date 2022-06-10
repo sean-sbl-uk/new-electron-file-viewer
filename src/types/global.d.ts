@@ -25,8 +25,9 @@ declare type FileRecords = {
 declare type Bacteria = {
   name: string;
   taxId: string;
-  recoverdAmount: number;
+  recoveredAmount: number;
   estimatedTotalAmount: number;
+  subjectLength: number;
 };
 
 declare type Spikes = {
@@ -41,12 +42,15 @@ declare type ProcessedFileData = {
   data: Bacteria[];
 };
 
-// interface Data {
-//   fileName: string;
-//   taxId: String;
-//   cellsPerMl: number;
-//   genomeSize: number;
-// }
+declare type ReformatedData = {
+  bacteria: string;
+  data: FileWithBacteriaAmount[];
+};
+
+declare type FileWithBacteriaAmount = {
+  fileName: string;
+  amount: number;
+};
 
 interface Window {
   electron: {

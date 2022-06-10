@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 
 const Landing = () => {
   return (
-    <section className="background">
+    <section data-testid="landing" className="background">
       <div className="dark-overlay">
         <div className="landing-inner">
           <h1>MicrobioMe File Viewer</h1>

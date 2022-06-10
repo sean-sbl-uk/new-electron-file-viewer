@@ -1,18 +1,19 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type SpikeDataSliceState = {
   data: Spikes[];
-}
+};
 
 const initialState: SpikeDataSliceState = {
-  data: []
-}
+  data: [],
+};
 //Slice
 export const spikeDataSlice = createSlice({
-  name: "spikeData",
+  name: 'spikeData',
   initialState,
   reducers: {
     setSpikeData: (state, action: PayloadAction<any>) => {
+      console.log(action.payload);
       state.data = action.payload;
     },
     resetSpikeData: (state) => {
@@ -25,4 +26,3 @@ export const spikeDataSlice = createSlice({
 export const { setSpikeData, resetSpikeData } = spikeDataSlice.actions;
 
 export default spikeDataSlice.reducer;
-

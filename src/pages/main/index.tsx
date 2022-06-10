@@ -6,11 +6,11 @@ import Dropzone from '../../components/dropzone/Dropzone';
 import Modal from '../../components/modal/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { setRecords } from '../../redux/records';
 import { FileWithPath } from 'react-dropzone';
+import { setReduxStoreFiles } from '../../redux/files';
 
 const Main = () => {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState<FileWithPath[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [spikesSet, setSpikesSet] = useState(false);
 
@@ -19,12 +19,13 @@ const Main = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const ipcRenderer = window.electron.ipcRenderer;
-
   useEffect(() => {
     if (Object.keys(spikeData).length !== 0) {
       setSpikesSet(true);
     }
+
+    // dispatch(resetReduxStoreFiles());
+    // setFiles([]);
   }, [spikeData]);
 
   const handleOpenModal = () => {
@@ -35,20 +36,20 @@ const Main = () => {
     setShowModal(false);
   };
 
-  const analyseOnClick = () => {
-    //Process each file
-    Array.from(files).forEach((fileObject: FileWithPath) => {
-      const filePath = fileObject.path;
-
-      ipcRenderer.on('csv-file-read-reply', (args: any) => {
-        const fileRecords: FileRecords = args;
-
-        dispatch(setRecords(fileRecords));
-      });
-
-      ipcRenderer.sendMessage('csv-file-read', filePath);
+  const analyseOnClick = async () => {
+    //convert file objs to serializable to dispatch
+    console.log(files);
+    let fileArray: any[] = Array.from(files).map((file) => {
+      return {
+        lastModified: file.lastModified,
+        name: file.name,
+        path: file.path,
+        size: file.size,
+        type: file.type,
+      };
     });
 
+    await dispatch(setReduxStoreFiles(fileArray));
     navigate('/results', { replace: true });
   };
 
@@ -74,7 +75,7 @@ const Main = () => {
     );
 
   return (
-    <section className="background">
+    <section data-testid="main" className="background">
       <div className="light-overlay">
         <Container>
           <div className="text-center row ">
@@ -90,8 +91,6 @@ const Main = () => {
               files={files}
             />
           </div>
-
-          {/* Display results here? */}
         </Container>
       </div>
     </section>

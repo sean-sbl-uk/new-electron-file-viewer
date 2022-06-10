@@ -1,86 +1,214 @@
-export const processEachFile = (
-  spikeData: Spikes,
+/**
+ *
+ * @param spikeData
+ * @param records
+ * @returns Bacteria[]
+ */
+export const processEachFileMultipleSpikes = (
+  spikeData: Spikes[],
   records: FileRecord[]
 ): Bacteria[] => {
   let bacteriaArray: Bacteria[] = [];
 
-  let spikeTaxId: string = spikeData.taxId;
-  let spikeDNAIn: number = spikeData.cellsPerMl * spikeData.genomeSize;
+  let spikeDNAIn: number = 0;
   let spikeDNAOut: number = 0;
 
-  records.forEach((record) => {
-    // count up all records for given spike
-    if (record.taxId === spikeTaxId) {
-      spikeDNAOut += record.queryLen;
-    } else {
-      //if not spike see if exists in bac array
-      if (!bacteriaArray.some((bacteria) => bacteria.taxId === record.taxId)) {
-        let newBacteria: Bacteria = {
-          name: record.subjectTitle,
-          taxId: record.taxId,
-          recoverdAmount: record.queryLen,
-          estimatedTotalAmount: 0,
-        };
-        bacteriaArray.push(newBacteria);
-      } else {
-        // count up all records for other species
-        let bacteriaIndex = bacteriaArray.findIndex(
-          (bacteria) => bacteria.taxId === record.taxId
-        );
-        bacteriaArray[bacteriaIndex].recoverdAmount += record.queryLen;
-      }
+  //count up spikes separtely
+  spikeData.forEach((spike) => {
+    const spikeRecords = records.filter(
+      (record) => record.taxId === spike.taxId
+    );
+
+    if (spikeRecords) {
+      spikeDNAIn += spike.cellsPerMl * spike.genomeSize;
+      spikeRecords.forEach(
+        (record) => (spikeDNAOut += Number(record.queryLen))
+      );
     }
   });
 
-  // calculate recovery ratio
-  let recoveryRatio = (spikeDNAIn / spikeDNAOut) * 100;
-  let multiplier = 1 / recoveryRatio;
+  //No spike found in records
+  if (spikeDNAOut === 0) {
+    return bacteriaArray;
+  }
 
-  // use recovery ratio to estimate cells in other species
+  //calculate recovery ratio
+  const recoveryRatio: number = spikeDNAIn / spikeDNAOut;
+
+  //loop over records and count up all species
+  records.forEach((record) => {
+    if (!bacteriaArray.some((bacteria) => bacteria.taxId === record.taxId)) {
+      let newBacteria: Bacteria = {
+        name: record.subjectTitle,
+        taxId: record.taxId,
+        subjectLength: Number(record.subjectLen),
+        recoveredAmount: Number(record.queryLen),
+        estimatedTotalAmount: 0,
+      };
+      bacteriaArray.push(newBacteria);
+    } else {
+      // count up all records for other species
+      let bacteriaIndex = bacteriaArray.findIndex(
+        (bacteria) => bacteria.taxId === record.taxId
+      );
+      let bacTotal =
+        Number(bacteriaArray[bacteriaIndex].recoveredAmount) +
+        Number(record.queryLen);
+      bacteriaArray[bacteriaIndex].recoveredAmount = bacTotal;
+    }
+  });
+
   bacteriaArray.forEach(
     (bacteria) =>
-      (bacteria.estimatedTotalAmount = bacteria.recoverdAmount * multiplier)
+      (bacteria.estimatedTotalAmount =
+        (bacteria.recoveredAmount * recoveryRatio) / bacteria.subjectLength)
+  );
+
+  //remove bad records
+  bacteriaArray = bacteriaArray.filter(
+    (bacteria) => bacteria.subjectLength > 0
   );
 
   return bacteriaArray;
 };
 
+/**
+ *
+ * @param allFileRecords
+ * @param allSpikeData
+ * @returns ProcessedFileData[]
+ */
 export const processAllFiles = (
   allFileRecords: FileRecords[],
   allSpikeData: Spikes[]
 ): Promise<ProcessedFileData[]> => {
   const processedDataArray: ProcessedFileData[] = [];
 
-  // for each file
   allFileRecords.forEach((file) => {
     // remove path to get file name
     let fileName: string = file.fileName.substring(
       file.fileName.lastIndexOf('/') + 1
     );
 
-    //if spikes > 1 do below.
     let spikes =
-      allSpikeData.length > 1
-        ? allSpikeData.find((spike) => spike.fileName === fileName)
-        : allSpikeData[0];
-    // let spikes = allSpikeData.find((spike) => spike.fileName === fileName);
-
-    //else spike is the same for each file, first in array
+      allSpikeData.length > 2
+        ? allSpikeData.filter((spike) => spike.fileName === fileName)
+        : allSpikeData;
 
     let records = file.records;
-    // if(allSpikeData.some(spike => spike.fileName === fileName)) {}
 
     if (spikes && records) {
-      let data = processEachFile(spikes, records);
+      let data = processEachFileMultipleSpikes(spikes, records);
 
-      const processedFileData: ProcessedFileData = {
-        fileName: fileName,
-        data: data,
-      };
+      if (data.length > 0) {
+        const processedFileData: ProcessedFileData = {
+          fileName: fileName,
+          data: data,
+        };
 
-      processedDataArray.push(processedFileData);
+        processedDataArray.push(processedFileData);
+      }
     }
   });
 
   return Promise.resolve(processedDataArray);
+};
+
+/**
+ * Runs all the filters on the data set
+ * @param results
+ * @param filters
+ * @returns
+ */
+export const filterResults = async (
+  results: ProcessedFileData[],
+  filters: any
+): Promise<ProcessedFileData[]> => {
+  let result: ProcessedFileData[] = [];
+
+  result = await topHitsFilter(filters, results);
+
+  return result;
+};
+
+/**
+ * Filters out bacteria not in the top no of hits
+ * @param filters
+ * @param results
+ * @returns
+ */
+const topHitsFilter = (
+  filters: any,
+  results: ProcessedFileData[]
+): ProcessedFileData[] => {
+  if (filters.topHits == 'All') return results;
+
+  results = results.map((file) => {
+    let topHits: Bacteria[] = [];
+
+    let copy: Bacteria[] = [...file.data];
+
+    let sortedData = copy.sort(
+      (a, b) => b.estimatedTotalAmount - a.estimatedTotalAmount
+    );
+
+    topHits =
+      sortedData.length > filters.topHits
+        ? sortedData.slice(0, filters.topHits)
+        : sortedData;
+
+    let result: ProcessedFileData = {
+      fileName: file.fileName,
+      data: topHits,
+    };
+
+    return result;
+  });
+
+  return results;
+};
+
+export const reformatData = (
+  bacteriaSet: Set<string>,
+  processedFileDataArr: ProcessedFileData[]
+): Promise<ReformatedData[]> => {
+  let reformatedDataArray: ReformatedData[] = [];
+
+  bacteriaSet.forEach((bacteria) => {
+    let dataArr: FileWithBacteriaAmount[] = [];
+
+    //for each file
+    processedFileDataArr.forEach((fileData) => {
+      //does the file have the bacteria
+      let fileBacteriaObj: Bacteria | undefined = fileData.data.find(
+        (fileBac) => fileBac.name === bacteria
+      );
+
+      //create obj
+      let fileWithBacteriaAmount: FileWithBacteriaAmount =
+        fileBacteriaObj == undefined
+          ? {
+              fileName: fileData.fileName,
+              amount: 0,
+            }
+          : {
+              fileName: fileData.fileName,
+              amount: fileBacteriaObj.estimatedTotalAmount,
+            };
+
+      //add to array
+      dataArr.push(fileWithBacteriaAmount);
+    });
+
+    //create final obj
+    let reformedDataElement: ReformatedData = {
+      bacteria: bacteria,
+      data: dataArr,
+    };
+
+    //add to array
+    reformatedDataArray.push(reformedDataElement);
+  });
+
+  return Promise.resolve(reformatedDataArray);
 };

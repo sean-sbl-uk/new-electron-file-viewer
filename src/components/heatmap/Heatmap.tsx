@@ -1,46 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Heatmap as ReavizHeatmap,
-  SequentialLegend,
-  HeatmapSeries,
-} from 'reaviz';
+import { ResponsiveHeatMapCanvas } from '@nivo/heatmap';
 
 interface DataObj {
-  key: string;
-  data: number;
+  x: string;
+  y: number;
 }
 
 interface HeatmapData {
-  key: string;
+  id: string;
   data: DataObj[];
 }
 
 type Props = {
-  results: ProcessedFileData[];
+  // results: ProcessedFileData[] | any;
+  results: ReformatedData[] | any;
   setLoading: (arg: boolean) => void;
 };
 
-const mapToHeatmapData = (results: ProcessedFileData[]): HeatmapData[] => {
+const mapToHeatmapData = (results: ReformatedData[]): HeatmapData[] => {
   let heatmapData: HeatmapData[] = [];
 
-  heatmapData = results.map((file) => {
-    let dataArr: DataObj[] = file.data.map((bac) => {
+  heatmapData = results.map((bacteria) => {
+    let dataArr: DataObj[] = bacteria.data.map((file) => {
       return {
-        key: bac.name,
-        data: bac.estimatedTotalAmount,
+        x: file.fileName,
+        y: file.amount,
       };
     });
+
     return {
-      key: file.fileName,
+      id: bacteria.bacteria,
       data: dataArr,
     };
   });
 
-  console.log(heatmapData);
   return heatmapData;
 };
 
-const Heatmap: React.FC<Props> = (props) => {
+const Heatmap: React.FC<Props> = (props: any) => {
   const { results, setLoading } = props;
   const [data, setData] = useState<HeatmapData[]>();
 
@@ -50,26 +47,75 @@ const Heatmap: React.FC<Props> = (props) => {
     setLoading(false);
   }, [results]);
 
-  // let data: HeatmapData[] = mapToHeatmapData(results);
-
-  // const color = select()
-
   return (
     <>
       {data && (
-        <div className="text-center row m-auto chart-background">
-          <ReavizHeatmap
-            height={400}
-            width={400}
-            data={data}
-            style={{}}
-            series={<HeatmapSeries animated={true} />}
-          />
-          <SequentialLegend
-            data={data}
-            style={{ height: '350px', marginLeft: '10px' }}
-          />
-        </div>
+        <>
+          <div
+            className="text-center row m-auto chart-background"
+            data-testid="heatmap"
+          >
+            <ResponsiveHeatMapCanvas
+              data={data}
+              forceSquare
+              margin={{ top: 70, right: 60, bottom: 20, left: 80 }}
+              valueFormat=">-.2s"
+              axisTop={null}
+              axisBottom={{
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: -45,
+                legend: '',
+                legendOffset: 46,
+                format: (value) => {
+                  return value.length > 7 ? value.slice(0, 7) : value;
+                },
+              }}
+              axisLeft={{
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+                legend: '',
+                legendPosition: 'middle',
+                legendOffset: 40,
+                format: (value) => {
+                  return value.length > 16 ? value.slice(0, 20) + '...' : value;
+                },
+              }}
+              axisRight={null}
+              colors={{
+                type: 'quantize',
+                scheme: 'red_yellow_blue',
+                steps: 16,
+                minValue: -100000,
+                maxValue: 100000,
+              }}
+              emptyColor="#555555"
+              borderWidth={1}
+              borderColor="#000000"
+              enableLabels={false}
+              legends={[
+                {
+                  anchor: 'top-right',
+                  translateX: 20,
+                  translateY: 0,
+                  length: 200,
+                  thickness: 10,
+                  direction: 'column',
+                  tickPosition: 'after',
+                  tickSize: 3,
+                  tickSpacing: 4,
+                  tickOverlap: false,
+                  tickFormat: '>-.2s',
+                  title: '',
+                  titleAlign: 'start',
+                  titleOffset: 4,
+                },
+              ]}
+              annotations={[]}
+            />
+          </div>
+        </>
       )}
     </>
   );
