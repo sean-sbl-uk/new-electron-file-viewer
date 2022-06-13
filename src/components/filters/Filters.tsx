@@ -55,7 +55,7 @@ const Filters: React.FC<Props> = (props) => {
             name="spikesOn"
             type="switch"
             id="spike-switch"
-            label="Spikes On/Off"
+            label="Spikes Off/On"
             onChange={spikeSwitchOnChange}
             className="mb-3"
             data-testid="spike-switch"

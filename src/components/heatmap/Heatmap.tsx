@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ResponsiveHeatMapCanvas } from '@nivo/heatmap';
+import { ResponsiveHeatMapCanvas, HeatMapCanvas } from '@nivo/heatmap';
 
 interface DataObj {
   x: string;
@@ -54,13 +54,13 @@ const Heatmap: React.FC<Props> = (props: any) => {
             className="text-center row m-auto chart-background"
             data-testid="heatmap"
           >
-            <ResponsiveHeatMapCanvas
+            {/* <ResponsiveHeatMapCanvas */}
+            <HeatMapCanvas
               data={data}
               forceSquare
               margin={{ top: 70, right: 60, bottom: 20, left: 80 }}
               valueFormat=">-.2s"
-              axisTop={null}
-              axisBottom={{
+              axisTop={{
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: -45,
@@ -70,6 +70,17 @@ const Heatmap: React.FC<Props> = (props: any) => {
                   return value.length > 7 ? value.slice(0, 7) : value;
                 },
               }}
+              axisBottom={null}
+              // axisBottom={{
+              //   tickSize: 5,
+              //   tickPadding: 5,
+              //   tickRotation: -45,
+              //   legend: '',
+              //   legendOffset: 46,
+              //   format: (value) => {
+              //     return value.length > 7 ? value.slice(0, 7) : value;
+              //   },
+              // }}
               axisLeft={{
                 tickSize: 5,
                 tickPadding: 5,
@@ -112,6 +123,8 @@ const Heatmap: React.FC<Props> = (props: any) => {
                 },
               ]}
               annotations={[]}
+              height={720}
+              width={696}
             />
           </div>
         </>

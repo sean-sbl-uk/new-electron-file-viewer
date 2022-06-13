@@ -116,21 +116,6 @@ a:hover {
   height: 100%;
 }
 
-/* .btn {
-  display: inline-block;
-  background: teal;
-  color: white;
-  padding: 0.4rem 1.3rem;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-  margin-right: 0.5rem;
-  transition: opacity 0.2s ease-in;
-  outline: none;
-
-  border-radius: 2px;
-} */
-
 .btn-link-outline {
   text-decoration: none;
   color: white;
@@ -210,6 +195,10 @@ a:hover {
   margin-left: '2px';
   margin-right: '2px';
   text-align: 'center';
-  height: 500px;
-  width: 500px;
+  /* height: 500px;
+  width: 500px; */
+  width: 720px;
+  height: 720px;
+  display: block;
+  overflow: scroll;
 }

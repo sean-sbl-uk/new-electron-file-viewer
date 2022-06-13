@@ -207,8 +207,9 @@ const topHitsFilter = (
  * @returns
  */
 export const reformatData = (
-  bacteriaSet: Set<string>,
-  processedFileDataArr: ProcessedFileData[]
+  bacteriaSet: Set<Bacteria>,
+  // filtered: ProcessedFileData[],
+  fullResults: ProcessedFileData[]
 ): Promise<ReformatedData[]> => {
   let reformatedDataArray: ReformatedData[] = [];
 
@@ -216,11 +217,17 @@ export const reformatData = (
     let dataArr: FileWithBacteriaAmount[] = [];
 
     //for each file
-    processedFileDataArr.forEach((fileData) => {
-      //does the file have the bacteria
-      let fileBacteriaObj: Bacteria | undefined = fileData.data.find(
-        (fileBac) => fileBac.name === bacteria
+    fullResults.forEach((fileData) => {
+      // get the full array of data for each file
+      let bacteriaArray: Bacteria[] = fileData.data;
+      console.log(bacteriaArray);
+
+      // get the bacteria data that matches the id from the set element
+      let fileBacteriaObj: Bacteria | undefined = bacteriaArray.find(
+        (element) => element.taxId == bacteria.taxId
       );
+
+      console.log(fileBacteriaObj);
 
       //create obj
       let fileWithBacteriaAmount: FileWithBacteriaAmount =
@@ -240,7 +247,7 @@ export const reformatData = (
 
     //create final obj
     let reformedDataElement: ReformatedData = {
-      bacteria: bacteria,
+      bacteria: bacteria.name,
       data: dataArr,
     };
 
@@ -250,3 +257,12 @@ export const reformatData = (
 
   return Promise.resolve(reformatedDataArray);
 };
+
+// const fillInGaps = (
+//   bacteria: Bacteria,
+//   processAllFiles: ProcessedFileData[]
+// ): FileWithBacteriaAmount => {
+//   const result: FileWithBacteriaAmount;
+
+//   return result;
+// };
