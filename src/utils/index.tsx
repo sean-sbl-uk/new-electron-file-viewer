@@ -128,9 +128,8 @@ export const filterResults = async (
   let result: ProcessedFileData[] = [];
 
   result = await topHitsFilter(filters, results);
-  result = filters.spikesOn
-    ? result
-    : await spikesOnFilter(filters, spikes, results);
+  // result =
+  //   filters.spikesOn && spikes ? result : await spikesOnFilter(spikes, results);
 
   return result;
 };
@@ -143,10 +142,10 @@ export const filterResults = async (
  * @returns
  */
 const spikesOnFilter = (
-  filters: any,
   spikes: Spikes[],
   results: ProcessedFileData[]
 ): ProcessedFileData[] | any[] => {
+  console.log('spikesOnFilter ');
   let result: ProcessedFileData[] = results.map((file) => {
     let data: Bacteria[] = file.data.filter((bacteria) => {
       spikes.some((spike) => {

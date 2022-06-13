@@ -8,12 +8,6 @@ type Props = {
   show: boolean;
 };
 
-type FilterData = {
-  spikesOn: boolean;
-  topHits: string;
-  minHitThreshold: number;
-};
-
 const Filters: React.FC<Props> = (props) => {
   const { handleCloseFiltering, handleFilterSubmit, show } = props;
 
@@ -66,7 +60,6 @@ const Filters: React.FC<Props> = (props) => {
             className="mb-3"
             data-testid="spike-switch"
             checked={filterFormData.spikesOn}
-            // disabled
           ></Form.Check>
           <Form.Group className="mb-3">
             <Form.Select

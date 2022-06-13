@@ -37,8 +37,10 @@ const Results = () => {
       dispatch(setResultsData(args));
 
       //filter top 10 hits per file by default
-      let filter = {
-        topHits: 10,
+      let filter: FilterData = {
+        spikesOn: true,
+        topHits: '10',
+        minHitThreshold: 1,
       };
 
       // let spikes: Spikes[] = [{
@@ -46,7 +48,7 @@ const Results = () => {
       // }]
 
       //make spikes an optional parameter
-      let filtered = await filterResults(args, filter);
+      let filtered = await filterResults(args, allSpikeData, filter);
 
       //After filtering add up all bacteria to set/unique list
       let reformatedDataArray: ReformatedData[] = await format(filtered);
@@ -97,8 +99,16 @@ const Results = () => {
     const fullResults: ProcessedFileData[] = state?.results?.data;
     const spikes: Spikes[] = state?.spikeData?.data;
 
+    console.log(
+      'handleFilterSubmit: ' + fullResults.forEach((x) => console.log(x.data))
+    );
+
     if (fullResults) {
       let filtered = await filterResults(fullResults, spikes, filters);
+
+      console.log(
+        'handleFilterSubmit: ' + filtered.forEach((x) => console.log(x.data))
+      );
 
       let reformatedDataArray: ReformatedData[] = await format(filtered);
 
