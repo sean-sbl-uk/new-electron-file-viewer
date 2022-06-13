@@ -58,7 +58,6 @@ const Results = () => {
 
   const format = async (
     filtered: ProcessedFileData[]
-    // fullResults: ProcessedFileData[]
   ): Promise<ReformatedData[]> => {
     let bacteriaSet: Set<string> = new Set();
 
@@ -99,10 +98,7 @@ const Results = () => {
     if (fullResults) {
       let filtered = await filterResults(fullResults, spikes, filters);
 
-      let reformatedDataArray: ReformatedData[] = await format(
-        filtered
-        // fullResults
-      );
+      let reformatedDataArray: ReformatedData[] = await format(filtered);
 
       setResults(reformatedDataArray);
       setLoading(false);
