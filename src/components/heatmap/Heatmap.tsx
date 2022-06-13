@@ -83,10 +83,10 @@ const Heatmap: React.FC<Props> = (props: any) => {
               }}
               axisRight={null}
               colors={{
-                type: 'quantize',
-                scheme: 'red_yellow_blue',
-                steps: 16,
-                minValue: -100000,
+                type: 'diverging',
+                scheme: 'blues',
+                // steps: 16,
+                minValue: 0,
                 maxValue: 100000,
               }}
               emptyColor="#555555"
