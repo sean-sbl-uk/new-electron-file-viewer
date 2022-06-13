@@ -9,7 +9,6 @@ import { Provider } from 'react-redux';
 import store from '../redux/store';
 
 export default function App() {
-  // console.log(window.electron);
   return (
     <Provider store={store}>
       <Router>

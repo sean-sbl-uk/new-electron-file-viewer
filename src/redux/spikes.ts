@@ -13,7 +13,6 @@ export const spikeDataSlice = createSlice({
   initialState,
   reducers: {
     setSpikeData: (state, action: PayloadAction<any>) => {
-      console.log(action.payload);
       state.data = action.payload;
     },
     resetSpikeData: (state) => {

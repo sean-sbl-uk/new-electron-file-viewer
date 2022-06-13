@@ -43,10 +43,6 @@ const Results = () => {
         minHitThreshold: 1,
       };
 
-      // let spikes: Spikes[] = [{
-      //   fileName:
-      // }]
-
       //make spikes an optional parameter
       let filtered = await filterResults(args, allSpikeData, filter);
 
@@ -61,11 +57,12 @@ const Results = () => {
   }, []);
 
   const format = async (
-    args: ProcessedFileData[]
+    filtered: ProcessedFileData[],
+    fullResults: ProcessedFileData[]
   ): Promise<ReformatedData[]> => {
     let bacteriaSet: Set<string> = new Set();
 
-    args.forEach((file) => {
+    filtered.forEach((file) => {
       file.data.forEach((bacteria) => {
         bacteriaSet.add(bacteria.name);
       });
@@ -73,7 +70,7 @@ const Results = () => {
 
     let reformatedDataArray: ReformatedData[] = await reformatData(
       bacteriaSet,
-      args
+      filtered
     );
 
     return reformatedDataArray;
@@ -99,18 +96,13 @@ const Results = () => {
     const fullResults: ProcessedFileData[] = state?.results?.data;
     const spikes: Spikes[] = state?.spikeData?.data;
 
-    console.log(
-      'handleFilterSubmit: ' + fullResults.forEach((x) => console.log(x.data))
-    );
-
     if (fullResults) {
       let filtered = await filterResults(fullResults, spikes, filters);
 
-      console.log(
-        'handleFilterSubmit: ' + filtered.forEach((x) => console.log(x.data))
+      let reformatedDataArray: ReformatedData[] = await format(
+        filtered,
+        fullResults
       );
-
-      let reformatedDataArray: ReformatedData[] = await format(filtered);
 
       setResults(reformatedDataArray);
       setLoading(false);

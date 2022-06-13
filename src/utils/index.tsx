@@ -128,8 +128,9 @@ export const filterResults = async (
   let result: ProcessedFileData[] = [];
 
   result = await topHitsFilter(filters, results);
-  // result =
-  //   filters.spikesOn && spikes ? result : await spikesOnFilter(spikes, results);
+
+  result =
+    filters.spikesOn && spikes ? result : await spikesOnFilter(spikes, result);
 
   return result;
 };
@@ -145,13 +146,12 @@ const spikesOnFilter = (
   spikes: Spikes[],
   results: ProcessedFileData[]
 ): ProcessedFileData[] | any[] => {
-  console.log('spikesOnFilter ');
+  let spikeTaxIds: string[] = spikes.map((spike) => spike.taxId);
   let result: ProcessedFileData[] = results.map((file) => {
     let data: Bacteria[] = file.data.filter((bacteria) => {
-      spikes.some((spike) => {
-        spike.taxId !== bacteria.taxId;
-      });
+      return !spikeTaxIds.includes(bacteria.taxId);
     });
+
     return {
       fileName: file.fileName,
       data: data,
@@ -170,8 +170,8 @@ const spikesOnFilter = (
 const topHitsFilter = (
   filters: any,
   results: ProcessedFileData[]
-): ProcessedFileData[] => {
-  if (filters.topHits == 'All') return results;
+): Promise<ProcessedFileData[]> => {
+  if (filters.topHits == 'All') return Promise.resolve(results);
 
   results = results.map((file) => {
     let topHits: Bacteria[] = [];
@@ -195,9 +195,17 @@ const topHitsFilter = (
     return result;
   });
 
-  return results;
+  return Promise.resolve(results);
 };
 
+/**
+ * Reformats the processed data so bacteria name is id.
+ * Necessary for swapping axis on heatmap.
+ * Also fills in blank spots on heatmap.
+ * @param bacteriaSet
+ * @param processedFileDataArr
+ * @returns
+ */
 export const reformatData = (
   bacteriaSet: Set<string>,
   processedFileDataArr: ProcessedFileData[]
