@@ -37,11 +37,14 @@ const Results = () => {
       dispatch(setResultsData(args));
 
       //filter top 10 hits per file by default
-      let filter = {
-        topHits: 10,
+      let filter: FilterData = {
+        spikesOn: true,
+        topHits: '10',
+        minHitThreshold: 1,
       };
 
-      let filtered = await filterResults(args, filter);
+      //make spikes an optional parameter
+      let filtered = await filterResults(args, allSpikeData, filter);
 
       //After filtering add up all bacteria to set/unique list
       let reformatedDataArray: ReformatedData[] = await format(filtered);
@@ -54,11 +57,11 @@ const Results = () => {
   }, []);
 
   const format = async (
-    args: ProcessedFileData[]
+    filtered: ProcessedFileData[]
   ): Promise<ReformatedData[]> => {
     let bacteriaSet: Set<string> = new Set();
 
-    args.forEach((file) => {
+    filtered.forEach((file) => {
       file.data.forEach((bacteria) => {
         bacteriaSet.add(bacteria.name);
       });
@@ -66,7 +69,7 @@ const Results = () => {
 
     let reformatedDataArray: ReformatedData[] = await reformatData(
       bacteriaSet,
-      args
+      filtered
     );
 
     return reformatedDataArray;
@@ -85,14 +88,15 @@ const Results = () => {
   };
 
   // TODO
-  const handleFilterSubmit = async (filters: any) => {
+  const handleFilterSubmit = async (filters: FilterData) => {
     setLoading(true);
     setShowFiltering(false);
 
-    const fullResults = state?.results?.data;
+    const fullResults: ProcessedFileData[] = state?.results?.data;
+    const spikes: Spikes[] = state?.spikeData?.data;
 
     if (fullResults) {
-      let filtered = await filterResults(fullResults, filters);
+      let filtered = await filterResults(fullResults, spikes, filters);
 
       let reformatedDataArray: ReformatedData[] = await format(filtered);
 

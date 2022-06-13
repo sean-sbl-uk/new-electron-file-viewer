@@ -52,6 +52,12 @@ declare type FileWithBacteriaAmount = {
   amount: number;
 };
 
+declare type FilterData = {
+  spikesOn: boolean;
+  topHits: string;
+  minHitThreshold: number;
+};
+
 interface Window {
   electron: {
     ipcRenderer: {

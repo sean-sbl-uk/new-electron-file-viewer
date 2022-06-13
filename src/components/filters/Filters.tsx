@@ -4,20 +4,18 @@ import { Modal as BootstrapModal, Form, Button } from 'react-bootstrap';
 type Props = {
   handleCloseFiltering: () => void;
   handleFilterSubmit: (filterData: any) => void;
-
+  // fiterData: FilterData;
   show: boolean;
-};
-
-type FilterData = {
-  spikesOn: boolean;
-  topHits: string;
-  minHitThreshold: number;
 };
 
 const Filters: React.FC<Props> = (props) => {
   const { handleCloseFiltering, handleFilterSubmit, show } = props;
 
-  const [filterFormData, setFilterFormData] = useState<FilterData | any>(null);
+  const [filterFormData, setFilterFormData] = useState<FilterData>({
+    spikesOn: true,
+    topHits: '10',
+    minHitThreshold: 1,
+  });
 
   const selectOptions = ['10', '20', '50', 'All'];
 
@@ -29,8 +27,9 @@ const Filters: React.FC<Props> = (props) => {
   };
 
   const spikeSwitchOnChange = () => {
-    let value = !filterFormData.spikesOn;
-    setFilterFormData({ ...filterFormData, [filterFormData.spikesOn]: value });
+    let value: boolean = !filterFormData.spikesOn;
+
+    setFilterFormData({ ...filterFormData, spikesOn: value });
   };
 
   const onFormChange = (e: any) => {
@@ -60,7 +59,7 @@ const Filters: React.FC<Props> = (props) => {
             onChange={spikeSwitchOnChange}
             className="mb-3"
             data-testid="spike-switch"
-            disabled
+            checked={filterFormData.spikesOn}
           ></Form.Check>
           <Form.Group className="mb-3">
             <Form.Select
@@ -93,7 +92,11 @@ const Filters: React.FC<Props> = (props) => {
           <Button variant="secondary" onClick={handleCloseFiltering}>
             Close
           </Button>
-          <Button type="submit" variant="outline-secondary">
+          <Button
+            type="submit"
+            variant="outline-secondary"
+            onClick={handleSubmit}
+          >
             Apply
           </Button>
         </BootstrapModal.Footer>

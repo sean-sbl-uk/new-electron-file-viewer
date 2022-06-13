@@ -12,7 +12,6 @@ interface HeatmapData {
 }
 
 type Props = {
-  // results: ProcessedFileData[] | any;
   results: ReformatedData[] | any;
   setLoading: (arg: boolean) => void;
 };
