@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from './Modal';
+import Modal from './SpikeModal';
 import '@testing-library/jest-dom';
 import { fireEvent, render } from '@testing-library/react';
 

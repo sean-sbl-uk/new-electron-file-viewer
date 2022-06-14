@@ -21,29 +21,31 @@ type Props = {
 
 interface Data {
   fileName: string;
-  taxId: String;
+  taxId: string;
   cellsPerMl: number;
   genomeSize: number;
 }
+
+const defaultSpikes: Data[] = [
+  {
+    fileName: 'spike1',
+    taxId: '570278',
+    cellsPerMl: 20000000,
+    genomeSize: 2639468,
+  },
+  {
+    fileName: 'spike2',
+    taxId: '946077',
+    cellsPerMl: 20000000,
+    genomeSize: 3105306,
+  },
+];
 
 const Modal: React.FC<Props> = (props) => {
   const { show, handleCloseModal, files } = props;
 
   const [multipleSpikes, setMultipleSpikes] = useState<boolean>(false);
-  const [formData, setFormData] = useState<Data[]>([
-    {
-      fileName: 'spike1',
-      taxId: '570278',
-      cellsPerMl: 20000000,
-      genomeSize: 2639468,
-    },
-    {
-      fileName: 'spike2',
-      taxId: '946077',
-      cellsPerMl: 20000000,
-      genomeSize: 3105306,
-    },
-  ]);
+  const [formData, setFormData] = useState<Data[]>(defaultSpikes);
   const [validated, setValidated] = useState(false);
 
   const dispatch = useDispatch();
@@ -121,7 +123,7 @@ const Modal: React.FC<Props> = (props) => {
     setMultipleSpikes(!multipleSpikes);
   };
 
-  const inputFields = (fileName: string) => {
+  const inputFields = (fileName: string, defaultSpike?: Data) => {
     return (
       <Row className="mb-3">
         <Form.Group as={Col}>
@@ -133,6 +135,7 @@ const Modal: React.FC<Props> = (props) => {
             id={`taxId/ ${fileName}`}
             placeholder="TaxId"
             onChange={onFormChange}
+            defaultValue={defaultSpike ? defaultSpike.taxId : undefined}
           ></Form.Control>
 
           <Form.Control.Feedback type="invalid">
@@ -149,6 +152,7 @@ const Modal: React.FC<Props> = (props) => {
             id={`cellsPerMl/ ${fileName}`}
             placeholder="Cells per ml"
             onChange={onFormChange}
+            defaultValue={defaultSpike ? defaultSpike.cellsPerMl : undefined}
           ></Form.Control>
           <Form.Control.Feedback type="invalid">
             Provide cells per ml
@@ -164,6 +168,7 @@ const Modal: React.FC<Props> = (props) => {
             id={`genomeSize/ ${fileName}`}
             placeholder="Genome Size"
             onChange={onFormChange}
+            defaultValue={defaultSpike ? defaultSpike.genomeSize : undefined}
           ></Form.Control>
           <Form.Control.Feedback type="invalid">
             Provide genome size
@@ -196,8 +201,12 @@ const Modal: React.FC<Props> = (props) => {
     ) : files[0] ? (
       // <div className="main-color">{inputFields(files[0].name)}</div>
       <>
-        <div className="main-color">{inputFields('Spike1')}</div>
-        <div className="main-color">{inputFields('Spike2')}</div>
+        <div className="main-color">
+          {inputFields('Spike1', defaultSpikes[0])}
+        </div>
+        <div className="main-color">
+          {inputFields('Spike2', defaultSpikes[1])}
+        </div>
       </>
     ) : null;
 

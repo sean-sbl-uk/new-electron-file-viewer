@@ -117,7 +117,7 @@ const Results = () => {
     <section data-testid="results" className="background">
       <div className="light-overlay">
         <Container>
-          <div className="text-center">
+          <div className="text-center results">
             {loading && <Loader />}
             {results && !loading && (
               <>

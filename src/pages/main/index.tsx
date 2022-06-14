@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Stack } from 'react-bootstrap';
 import Container from '../../components/container/Container';
 import Dropzone from '../../components/dropzone/Dropzone';
-import Modal from '../../components/modal/Modal';
+import Modal from '../../components/spikeModal/SpikeModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { FileWithPath } from 'react-dropzone';
