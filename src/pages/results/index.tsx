@@ -113,6 +113,10 @@ const Results = () => {
     setDataVisualization(e);
   };
 
+  const dropdownStyle = {
+    width: '100%',
+  };
+
   return (
     <section data-testid="results" className="background">
       <div className="light-overlay">
@@ -123,7 +127,7 @@ const Results = () => {
               <>
                 <h1 className="my-4 main-color">Results</h1>
                 <div className="mt-4 mb-4">
-                  <Row>
+                  <Row xs={1} md={6} lg={8} className="justify-content-start">
                     <Col>
                       <Button
                         className="btn-hover btn-block"
@@ -147,12 +151,12 @@ const Results = () => {
 
                     <Col>
                       <DropdownButton
-                        className="btn-block"
+                        className="btn-block dropdown"
                         data-testid="result-dropdown"
                         title="Data Visulazation"
                         onSelect={handleDropdownSelect}
                         variant="secondary"
-                        style={{ width: '100%' }}
+                        style={dropdownStyle}
                       >
                         <Dropdown.Item eventKey="heatmap">
                           Heatmap

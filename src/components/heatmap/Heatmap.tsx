@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { ResponsiveHeatMapCanvas, HeatMapCanvas } from '@nivo/heatmap';
+import {
+  ResponsiveHeatMapCanvas,
+  HeatMapCanvas,
+  TooltipComponent,
+  HeatMapDatum,
+  DefaultHeatMapDatum,
+} from '@nivo/heatmap';
+import { BasicTooltip, BasicTooltipProps } from '@nivo/tooltip';
 
 interface DataObj {
   x: string;
@@ -36,6 +43,21 @@ const mapToHeatmapData = (results: ReformatedData[]): HeatmapData[] => {
   return heatmapData;
 };
 
+// const customTooltip: React.FunctionComponent<any> = (props: {
+//   id: string | undefined;
+//   value: string | number | Date | undefined;
+//   color: string | undefined;
+// }) => {
+//   return (
+//     <BasicTooltip
+//       id={props.id}
+//       value={props.value}
+//       color={props.color}
+//       enableChip
+//     />
+//   );
+// };
+
 const Heatmap: React.FC<Props> = (props: any) => {
   const { results, setLoading } = props;
   const [data, setData] = useState<HeatmapData[]>();
@@ -45,6 +67,20 @@ const Heatmap: React.FC<Props> = (props: any) => {
 
     setLoading(false);
   }, [results]);
+
+  // const customTooltip: React.FunctionComponent<BarTooltipDatum> = (props: {
+  //   value: string | number | Date | undefined;
+  //   color: string | undefined;
+  // }) => {
+  //   return (
+  //     <BasicTooltip
+  //       id={undefined}
+  //       value={props.value}
+  //       color={props.color}
+  //       enableChip
+  //     />
+  //   );
+  // };
 
   return (
     <>
@@ -60,6 +96,10 @@ const Heatmap: React.FC<Props> = (props: any) => {
               forceSquare
               margin={{ top: 70, right: 60, bottom: 20, left: 80 }}
               valueFormat=">-.2s"
+              // tooltip={customTooltip}
+              // tooltip={point => {
+              //   return <div>{point}</div>
+              // }}
               axisTop={{
                 tickSize: 5,
                 tickPadding: 5,
@@ -71,16 +111,6 @@ const Heatmap: React.FC<Props> = (props: any) => {
                 },
               }}
               axisBottom={null}
-              // axisBottom={{
-              //   tickSize: 5,
-              //   tickPadding: 5,
-              //   tickRotation: -45,
-              //   legend: '',
-              //   legendOffset: 46,
-              //   format: (value) => {
-              //     return value.length > 7 ? value.slice(0, 7) : value;
-              //   },
-              // }}
               axisLeft={{
                 tickSize: 5,
                 tickPadding: 5,
