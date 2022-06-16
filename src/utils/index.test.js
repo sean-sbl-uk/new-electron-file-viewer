@@ -92,7 +92,7 @@ describe('utils methods', () => {
     });
   });
 
-  test('test filtering top hits', async () => {
+  test('test filtering top hits with spikes included', async () => {
     const filters = {
       spikesOn: true,
       topHits: '3',

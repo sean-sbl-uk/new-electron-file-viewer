@@ -1,10 +1,5 @@
-import React from 'react';
 import '@testing-library/jest-dom';
-import { render } from '@testing-library/react';
 import Heatmap from './Heatmap';
-import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
-import Results from 'pages/results';
 import { renderWithStore } from '../../utils/testUtils';
 
 window.ResizeObserver =
