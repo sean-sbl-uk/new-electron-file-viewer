@@ -161,7 +161,9 @@ const Results = () => {
                         <Dropdown.Item eventKey="heatmap">
                           Heatmap
                         </Dropdown.Item>
-                        <Dropdown.Item disabled>Line Chart</Dropdown.Item>
+                        <Dropdown.Item disabled>
+                          Future Chart Opts...
+                        </Dropdown.Item>
                       </DropdownButton>
                     </Col>
                   </Row>
