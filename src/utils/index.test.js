@@ -1,44 +1,7 @@
-import React from 'react';
-import Modal from './SpikeModal';
 import '@testing-library/jest-dom';
-import { fireEvent, render } from '@testing-library/react';
-
-import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
-import { renderWithMockStore } from '../../utils/testUtils';
 import { filterResults, reformatData } from './index';
 
 describe('utils methods', () => {
-  // const data = [
-  //   {
-  //     fileName: 'file1',
-  //     amount: 12345,
-  //   },
-  //   {
-  //     fileName: 'file2',
-  //     amount: 12345,
-  //   },
-  //   {
-  //     fileName: 'file3',
-  //     amount: 12345,
-  //   },
-  // ];
-
-  // const results = [
-  //   {
-  //     bacteria: 'bacteria1',
-  //     data: data,
-  //   },
-  //   {
-  //     bacteria: 'bacteria2',
-  //     data: data,
-  //   },
-  //   {
-  //     bacteria: 'bacteria3',
-  //     data: data,
-  //   },
-  // ];
-
   const bacteriaArray = [
     {
       name: 'bacteria1',
