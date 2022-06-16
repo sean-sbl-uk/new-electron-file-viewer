@@ -32,8 +32,13 @@ export const processEachFileMultipleSpikes = (
     return bacteriaArray;
   }
 
+  console.log(spikeDNAOut);
+  console.log(spikeDNAIn);
+
   //calculate recovery ratio
   const recoveryRatio: number = spikeDNAIn / spikeDNAOut;
+
+  // console.log(recoveryRatio);
 
   //loop over records and count up all species
   records.forEach((record) => {

@@ -1,5 +1,9 @@
 import '@testing-library/jest-dom';
-import { filterResults, reformatData } from './index';
+import {
+  filterResults,
+  processEachFileMultipleSpikes,
+  reformatData,
+} from './index';
 
 describe('utils methods', () => {
   const bacteriaArray = [
@@ -139,6 +143,77 @@ describe('utils methods', () => {
           expect(file.data).not.toContain(spikeBacteria);
         });
       }
+    );
+  });
+
+  test('test individual file processing returns correct data', () => {
+    const spike = {
+      fileName: 'spike bacteria',
+      taxId: '1',
+      cellsPerMl: 5,
+      genomeSize: 5,
+    };
+
+    const spikeRecord = {
+      queryLen: 1,
+      queryStart: 1,
+      queryEnd: 2,
+      subjectStart: 1,
+      subjectEnd: 2,
+      alignmentLen: 1,
+      pIdent: 1,
+      eVal: 1,
+      mismatches: 1,
+      rawScore: 1,
+      subjectLen: 5,
+      taxId: '1',
+      accId: '1',
+      subjectTitle: 'spike bacteria',
+      accIdVersion: 'spike bacteria',
+      fbtop: 'dummy bacteria',
+    };
+
+    const fileRecord = {
+      queryLen: 1,
+      queryStart: 1,
+      queryEnd: 2,
+      subjectStart: 1,
+      subjectEnd: 2,
+      alignmentLen: 1,
+      pIdent: 1,
+      eVal: 1,
+      mismatches: 1,
+      rawScore: 1,
+      subjectLen: 5,
+      taxId: '2',
+      accId: '2',
+      subjectTitle: 'dummy bacteria',
+      accIdVersion: 'dummy bacteria',
+      fbtop: 'dummy bacteria',
+    };
+
+    const fileRecordArray = [spikeRecord, fileRecord, fileRecord, fileRecord];
+
+    const result = processEachFileMultipleSpikes([spike], fileRecordArray);
+
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: 'dummy bacteria',
+          taxId: '2',
+          subjectLength: 5,
+          recoveredAmount: 3,
+          estimatedTotalAmount: 15,
+        }),
+
+        expect.objectContaining({
+          name: 'spike bacteria',
+          taxId: '1',
+          subjectLength: 5,
+          recoveredAmount: 1,
+          estimatedTotalAmount: 5,
+        }),
+      ])
     );
   });
 });
