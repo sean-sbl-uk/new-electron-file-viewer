@@ -32,9 +32,6 @@ export const processEachFileMultipleSpikes = (
     return bacteriaArray;
   }
 
-  console.log(spikeDNAOut);
-  console.log(spikeDNAIn);
-
   //calculate recovery ratio
   const recoveryRatio: number = spikeDNAIn / spikeDNAOut;
 
