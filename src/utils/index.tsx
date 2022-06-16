@@ -220,14 +220,14 @@ export const reformatData = (
     fullResults.forEach((fileData) => {
       // get the full array of data for each file
       let bacteriaArray: Bacteria[] = fileData.data;
-      console.log(bacteriaArray);
+      // console.log(bacteriaArray);
 
       // get the bacteria data that matches the id from the set element
       let fileBacteriaObj: Bacteria | undefined = bacteriaArray.find(
         (element) => element.taxId == bacteria.taxId
       );
 
-      console.log(fileBacteriaObj);
+      // console.log(fileBacteriaObj);
 
       //create obj
       let fileWithBacteriaAmount: FileWithBacteriaAmount =

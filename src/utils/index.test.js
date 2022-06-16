@@ -6,38 +6,38 @@ import { fireEvent, render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { renderWithMockStore } from '../../utils/testUtils';
-import { filterResults } from './index';
+import { filterResults, reformatData } from './index';
 
 describe('utils methods', () => {
-  const data = [
-    {
-      fileName: 'file1',
-      amount: 12345,
-    },
-    {
-      fileName: 'file2',
-      amount: 12345,
-    },
-    {
-      fileName: 'file3',
-      amount: 12345,
-    },
-  ];
+  // const data = [
+  //   {
+  //     fileName: 'file1',
+  //     amount: 12345,
+  //   },
+  //   {
+  //     fileName: 'file2',
+  //     amount: 12345,
+  //   },
+  //   {
+  //     fileName: 'file3',
+  //     amount: 12345,
+  //   },
+  // ];
 
-  const results = [
-    {
-      bacteria: 'bacteria1',
-      data: data,
-    },
-    {
-      bacteria: 'bacteria2',
-      data: data,
-    },
-    {
-      bacteria: 'bacteria3',
-      data: data,
-    },
-  ];
+  // const results = [
+  //   {
+  //     bacteria: 'bacteria1',
+  //     data: data,
+  //   },
+  //   {
+  //     bacteria: 'bacteria2',
+  //     data: data,
+  //   },
+  //   {
+  //     bacteria: 'bacteria3',
+  //     data: data,
+  //   },
+  // ];
 
   const bacteriaArray = [
     {
@@ -99,7 +99,31 @@ describe('utils methods', () => {
     },
   ];
 
-  // test('check data reformatting', () => {});
+  test('check data reformatting', async () => {
+    let bacteriaSet = new Set(bacteriaArray);
+
+    return reformatData(bacteriaSet, processedFileDataArray).then((data) => {
+      expect.arrayContaining([
+        expect.objectContaining({
+          bacteria: 'bacteria1',
+          data: [
+            {
+              fileName: 'file1',
+              amount: 1,
+            },
+            {
+              fileName: 'file2',
+              amount: 1,
+            },
+            {
+              fileName: 'file3',
+              amount: 1,
+            },
+          ],
+        }),
+      ]);
+    });
+  });
 
   test('test filtering top hits', async () => {
     const filters = {
