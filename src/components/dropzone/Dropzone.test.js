@@ -11,28 +11,32 @@ describe('Dropzone', () => {
   const initialState = {};
   const mockStore = configureStore();
   let store, wrapper;
-  const mockFunc = jest.fn();
+  const setFiles = jest.fn();
+  // const mockFile = jest.mock('../ file.csv');
 
   it('should render', () => {
     store = mockStore(initialState);
     const { getByTestId } = render(
       <Provider store={store}>
-        <Dropzone setFiles={mockFunc} />
+        <Dropzone setFiles={setFiles} />
       </Provider>
     );
 
     expect(getByTestId('dropzone')).toBeInTheDocument();
   });
 
-  // it('shold bring up file explorer', () => {
-  //   store = mockStore(initialState);
+  it('shold call the setFiles method on input change explorer', () => {
+    store = mockStore(initialState);
 
-  //   const {getByTestId, getByText} = render(    <Provider store={store}>
-  //     <Dropzone setFiles={mockFunc} />
-  //   </Provider>);
+    const { getByTestId, getByText } = render(
+      <Provider store={store}>
+        <Dropzone setFiles={setFiles} />
+      </Provider>
+    );
 
-  //   const dropzoneInput = getByTestId('dropzone-input');
-  //   fireEvent.click(dropzoneInput)
+    const dropzoneInput = getByTestId('dropzone-input');
+    fireEvent.change(dropzoneInput, { target: { value: '' } });
 
-  // });
+    expect(setFiles).toBeCalled();
+  });
 });

@@ -26,7 +26,6 @@ describe('filter modal', () => {
     );
 
     expect(getByText('Filters')).toBeInTheDocument();
-    // expect(getByTestId('filter-modal')).toBeInTheDocument();
   });
 
   it('should show dropdown for top hits', () => {
@@ -49,7 +48,7 @@ describe('filter modal', () => {
   });
 
   it('should call filter submit method on submit', () => {
-    const { getByTestId, getByText } = renderWithMockStore(
+    const { getByText } = renderWithMockStore(
       <Filters
         handleCloseFiltering={handleCloseFiltering}
         handleFilterSubmit={handleFilterSubmit}
