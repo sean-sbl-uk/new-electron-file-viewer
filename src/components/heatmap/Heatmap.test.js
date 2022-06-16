@@ -45,12 +45,20 @@ describe('Heatmap', () => {
       data: data,
     },
   ];
-  const mockFunc = jest.fn();
+  const setLoading = jest.fn();
 
   it('should render', () => {
     const { getByTestId } = renderWithStore(
-      <Heatmap results={results} setLoading={mockFunc} />
+      <Heatmap results={results} setLoading={setLoading} />
     );
     expect(getByTestId('heatmap')).toBeInTheDocument();
+  });
+
+  it('should set loading animation to false when heatmap data loaded', () => {
+    const { getByTestId } = renderWithStore(
+      <Heatmap results={results} setLoading={setLoading} />
+    );
+
+    expect(setLoading).toBeCalledWith(false);
   });
 });
