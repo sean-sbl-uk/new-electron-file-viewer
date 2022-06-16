@@ -132,7 +132,8 @@ export const filterResults = async (
   result =
     filters.spikesOn && spikes ? result : await spikesOnFilter(spikes, result);
 
-  return result;
+  // console.log(result);
+  return Promise.resolve(result);
 };
 
 /**
@@ -208,7 +209,6 @@ const topHitsFilter = (
  */
 export const reformatData = (
   bacteriaSet: Set<Bacteria>,
-  // filtered: ProcessedFileData[],
   fullResults: ProcessedFileData[]
 ): Promise<ReformatedData[]> => {
   let reformatedDataArray: ReformatedData[] = [];

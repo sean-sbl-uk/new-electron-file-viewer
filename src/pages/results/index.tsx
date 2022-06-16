@@ -125,7 +125,7 @@ const Results = () => {
             {loading && <Loader />}
             {results && !loading && (
               <>
-                <h1 className="my-4 main-color">Results</h1>
+                <h1 className="my-8 main-color page-title">Results</h1>
                 <div className="mt-4 mb-4">
                   <Row xs={1} md={6} lg={8} className="justify-content-start">
                     <Col>

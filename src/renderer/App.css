@@ -116,6 +116,12 @@ a:hover {
   height: 100%;
 }
 
+.page-title {
+  font-size: 4rem;
+  /* text-transform: uppercase; */
+  /* margin-bottom: 2rem; */
+}
+
 .btn-link-outline {
   text-decoration: none;
   color: white;
