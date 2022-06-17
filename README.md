@@ -1,4 +1,26 @@
-<img src=".erb/img/erb-banner.svg" width="100%" />
+## MicrobioMe File Uploader Desktop
+
+A desktop GUI that can analyze and produce data visualization for multiple files containing DNA records.
+accepts .csv, .tsv and .blast files containing dna data output by [BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi)
+
+## Features
+
+- Upload multiple csv, tsv or blast files.
+- Define spike data for all files.
+- Display heatmap showing cell counts of identified species.
+- Filter options for displaying results
+  - Spikes on/off
+  - Top hits per file (10, 20, 50)
+
+## Dependencies
+
+- [electron-react-boilerplate](https://electron-react-boilerplate.js.org/docs/installation)
+- [redux toolkit](https://redux-toolkit.js.org/)
+- [react bootstrap](https://react-bootstrap.github.io/)
+- [nivo heatmap canvas](https://nivo.rocks/heatmap/canvas/)
+- [Typescript](https://www.typescriptlang.org/docs/handbook/react.html)
+
+<!-- <img src=".erb/img/erb-banner.svg" width="100%" />
 
 <br>
 
@@ -150,4 +172,4 @@ MIT © [Electron React Boilerplate](https://github.com/electron-react-boilerplat
 [github-tag-image]: https://img.shields.io/github/tag/electron-react-boilerplate/electron-react-boilerplate.svg?label=version
 [github-tag-url]: https://github.com/electron-react-boilerplate/electron-react-boilerplate/releases/latest
 [stackoverflow-img]: https://img.shields.io/badge/stackoverflow-electron_react_boilerplate-blue.svg
-[stackoverflow-url]: https://stackoverflow.com/questions/tagged/electron-react-boilerplate
+[stackoverflow-url]: https://stackoverflow.com/questions/tagged/electron-react-boilerplate -->
