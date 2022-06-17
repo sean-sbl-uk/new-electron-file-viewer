@@ -19,7 +19,6 @@ window.electron = {
 describe('Results', () => {
   it('should render', () => {
     const { getByTestId } = renderWithStore(<Results />);
-
     expect(getByTestId('results')).toBeInTheDocument();
   });
 });

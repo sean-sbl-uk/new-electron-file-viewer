@@ -8,10 +8,6 @@ import configureStore from 'redux-mock-store';
 import { renderWithMockStore } from '../../utils/testUtils';
 
 describe('Container', () => {
-  // const initialState = {};
-  // const mockStore = configureStore();
-  // const store = mockStore(initialState);
-
   it('should render', () => {
     const { getByTestId } = renderWithMockStore(<Container />);
     expect(getByTestId('container')).toBeInTheDocument();

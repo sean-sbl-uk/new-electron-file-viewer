@@ -1,9 +1,8 @@
 import React from 'react';
-import Modal from './Modal';
+import Modal from './SpikeModal';
 import '@testing-library/jest-dom';
 import { fireEvent, render } from '@testing-library/react';
 
-import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { renderWithMockStore } from '../../utils/testUtils';
 
@@ -15,6 +14,8 @@ describe('Modal', () => {
   const mockStore = configureStore();
   let store, wrapper;
 
+  const handleCloseModal = jest.fn();
+
   it('should render', () => {
     const { getByTestId } = renderWithMockStore(
       <Modal show files={files} />,
@@ -24,7 +25,7 @@ describe('Modal', () => {
     expect(getByTestId('modal')).toBeInTheDocument();
   });
 
-  it('should display file name over input fields', () => {
+  it('should display file name over input fields when spike swith clicked', () => {
     store = mockStore(initialState);
     const { getByTestId, getByText } = renderWithMockStore(
       <Modal show={true} files={files} />,
@@ -52,4 +53,15 @@ describe('Modal', () => {
 
   //   expect(getByText('Provide taxId')).toBeInTheDocument();
   // });
+
+  it('should close modal on submit', () => {
+    const { getByText } = renderWithMockStore(
+      <Modal show={true} files={files} handleCloseModal={handleCloseModal} />
+    );
+
+    const saveButton = getByText('Save Changes');
+    fireEvent.click(saveButton);
+
+    expect(handleCloseModal).toBeCalled();
+  });
 });

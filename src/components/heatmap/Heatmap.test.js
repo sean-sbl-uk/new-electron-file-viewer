@@ -1,10 +1,5 @@
-import React from 'react';
 import '@testing-library/jest-dom';
-import { render } from '@testing-library/react';
 import Heatmap from './Heatmap';
-import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
-import Results from 'pages/results';
 import { renderWithStore } from '../../utils/testUtils';
 
 window.ResizeObserver =
@@ -45,12 +40,20 @@ describe('Heatmap', () => {
       data: data,
     },
   ];
-  const mockFunc = jest.fn();
+  const setLoading = jest.fn();
 
   it('should render', () => {
     const { getByTestId } = renderWithStore(
-      <Heatmap results={results} setLoading={mockFunc} />
+      <Heatmap results={results} setLoading={setLoading} />
     );
     expect(getByTestId('heatmap')).toBeInTheDocument();
+  });
+
+  it('should set loading animation to false when heatmap data loaded', () => {
+    const { getByTestId } = renderWithStore(
+      <Heatmap results={results} setLoading={setLoading} />
+    );
+
+    expect(setLoading).toBeCalledWith(false);
   });
 });

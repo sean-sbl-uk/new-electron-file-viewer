@@ -65,6 +65,7 @@ a:hover {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: Tahoma, sans-serif;
 }
 
 .background {
@@ -116,20 +117,11 @@ a:hover {
   height: 100%;
 }
 
-/* .btn {
-  display: inline-block;
-  background: teal;
-  color: white;
-  padding: 0.4rem 1.3rem;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-  margin-right: 0.5rem;
-  transition: opacity 0.2s ease-in;
-  outline: none;
-
-  border-radius: 2px;
-} */
+.page-title {
+  font-size: 4rem;
+  /* text-transform: uppercase; */
+  /* margin-bottom: 2rem; */
+}
 
 .btn-link-outline {
   text-decoration: none;
@@ -202,6 +194,14 @@ a:hover {
   color: #566;
 }
 
+.results {
+  width: 100%;
+}
+
+.dropdown button {
+  width: 100%;
+}
+
 .chart-background {
   background-color: rgba(255, 255, 255, 0.568);
   border-radius: 4px;
@@ -210,6 +210,10 @@ a:hover {
   margin-left: '2px';
   margin-right: '2px';
   text-align: 'center';
-  height: 500px;
-  width: 500px;
+  /* height: 500px;
+  width: 500px; */
+  width: 100%;
+  height: 90%;
+  display: block;
+  overflow: scroll;
 }

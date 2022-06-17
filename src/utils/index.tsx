@@ -1,5 +1,5 @@
 /**
- *
+ * Process each individual file with using multiple spikes
  * @param spikeData
  * @param records
  * @returns Bacteria[]
@@ -34,6 +34,8 @@ export const processEachFileMultipleSpikes = (
 
   //calculate recovery ratio
   const recoveryRatio: number = spikeDNAIn / spikeDNAOut;
+
+  // console.log(recoveryRatio);
 
   //loop over records and count up all species
   records.forEach((record) => {
@@ -73,7 +75,7 @@ export const processEachFileMultipleSpikes = (
 };
 
 /**
- *
+ * Takes in list of files and spikes and begins process
  * @param allFileRecords
  * @param allSpikeData
  * @returns ProcessedFileData[]
@@ -132,7 +134,7 @@ export const filterResults = async (
   result =
     filters.spikesOn && spikes ? result : await spikesOnFilter(spikes, result);
 
-  return result;
+  return Promise.resolve(result);
 };
 
 /**
@@ -207,40 +209,17 @@ const topHitsFilter = (
  * @returns
  */
 export const reformatData = (
-  bacteriaSet: Set<string>,
-  processedFileDataArr: ProcessedFileData[]
+  bacteriaSet: Set<Bacteria>,
+  fullResults: ProcessedFileData[]
 ): Promise<ReformatedData[]> => {
   let reformatedDataArray: ReformatedData[] = [];
 
   bacteriaSet.forEach((bacteria) => {
-    let dataArr: FileWithBacteriaAmount[] = [];
-
-    //for each file
-    processedFileDataArr.forEach((fileData) => {
-      //does the file have the bacteria
-      let fileBacteriaObj: Bacteria | undefined = fileData.data.find(
-        (fileBac) => fileBac.name === bacteria
-      );
-
-      //create obj
-      let fileWithBacteriaAmount: FileWithBacteriaAmount =
-        fileBacteriaObj == undefined
-          ? {
-              fileName: fileData.fileName,
-              amount: 0,
-            }
-          : {
-              fileName: fileData.fileName,
-              amount: fileBacteriaObj.estimatedTotalAmount,
-            };
-
-      //add to array
-      dataArr.push(fileWithBacteriaAmount);
-    });
+    let dataArr: FileWithBacteriaAmount[] = fillInGaps(bacteria, fullResults);
 
     //create final obj
     let reformedDataElement: ReformatedData = {
-      bacteria: bacteria,
+      bacteria: bacteria.name,
       data: dataArr,
     };
 
@@ -249,4 +228,45 @@ export const reformatData = (
   });
 
   return Promise.resolve(reformatedDataArray);
+};
+
+/**
+ * Helper function that checks if file has hits for other bacteria outside top x
+ * @param bacteria
+ * @param fullResults
+ * @returns
+ */
+const fillInGaps = (
+  bacteria: Bacteria,
+  fullResults: ProcessedFileData[]
+): FileWithBacteriaAmount[] => {
+  // const result: FileWithBacteriaAmount;
+  let dataArr: FileWithBacteriaAmount[] = [];
+
+  fullResults.forEach((fileData) => {
+    // get the full array of data for each file
+    let bacteriaArray: Bacteria[] = fileData.data;
+
+    // get the bacteria data that matches the id from the set element
+    let fileBacteriaObj: Bacteria | undefined = bacteriaArray.find(
+      (element) => element.taxId == bacteria.taxId
+    );
+
+    //create obj
+    let fileWithBacteriaAmount: FileWithBacteriaAmount =
+      fileBacteriaObj == undefined
+        ? {
+            fileName: fileData.fileName,
+            amount: 0,
+          }
+        : {
+            fileName: fileData.fileName,
+            amount: fileBacteriaObj.estimatedTotalAmount,
+          };
+
+    //add to array
+    dataArr.push(fileWithBacteriaAmount);
+  });
+
+  return dataArr;
 };

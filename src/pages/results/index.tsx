@@ -9,6 +9,7 @@ import { Button, Row, Col, Dropdown, DropdownButton } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Filters from '../../components/filters/Filters';
 import { setResultsData } from '../../redux/results';
+import { resetSpikeData } from '../../redux/spikes';
 
 const Results = () => {
   const [loading, setLoading] = useState(true);
@@ -47,7 +48,7 @@ const Results = () => {
       let filtered = await filterResults(args, allSpikeData, filter);
 
       //After filtering add up all bacteria to set/unique list
-      let reformatedDataArray: ReformatedData[] = await format(filtered);
+      let reformatedDataArray: ReformatedData[] = await format(args, filtered);
 
       setResults(reformatedDataArray);
       setLoading(false);
@@ -57,25 +58,27 @@ const Results = () => {
   }, []);
 
   const format = async (
+    fullResults: ProcessedFileData[],
     filtered: ProcessedFileData[]
   ): Promise<ReformatedData[]> => {
-    let bacteriaSet: Set<string> = new Set();
+    let bacteriaSet: Set<Bacteria> = new Set();
 
     filtered.forEach((file) => {
       file.data.forEach((bacteria) => {
-        bacteriaSet.add(bacteria.name);
+        bacteriaSet.add(bacteria);
       });
     });
 
     let reformatedDataArray: ReformatedData[] = await reformatData(
       bacteriaSet,
-      filtered
+      fullResults
     );
 
     return reformatedDataArray;
   };
 
   const handleBackOnClick = () => {
+    dispatch(resetSpikeData());
     navigate('/main', { replace: true });
   };
 
@@ -98,7 +101,10 @@ const Results = () => {
     if (fullResults) {
       let filtered = await filterResults(fullResults, spikes, filters);
 
-      let reformatedDataArray: ReformatedData[] = await format(filtered);
+      let reformatedDataArray: ReformatedData[] = await format(
+        fullResults,
+        filtered
+      );
 
       setResults(reformatedDataArray);
       setLoading(false);
@@ -109,17 +115,21 @@ const Results = () => {
     setDataVisualization(e);
   };
 
+  const dropdownStyle = {
+    width: '100%',
+  };
+
   return (
     <section data-testid="results" className="background">
       <div className="light-overlay">
         <Container>
-          <div className="text-center">
+          <div className="text-center results">
             {loading && <Loader />}
             {results && !loading && (
               <>
-                <h1 className="my-4 main-color">Results</h1>
+                <h1 className="my-8 main-color page-title">Results</h1>
                 <div className="mt-4 mb-4">
-                  <Row>
+                  <Row xs={1} md={6} lg={8} className="justify-content-start">
                     <Col>
                       <Button
                         className="btn-hover btn-block"
@@ -143,17 +153,19 @@ const Results = () => {
 
                     <Col>
                       <DropdownButton
-                        className="btn-block"
+                        className="btn-block dropdown"
                         data-testid="result-dropdown"
                         title="Data Visulazation"
                         onSelect={handleDropdownSelect}
                         variant="secondary"
-                        style={{ width: '100%' }}
+                        style={dropdownStyle}
                       >
                         <Dropdown.Item eventKey="heatmap">
                           Heatmap
                         </Dropdown.Item>
-                        <Dropdown.Item disabled>Line Chart</Dropdown.Item>
+                        <Dropdown.Item disabled>
+                          Future Chart Opts...
+                        </Dropdown.Item>
                       </DropdownButton>
                     </Col>
                   </Row>

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Stack } from 'react-bootstrap';
 import Container from '../../components/container/Container';
 import Dropzone from '../../components/dropzone/Dropzone';
-import Modal from '../../components/modal/Modal';
+import Modal from '../../components/spikeModal/SpikeModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { FileWithPath } from 'react-dropzone';
@@ -22,10 +22,9 @@ const Main = () => {
   useEffect(() => {
     if (Object.keys(spikeData).length !== 0) {
       setSpikesSet(true);
+    } else {
+      setSpikesSet(false);
     }
-
-    // dispatch(resetReduxStoreFiles());
-    // setFiles([]);
   }, [spikeData]);
 
   const handleOpenModal = () => {
@@ -78,6 +77,7 @@ const Main = () => {
       <div className="light-overlay">
         <Container>
           <div className="text-center row ">
+            <h1 className="my-8 main-color page-title">File Upload</h1>
             <Dropzone setFiles={setFiles}>
               <Stack gap={2}>
                 {spikesButton}
