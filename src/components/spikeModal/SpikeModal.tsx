@@ -78,16 +78,6 @@ const Modal: React.FC<Props> = (props) => {
     const fileName: string = id.split('/')[1].trim();
     const key: '' = e.target.name;
 
-    //   setFormData({
-    //     ...formData,
-    //     [fileName]: {
-    //       // ...formData[fileName],
-
-    //       [e.target.name]: e.target.value,
-    //     },
-    //   });
-    // };
-
     let index = formData.findIndex((obj) => obj.fileName === fileName);
 
     //If index is not in formData set index to end of array
@@ -193,13 +183,10 @@ const Modal: React.FC<Props> = (props) => {
             </Form.Label>
 
             {inputFields(file.name)}
-            {/* Button here */}
-            {/* onclick adds another input row? */}
           </div>
         );
       })
     ) : files[0] ? (
-      // <div className="main-color">{inputFields(files[0].name)}</div>
       <>
         <div className="main-color">
           {inputFields('Spike1', defaultSpikes[0])}

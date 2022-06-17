@@ -4,7 +4,6 @@ import { Modal as BootstrapModal, Form, Button } from 'react-bootstrap';
 type Props = {
   handleCloseFiltering: () => void;
   handleFilterSubmit: (filterData: any) => void;
-  // fiterData: FilterData;
   show: boolean;
 };
 

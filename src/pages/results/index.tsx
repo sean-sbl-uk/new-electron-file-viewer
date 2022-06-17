@@ -9,6 +9,7 @@ import { Button, Row, Col, Dropdown, DropdownButton } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Filters from '../../components/filters/Filters';
 import { setResultsData } from '../../redux/results';
+import { resetSpikeData } from '../../redux/spikes';
 
 const Results = () => {
   const [loading, setLoading] = useState(true);
@@ -77,6 +78,7 @@ const Results = () => {
   };
 
   const handleBackOnClick = () => {
+    dispatch(resetSpikeData());
     navigate('/main', { replace: true });
   };
 
