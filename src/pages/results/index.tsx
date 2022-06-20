@@ -16,6 +16,7 @@ const Results = () => {
   const [results, setResults] = useState<ReformatedData[]>();
   const [showFiltering, setShowFiltering] = useState(false);
   const [dataVisualization, setDataVisualization] = useState<string>('heatmap');
+  const [color, setColor] = useState<string>('blues');
 
   const allFileRecords = useSelector((state: RootState) => state.records.data);
   const allSpikeData = useSelector((state: RootState) => state.spikeData.data);
@@ -115,6 +116,10 @@ const Results = () => {
     setDataVisualization(e);
   };
 
+  const handleColorDropdown = (e: any) => {
+    setColor(e);
+  };
+
   const dropdownStyle = {
     width: '100%',
   };
@@ -168,9 +173,41 @@ const Results = () => {
                         </Dropdown.Item>
                       </DropdownButton>
                     </Col>
+
+                    <Row>
+                      <DropdownButton
+                        className="btn-block dropdown"
+                        data-testid="color-dropdown"
+                        title="Color"
+                        onSelect={handleColorDropdown}
+                        variant="secondary"
+                        style={dropdownStyle}
+                      >
+                        <Dropdown.Item eventKey="blues">Blue</Dropdown.Item>
+                        <Dropdown.Item eventKey="reds">Red</Dropdown.Item>
+                        <Dropdown.Item eventKey="greens">Green</Dropdown.Item>
+                        <Dropdown.Item eventKey="greys">Grey</Dropdown.Item>
+                        <Dropdown.Item eventKey="yellow_orange_red">
+                          Yellow/Red
+                        </Dropdown.Item>
+                        <Dropdown.Item eventKey="red_blue">
+                          Red/Blue
+                        </Dropdown.Item>
+                        <Dropdown.Item eventKey="spectral">
+                          Spectral
+                        </Dropdown.Item>
+                        <Dropdown.Item eventKey="rainbow">
+                          Rainbow
+                        </Dropdown.Item>
+                      </DropdownButton>
+                    </Row>
                   </Row>
                 </div>
-                <Heatmap results={results} setLoading={setLoading} />
+                <Heatmap
+                  results={results}
+                  setLoading={setLoading}
+                  color={color}
+                />
               </>
             )}
 

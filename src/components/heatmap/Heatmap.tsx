@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  ResponsiveHeatMapCanvas,
-  HeatMapCanvas,
-  TooltipComponent,
-  HeatMapDatum,
-  DefaultHeatMapDatum,
-} from '@nivo/heatmap';
-import { BasicTooltip, BasicTooltipProps } from '@nivo/tooltip';
+import { HeatMapCanvas } from '@nivo/heatmap';
 
 interface DataObj {
   x: string;
@@ -21,6 +14,7 @@ interface HeatmapData {
 type Props = {
   results: ReformatedData[] | any;
   setLoading: (arg: boolean) => void;
+  color: string;
 };
 
 const mapToHeatmapData = (results: ReformatedData[]): HeatmapData[] => {
@@ -43,23 +37,8 @@ const mapToHeatmapData = (results: ReformatedData[]): HeatmapData[] => {
   return heatmapData;
 };
 
-// const customTooltip: React.FunctionComponent<any> = (props: {
-//   id: string | undefined;
-//   value: string | number | Date | undefined;
-//   color: string | undefined;
-// }) => {
-//   return (
-//     <BasicTooltip
-//       id={props.id}
-//       value={props.value}
-//       color={props.color}
-//       enableChip
-//     />
-//   );
-// };
-
 const Heatmap: React.FC<Props> = (props: any) => {
-  const { results, setLoading } = props;
+  const { results, setLoading, color } = props;
   const [data, setData] = useState<HeatmapData[]>();
 
   useEffect(() => {
@@ -67,20 +46,6 @@ const Heatmap: React.FC<Props> = (props: any) => {
 
     setLoading(false);
   }, [results]);
-
-  // const customTooltip: React.FunctionComponent<BarTooltipDatum> = (props: {
-  //   value: string | number | Date | undefined;
-  //   color: string | undefined;
-  // }) => {
-  //   return (
-  //     <BasicTooltip
-  //       id={undefined}
-  //       value={props.value}
-  //       color={props.color}
-  //       enableChip
-  //     />
-  //   );
-  // };
 
   return (
     <>
@@ -96,10 +61,6 @@ const Heatmap: React.FC<Props> = (props: any) => {
               forceSquare
               margin={{ top: 70, right: 60, bottom: 20, left: 80 }}
               valueFormat=">-.2s"
-              // tooltip={customTooltip}
-              // tooltip={point => {
-              //   return <div>{point}</div>
-              // }}
               axisTop={{
                 tickSize: 5,
                 tickPadding: 5,
@@ -119,13 +80,13 @@ const Heatmap: React.FC<Props> = (props: any) => {
                 legendPosition: 'middle',
                 legendOffset: 40,
                 format: (value) => {
-                  return value.length > 16 ? value.slice(0, 20) + '...' : value;
+                  return value.length > 16 ? value.slice(0, 30) + '...' : value;
                 },
               }}
               axisRight={null}
               colors={{
                 type: 'diverging',
-                scheme: 'blues',
+                scheme: color,
                 // steps: 16,
                 minValue: 0,
                 maxValue: 100000,
