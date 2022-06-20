@@ -87,9 +87,6 @@ const Heatmap: React.FC<Props> = (props: any) => {
               colors={{
                 type: 'diverging',
                 scheme: color,
-                // steps: 16,
-                minValue: 0,
-                maxValue: 100000,
               }}
               emptyColor="#555555"
               borderWidth={1}
@@ -98,10 +95,10 @@ const Heatmap: React.FC<Props> = (props: any) => {
               legends={[
                 {
                   anchor: 'top-right',
-                  translateX: 20,
+                  translateX: 40,
                   translateY: 0,
-                  length: 200,
-                  thickness: 10,
+                  length: 630,
+                  thickness: 16,
                   direction: 'column',
                   tickPosition: 'after',
                   tickSize: 3,
