@@ -12,6 +12,9 @@ const Filters: React.FC<Props> = (props) => {
 
   const [filterFormData, setFilterFormData] = useState<FilterData>({
     spikesOn: true,
+    bacteriaOn: true,
+    plasmidOn: true,
+    hostOn: true,
     topHits: '10',
     minHitThreshold: 1,
   });
@@ -25,10 +28,17 @@ const Filters: React.FC<Props> = (props) => {
     handleFilterSubmit(filterFormData);
   };
 
-  const spikeSwitchOnChange = () => {
-    let value: boolean = !filterFormData.spikesOn;
+  // const spikeSwitchOnChange = () => {
+  //   let value: boolean = !filterFormData.spikesOn;
+  //   setFilterFormData({ ...filterFormData, spikesOn: value });
+  // };
 
-    setFilterFormData({ ...filterFormData, spikesOn: value });
+  const switchOnChange = (e: any) => {
+    let name: string = e.target.name;
+    let objKey = name as keyof FilterData;
+    let value: boolean = !filterFormData[objKey];
+    // console.log(e.target.name);
+    setFilterFormData({ ...filterFormData, [objKey]: value });
   };
 
   const onFormChange = (e: any) => {
@@ -55,10 +65,20 @@ const Filters: React.FC<Props> = (props) => {
             type="switch"
             id="spike-switch"
             label="Spikes Off/On"
-            onChange={spikeSwitchOnChange}
+            onChange={switchOnChange}
             className="mb-3"
             data-testid="spike-switch"
             checked={filterFormData.spikesOn}
+          ></Form.Check>
+          <Form.Check
+            name="bacteriaOn"
+            type="switch"
+            id="bacteria-switch"
+            label="bacteria Off/On"
+            onChange={switchOnChange}
+            className="mb-3"
+            data-testid="bacteria-switch"
+            checked={filterFormData.bacteriaOn}
           ></Form.Check>
           <Form.Group className="mb-3">
             <Form.Select

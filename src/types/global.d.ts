@@ -54,6 +54,9 @@ declare type FileWithBacteriaAmount = {
 
 declare type FilterData = {
   spikesOn: boolean;
+  bacteriaOn: boolean;
+  plasmidOn: boolean;
+  hostOn: boolean;
   topHits: string;
   minHitThreshold: number;
 };
