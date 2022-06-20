@@ -28,16 +28,10 @@ const Filters: React.FC<Props> = (props) => {
     handleFilterSubmit(filterFormData);
   };
 
-  // const spikeSwitchOnChange = () => {
-  //   let value: boolean = !filterFormData.spikesOn;
-  //   setFilterFormData({ ...filterFormData, spikesOn: value });
-  // };
-
   const switchOnChange = (e: any) => {
     let name: string = e.target.name;
     let objKey = name as keyof FilterData;
     let value: boolean = !filterFormData[objKey];
-    // console.log(e.target.name);
     setFilterFormData({ ...filterFormData, [objKey]: value });
   };
 
