@@ -41,8 +41,6 @@ const Heatmap: React.FC<Props> = (props: any) => {
   const { results, setLoading, color } = props;
   const [data, setData] = useState<HeatmapData[]>();
 
-  console.log(color);
-
   useEffect(() => {
     setData(mapToHeatmapData(results));
 
