@@ -18,13 +18,17 @@ Accepts .csv, .tsv and .blast files containing dna data output by [BLAST](https:
 
 ## Commands
 
+#### `npm install --legacy-peer-deps`
+
+Installs all dependencies and specific versions of peer dependencies.
+
 #### `npm start`
 
 Starts the app in a locaal development environment.
 
 #### `npm run test`
 
-Runs all test suites using [Jest](https://jestjs.io/) with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+Runs all test suites using [Jest](https://jestjs.io/) with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
 
 ## Requirements
 
