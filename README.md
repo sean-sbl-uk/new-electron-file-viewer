@@ -16,6 +16,16 @@ Accepts .csv, .tsv and .blast files containing dna data output by [BLAST](https:
   - Top hits per file (10, 20, 50, All)
 - Color picker for results display
 
+## Commands
+
+#### `npm start`
+
+Starts the app in a locaal development environment.
+
+#### `npm run test`
+
+Runs all test suites using [Jest](https://jestjs.io/) with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+
 ## Requirements
 
 Linux os
@@ -28,16 +38,6 @@ Linux os
 - [Nivo heatmap canvas](https://nivo.rocks/heatmap/canvas/)
 - [csv-parser](https://github.com/mafintosh/csv-parser)
 - [Typescript](https://www.typescriptlang.org/docs/handbook/react.html)
-
-## Commands
-
-#### `npm start`
-
-Starts the app in a locaal development environment.
-
-#### `npm run test`
-
-Runs all test suites using [Jest](https://jestjs.io/) with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 
 ## Maintainers
 
