@@ -13,6 +13,7 @@ declare type FileRecord = {
   taxId: string;
   accId: string;
   subjectTitle: string;
+  subjectGroup: string;
   accIdVersion: string;
   fbtop: string;
 };
@@ -28,6 +29,7 @@ declare type Bacteria = {
   recoveredAmount: number;
   estimatedTotalAmount: number;
   subjectLength: number;
+  subjectGroup: string;
 };
 
 declare type Spikes = {
@@ -54,6 +56,9 @@ declare type FileWithBacteriaAmount = {
 
 declare type FilterData = {
   spikesOn: boolean;
+  bacteriaOn: boolean;
+  plasmidOn: boolean;
+  hostOn: boolean;
   topHits: string;
   minHitThreshold: number;
 };

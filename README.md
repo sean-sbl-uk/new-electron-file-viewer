@@ -32,7 +32,7 @@ Runs all test suites using [Jest](https://jestjs.io/) with [React Testing Librar
 
 ## Requirements
 
-Linux os
+Linux/Unbuntu os
 
 ## Dependencies
 

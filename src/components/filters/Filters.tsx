@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { Modal as BootstrapModal, Form, Button } from 'react-bootstrap';
+import {
+  Modal as BootstrapModal,
+  Form,
+  Button,
+  Row,
+  Col,
+} from 'react-bootstrap';
 
 type Props = {
   handleCloseFiltering: () => void;
@@ -12,6 +18,9 @@ const Filters: React.FC<Props> = (props) => {
 
   const [filterFormData, setFilterFormData] = useState<FilterData>({
     spikesOn: true,
+    bacteriaOn: true,
+    plasmidOn: true,
+    hostOn: true,
     topHits: '10',
     minHitThreshold: 1,
   });
@@ -25,10 +34,11 @@ const Filters: React.FC<Props> = (props) => {
     handleFilterSubmit(filterFormData);
   };
 
-  const spikeSwitchOnChange = () => {
-    let value: boolean = !filterFormData.spikesOn;
-
-    setFilterFormData({ ...filterFormData, spikesOn: value });
+  const switchOnChange = (e: any) => {
+    let name: string = e.target.name;
+    let objKey = name as keyof FilterData;
+    let value: boolean = !filterFormData[objKey];
+    setFilterFormData({ ...filterFormData, [objKey]: value });
   };
 
   const onFormChange = (e: any) => {
@@ -50,16 +60,60 @@ const Filters: React.FC<Props> = (props) => {
       </BootstrapModal.Header>
       <Form onSubmit={handleSubmit}>
         <BootstrapModal.Body>
-          <Form.Check
-            name="spikesOn"
-            type="switch"
-            id="spike-switch"
-            label="Spikes Off/On"
-            onChange={spikeSwitchOnChange}
-            className="mb-3"
-            data-testid="spike-switch"
-            checked={filterFormData.spikesOn}
-          ></Form.Check>
+          <Row xs={1} md={4} lg={4} className="justify-content">
+            <Col>
+              <Form.Check
+                name="spikesOn"
+                type="switch"
+                id="spike-switch"
+                label="Spikes"
+                onChange={switchOnChange}
+                className="mb-3"
+                data-testid="spike-switch"
+                checked={filterFormData.spikesOn}
+              ></Form.Check>
+            </Col>
+            <Col>
+              <Form.Check
+                name="bacteriaOn"
+                type="switch"
+                id="bacteria-switch"
+                label="Bacteria"
+                onChange={switchOnChange}
+                className="mb-3"
+                data-testid="bacteria-switch"
+                checked={filterFormData.bacteriaOn}
+              ></Form.Check>
+            </Col>
+            {/* </Row>
+
+          <Row xs={1} md={2} lg={4}> */}
+            <Col>
+              <Form.Check
+                name="plasmidOn"
+                type="switch"
+                id="plasmid-switch"
+                label="Plasmids"
+                onChange={switchOnChange}
+                className="mb-3"
+                data-testid="plasmid-switch"
+                checked={filterFormData.plasmidOn}
+              ></Form.Check>
+            </Col>
+            <Col>
+              <Form.Check
+                name="hostOn"
+                type="switch"
+                id="host-switch"
+                label="Host"
+                onChange={switchOnChange}
+                className="mb-3"
+                data-testid="host-switch"
+                checked={filterFormData.hostOn}
+              ></Form.Check>
+            </Col>
+          </Row>
+
           <Form.Group className="mb-3">
             <Form.Select
               defaultValue={'Top hits per cell'}

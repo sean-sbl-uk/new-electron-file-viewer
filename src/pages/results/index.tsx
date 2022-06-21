@@ -41,6 +41,9 @@ const Results = () => {
       //filter top 10 hits per file by default
       let filter: FilterData = {
         spikesOn: true,
+        bacteriaOn: true,
+        plasmidOn: true,
+        hostOn: true,
         topHits: '10',
         minHitThreshold: 1,
       };
@@ -95,6 +98,8 @@ const Results = () => {
   const handleFilterSubmit = async (filters: FilterData) => {
     setLoading(true);
     setShowFiltering(false);
+
+    console.log(filters);
 
     const fullResults: ProcessedFileData[] = state?.results?.data;
     const spikes: Spikes[] = state?.spikeData?.data;
