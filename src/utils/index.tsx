@@ -35,8 +35,6 @@ export const processEachFileMultipleSpikes = (
   //calculate recovery ratio
   const recoveryRatio: number = spikeDNAIn / spikeDNAOut;
 
-  // console.log(recoveryRatio);
-
   //loop over records and count up all species
   records.forEach((record) => {
     if (!bacteriaArray.some((bacteria) => bacteria.taxId === record.taxId)) {
@@ -46,6 +44,7 @@ export const processEachFileMultipleSpikes = (
         subjectLength: Number(record.subjectLen),
         recoveredAmount: Number(record.queryLen),
         estimatedTotalAmount: 0,
+        subjectGroup: record.subjectGroup,
       };
       bacteriaArray.push(newBacteria);
     } else {
@@ -118,7 +117,7 @@ export const processAllFiles = (
 
 /**
  * Runs all the filters on the data set
- * @param results
+ * @param results The full results pre any filtering
  * @param filters
  * @returns
  */
@@ -134,9 +133,12 @@ export const filterResults = async (
   result =
     filters.spikesOn && spikes ? result : await spikesOnFilter(spikes, result);
 
+  result = filters.bacteriaOn ? result : await bacteriaOnFilter(result);
+
   return Promise.resolve(result);
 };
 
+// Make all checkbox filters async?
 /**
  * Filters out spikes from results
  * @param filters
@@ -160,6 +162,51 @@ const spikesOnFilter = (
     };
   });
 
+  return result;
+};
+
+/**
+ * Filters out bacteria
+ * @param results
+ * @returns
+ */
+const bacteriaOnFilter = (
+  results: ProcessedFileData[]
+): ProcessedFileData[] | any[] => {
+  let result: ProcessedFileData[] = results.map((file) => {
+    let data: Bacteria[] = file.data.filter((bacteria) => {
+      return bacteria.subjectGroup !== 'BACTERIA';
+    });
+
+    return {
+      fileName: file.fileName,
+      data: data,
+    };
+  });
+  return result;
+};
+
+/**
+ *
+ * @param results
+ * @returns
+ */
+const plasmidOnFilter = (
+  results: ProcessedFileData[]
+): ProcessedFileData[] | any[] => {
+  let result: ProcessedFileData[] = results;
+  return result;
+};
+
+/**
+ *
+ * @param results
+ * @returns
+ */
+const hostOnFilter = (
+  results: ProcessedFileData[]
+): ProcessedFileData[] | any[] => {
+  let result: ProcessedFileData[] = results;
   return result;
 };
 
