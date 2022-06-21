@@ -134,6 +134,9 @@ export const filterResults = async (
     filters.spikesOn && spikes ? result : await spikesOnFilter(spikes, result);
 
   result = filters.bacteriaOn ? result : await bacteriaOnFilter(result);
+  result = filters.virusOn ? result : await virusOnFilter(result);
+  result = filters.plasmidOn ? result : await plasmidOnFilter(result);
+  result = filters.hostOn ? result : await hostOnFilter(result);
 
   return Promise.resolve(result);
 };
@@ -186,6 +189,22 @@ const bacteriaOnFilter = (
   return result;
 };
 
+const virusOnFilter = (
+  results: ProcessedFileData[]
+): ProcessedFileData[] | any[] => {
+  let result: ProcessedFileData[] = results.map((file) => {
+    let data: Bacteria[] = file.data.filter((bacteria) => {
+      return bacteria.subjectGroup !== 'VIRUS';
+    });
+
+    return {
+      fileName: file.fileName,
+      data: data,
+    };
+  });
+  return result;
+};
+
 /**
  *
  * @param results
@@ -194,7 +213,16 @@ const bacteriaOnFilter = (
 const plasmidOnFilter = (
   results: ProcessedFileData[]
 ): ProcessedFileData[] | any[] => {
-  let result: ProcessedFileData[] = results;
+  let result: ProcessedFileData[] = results.map((file) => {
+    let data: Bacteria[] = file.data.filter((bacteria) => {
+      return bacteria.subjectGroup !== 'PLASMID';
+    });
+
+    return {
+      fileName: file.fileName,
+      data: data,
+    };
+  });
   return result;
 };
 
@@ -206,7 +234,16 @@ const plasmidOnFilter = (
 const hostOnFilter = (
   results: ProcessedFileData[]
 ): ProcessedFileData[] | any[] => {
-  let result: ProcessedFileData[] = results;
+  let result: ProcessedFileData[] = results.map((file) => {
+    let data: Bacteria[] = file.data.filter((bacteria) => {
+      return bacteria.subjectGroup !== 'HOST';
+    });
+
+    return {
+      fileName: file.fileName,
+      data: data,
+    };
+  });
   return result;
 };
 
