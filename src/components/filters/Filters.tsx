@@ -19,6 +19,7 @@ const Filters: React.FC<Props> = (props) => {
   const [filterFormData, setFilterFormData] = useState<FilterData>({
     spikesOn: true,
     bacteriaOn: true,
+    virusOn: true,
     plasmidOn: true,
     hostOn: true,
     topHits: '10',
@@ -85,6 +86,18 @@ const Filters: React.FC<Props> = (props) => {
                 checked={filterFormData.bacteriaOn}
               ></Form.Check>
             </Col>
+            <Col>
+              <Form.Check
+                name="virusOn"
+                type="switch"
+                id="virus-switch"
+                label="Virus"
+                onChange={switchOnChange}
+                className="mb-3"
+                data-testid="virus-switch"
+                checked={filterFormData.virusOn}
+              ></Form.Check>
+            </Col>
             {/* </Row>
 
           <Row xs={1} md={2} lg={4}> */}
@@ -100,7 +113,7 @@ const Filters: React.FC<Props> = (props) => {
                 checked={filterFormData.plasmidOn}
               ></Form.Check>
             </Col>
-            <Col>
+            {/* <Col>
               <Form.Check
                 name="hostOn"
                 type="switch"
@@ -111,7 +124,7 @@ const Filters: React.FC<Props> = (props) => {
                 data-testid="host-switch"
                 checked={filterFormData.hostOn}
               ></Form.Check>
-            </Col>
+            </Col> */}
           </Row>
 
           <Form.Group className="mb-3">
