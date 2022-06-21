@@ -13,6 +13,9 @@ Accepts .csv, .tsv and .blast files containing dna data output by [BLAST](https:
 - Display heatmap showing cell counts of identified species.
 - Filter options for displaying results
   - Spikes on/off
+  - Bacteria on/off
+  - Virus on/off
+  - Plasmids on/off
   - Top hits per file (10, 20, 50, All)
 - Color picker for results display
 
