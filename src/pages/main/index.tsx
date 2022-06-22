@@ -73,11 +73,14 @@ const Main = () => {
     );
 
   return (
-    <section data-testid="main" className="background">
+    <section data-testid="main" className="background font-oswald">
       <div className="light-overlay">
-        <Container>
-          <div className="text-center row ">
-            <h1 className="my-8 main-color page-title">File Upload</h1>
+        <Container title={'File Upload'}>
+          {/* <h1 className="my-8 main-color page-title">File Upload</h1>
+          <hr className="hr" /> */}
+          <div className="text-center row " style={{ width: '100%' }}>
+            {/* <h1 className="my-8 main-color page-title">File Upload</h1>
+            <hr className="hr" /> */}
             <Dropzone setFiles={setFiles}>
               <Stack gap={2}>
                 {spikesButton}

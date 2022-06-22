@@ -129,14 +129,15 @@ const Results = () => {
   };
 
   return (
-    <section data-testid="results" className="background">
+    <section data-testid="results" className="background font-oswald">
       <div className="light-overlay">
-        <Container>
+        <Container title={'Results'}>
           <div className="text-center results">
             {loading && <Loader />}
             {results && !loading && (
               <>
-                <h1 className="my-8 main-color page-title">Results</h1>
+                {/* <h1 className="my-8 main-color page-title">Results</h1>
+                <hr /> */}
                 <div className="mt-4 mb-4">
                   <Row xs={1} md={6} lg={8} className="justify-content-start">
                     <Col>

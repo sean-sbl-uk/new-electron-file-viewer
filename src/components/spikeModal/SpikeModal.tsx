@@ -205,7 +205,7 @@ const Modal: React.FC<Props> = (props) => {
       onHide={handleCloseModal}
     >
       <BootstrapModal.Header closeButton>
-        <BootstrapModal.Title className="main-color">
+        <BootstrapModal.Title className="main-color font-bebas-neue">
           Spike Data
         </BootstrapModal.Title>
       </BootstrapModal.Header>
