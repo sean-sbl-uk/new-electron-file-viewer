@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { FileWithPath } from 'react-dropzone';
 import { setReduxStoreFiles } from '../../redux/files';
+import Layout from 'layouts/Layout';
 
 const Main = () => {
   const [files, setFiles] = useState<FileWithPath[]>([]);
@@ -73,29 +74,27 @@ const Main = () => {
     );
 
   return (
-    <section data-testid="main" className="background font-oswald">
-      <div className="light-overlay">
-        <Container title={'File Upload'}>
-          {/* <h1 className="my-8 main-color page-title">File Upload</h1>
-          <hr className="hr" /> */}
-          <div className="text-center row " style={{ width: '100%' }}>
-            {/* <h1 className="my-8 main-color page-title">File Upload</h1>
-            <hr className="hr" /> */}
-            <Dropzone setFiles={setFiles}>
-              <Stack gap={2}>
-                {spikesButton}
-                {analyseButton}
-              </Stack>
-            </Dropzone>
-            <Modal
-              show={showModal}
-              handleCloseModal={handleCloseModal}
-              files={files}
-            />
-          </div>
-        </Container>
+    <Layout title="File Upload">
+      {/* // <section data-testid="main" className="background font-oswald">
+    //   <div className="light-overlay">
+    //     <Container title={'File Upload'}> */}
+      <div className="text-center row " style={{ width: '100%' }}>
+        <Dropzone setFiles={setFiles}>
+          <Stack gap={2}>
+            {spikesButton}
+            {analyseButton}
+          </Stack>
+        </Dropzone>
+        <Modal
+          show={showModal}
+          handleCloseModal={handleCloseModal}
+          files={files}
+        />
       </div>
-    </section>
+    </Layout>
+    //     </Container>
+    //   </div>
+    // </section>
   );
 };
 
