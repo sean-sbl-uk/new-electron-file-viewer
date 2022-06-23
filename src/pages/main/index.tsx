@@ -7,6 +7,7 @@ import Modal from '../../components/spikeModal/SpikeModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { FileWithPath } from 'react-dropzone';
+import FadeIn from 'react-fade-in';
 import { setReduxStoreFiles } from '../../redux/files';
 import Layout from '../../layouts/Layout';
 
@@ -75,12 +76,14 @@ const Main = () => {
 
   const content = (
     <div className="text-center row " style={{ width: '100%' }}>
-      <Dropzone setFiles={setFiles}>
-        <Stack gap={2}>
-          {spikesButton}
-          {analyseButton}
-        </Stack>
-      </Dropzone>
+      <FadeIn>
+        <Dropzone setFiles={setFiles}>
+          <Stack gap={2}>
+            {spikesButton}
+            {analyseButton}
+          </Stack>
+        </Dropzone>
+      </FadeIn>
       <Modal
         show={showModal}
         handleCloseModal={handleCloseModal}
