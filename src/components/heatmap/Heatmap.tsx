@@ -80,7 +80,7 @@ const Heatmap: React.FC<Props> = (props: any) => {
                 legendPosition: 'middle',
                 legendOffset: 40,
                 format: (value) => {
-                  return value.length > 16 ? value.slice(0, 30) + '...' : value;
+                  return value.length > 40 ? value.slice(0, 40) + '...' : value;
                 },
               }}
               axisRight={null}
