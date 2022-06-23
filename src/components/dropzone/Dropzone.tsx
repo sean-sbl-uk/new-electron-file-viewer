@@ -14,9 +14,8 @@ const Dropzone: React.FC<Props> = (props) => {
   return (
     <div className="container">
       <div className="row">
-        {/* <h1 className="main-color">File Upload</h1> */}
-        <div className="mx-auto">
-          <form data-testid="dropzone">
+        <div className="mx-auto" style={{ width: '50%' }}>
+          <form data-testid="dropzone" style={{ width: '100%' }}>
             <div className="form-group color files my-2">
               <label></label>
               <input

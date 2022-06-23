@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { FileWithPath } from 'react-dropzone';
 import { setReduxStoreFiles } from '../../redux/files';
+import Layout from '../../layouts/Layout';
 
 const Main = () => {
   const [files, setFiles] = useState<FileWithPath[]>([]);
@@ -72,28 +73,23 @@ const Main = () => {
       </Button>
     );
 
-  return (
-    <section data-testid="main" className="background">
-      <div className="light-overlay">
-        <Container>
-          <div className="text-center row ">
-            <h1 className="my-8 main-color page-title">File Upload</h1>
-            <Dropzone setFiles={setFiles}>
-              <Stack gap={2}>
-                {spikesButton}
-                {analyseButton}
-              </Stack>
-            </Dropzone>
-            <Modal
-              show={showModal}
-              handleCloseModal={handleCloseModal}
-              files={files}
-            />
-          </div>
-        </Container>
-      </div>
-    </section>
+  const content = (
+    <div className="text-center row " style={{ width: '100%' }}>
+      <Dropzone setFiles={setFiles}>
+        <Stack gap={2}>
+          {spikesButton}
+          {analyseButton}
+        </Stack>
+      </Dropzone>
+      <Modal
+        show={showModal}
+        handleCloseModal={handleCloseModal}
+        files={files}
+      />
+    </div>
   );
+
+  return <Layout title="File Upload">{content}</Layout>;
 };
 
 export default Main;

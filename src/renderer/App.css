@@ -1,71 +1,37 @@
-/*
- * @NOTE: Prepend a `~` to css file paths that are in your node_modules
- *        See https://github.com/webpack-contrib/sass-loader#imports
- */
-/* body {
-  position: relative;
-  color: white;
-  height: 100vh;
-  background: linear-gradient(
-    200.96deg,
-    #fedc2a -29.09%,
-    #dd5789 51.77%,
-    #7a2c9e 129.35%
-  );
-  font-family: sans-serif;
-  overflow-y: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* bebas-neue-regular - latin */
+@font-face {
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''),
+    /* url('bebas-neue-v9-latin-regular.woff2') format('woff2'), Chrome 26+, Opera 23+, Firefox 39+ */
+      url('../fonts/bebas-neue-v9-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
-button {
-  background-color: white;
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: none;
-  appearance: none;
-  font-size: 1.3rem;
-  box-shadow: 0px 8px 28px -6px rgba(24, 39, 75, 0.12),
-    0px 18px 88px -4px rgba(24, 39, 75, 0.14);
-  transition: all ease-in 0.1s;
-  cursor: pointer;
-  opacity: 0.9;
+/* oswald-regular - latin */
+@font-face {
+  font-family: 'Oswald';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.2rem;
+  src: local(''), url('../fonts/oswald-v48-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
-button:hover {
-  transform: scale(1.05);
-  opacity: 1;
+.font-bebas-neue {
+  font-family: 'Bebas Neue';
 }
 
-li {
-  list-style: none;
+.font-oswald {
+  font-family: 'Oswald';
 }
-
-a {
-  text-decoration: none;
-  height: fit-content;
-  width: fit-content;
-  margin: 10px;
-}
-
-a:hover {
-  opacity: 1;
-  text-decoration: none;
-}
-
-.Hello {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
-} */
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: Tahoma, sans-serif;
+  font-family: 'Oswald';
+  font-size: 18px;
+  letter-spacing: 1px;
 }
 
 .background {
@@ -89,7 +55,7 @@ a:hover {
 }
 
 .container-inner {
-  height: 100%;
+  /* height: 100%; */
   width: 90%;
   margin: auto;
   display: flex;
@@ -117,10 +83,32 @@ a:hover {
   height: 100%;
 }
 
+.hr {
+  color: #444;
+  height: 2px !important;
+  width: 100% !important;
+  border-radius: 2px;
+}
+
 .page-title {
-  font-size: 4rem;
-  /* text-transform: uppercase; */
-  /* margin-bottom: 2rem; */
+  font-size: 3rem;
+  font-family: 'Bebas Neue';
+  margin-right: 2rem;
+}
+.title-div {
+  margin: 3rem 5rem;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.landing-heading {
+  font-family: 'Bebas Neue';
+  font-size: 3.5rem;
+}
+
+.landing-subheading {
+  font-family: 'Oswald';
+  font-size: 1.3rem;
 }
 
 .btn-link-outline {
@@ -164,7 +152,6 @@ a:hover {
   right: 0;
   height: 56px;
   content: '';
-  /* background-image: url(https://image.flaticon.com/icons/png/128/109/109612.png); */
   display: block;
   margin: 0 auto;
   background-size: 100%;
@@ -210,10 +197,17 @@ a:hover {
   margin-left: '2px';
   margin-right: '2px';
   text-align: 'center';
-  /* height: 500px;
-  width: 500px; */
   width: 100%;
   height: 90%;
   display: block;
   overflow: scroll;
+}
+
+.modal-dialog {
+  max-width: 600px;
+  margin: 1.75rem auto;
+}
+
+.loader {
+  margin-top: 30vh;
 }

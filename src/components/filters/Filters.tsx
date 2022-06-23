@@ -57,7 +57,9 @@ const Filters: React.FC<Props> = (props) => {
       onHide={handleCloseFiltering}
     >
       <BootstrapModal.Header>
-        <BootstrapModal.Title>Filters</BootstrapModal.Title>
+        <BootstrapModal.Title className="main-color font-bebas-neue">
+          Filters
+        </BootstrapModal.Title>
       </BootstrapModal.Header>
       <Form onSubmit={handleSubmit}>
         <BootstrapModal.Body>
