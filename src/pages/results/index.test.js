@@ -13,7 +13,7 @@ window.electron = {
 describe('Results', () => {
   it('should render', () => {
     const { getByTestId } = renderWithStore(<Results />);
-    expect(getByTestId('results')).toBeInTheDocument();
+    expect(getByTestId('Results')).toBeInTheDocument();
   });
 
   it('should show loading animation when navigating to page', () => {

@@ -8,6 +8,6 @@ describe('Main', () => {
   it('should render', () => {
     const { getByTestId } = renderWithStore(<Main />);
 
-    expect(getByTestId('main')).toBeInTheDocument();
+    expect(getByTestId('File Upload')).toBeInTheDocument();
   });
 });

@@ -10,7 +10,7 @@ const Layout: React.FC<Props> = (props) => {
   const { children, title } = props;
 
   return (
-    <section data-testid={title.toLowerCase} className="background font-oswald">
+    <section data-testid={title} className="background font-oswald">
       <div className="light-overlay">
         <Container title={title}>{children}</Container>
       </div>

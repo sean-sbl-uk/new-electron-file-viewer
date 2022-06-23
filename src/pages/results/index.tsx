@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import Filters from '../../components/filters/Filters';
 import { setResultsData } from '../../redux/results';
 import { resetSpikeData } from '../../redux/spikes';
+import Layout from '../../layouts/Layout';
 
 const Results = () => {
   const [loading, setLoading] = useState(true);
@@ -128,104 +129,86 @@ const Results = () => {
     width: '100%',
   };
 
-  return (
-    <section data-testid="results" className="background font-oswald">
-      <div className="light-overlay">
-        <Container title={'Results'}>
-          <div className="text-center results">
-            {loading && <Loader />}
-            {results && !loading && (
-              <>
-                {/* <h1 className="my-8 main-color page-title">Results</h1>
-                <hr /> */}
-                <div className="mt-4 mb-4">
-                  <Row xs={1} md={6} lg={8} className="justify-content-start">
-                    <Col>
-                      <Button
-                        className="btn-hover btn-block"
-                        variant="outline-secondary"
-                        onClick={handleBackOnClick}
-                        style={{ width: '100%' }}
-                      >
-                        Back
-                      </Button>{' '}
-                    </Col>
-                    <Col>
-                      <Button
-                        className="mr-1 btn-block"
-                        variant="secondary"
-                        onClick={handleOpenFiltering}
-                        style={{ width: '100%' }}
-                      >
-                        Filtering
-                      </Button>{' '}
-                    </Col>
+  const content = (
+    <div className="text-center results">
+      {loading && <Loader />}
+      {results && !loading && (
+        <>
+          {/* <h1 className="my-8 main-color page-title">Results</h1>
+      <hr /> */}
+          <div className="mt-4 mb-4">
+            <Row xs={1} md={6} lg={8} className="justify-content-start">
+              <Col>
+                <Button
+                  className="btn-hover btn-block"
+                  variant="outline-secondary"
+                  onClick={handleBackOnClick}
+                  style={{ width: '100%' }}
+                >
+                  Back
+                </Button>{' '}
+              </Col>
+              <Col>
+                <Button
+                  className="mr-1 btn-block"
+                  variant="secondary"
+                  onClick={handleOpenFiltering}
+                  style={{ width: '100%' }}
+                >
+                  Filtering
+                </Button>{' '}
+              </Col>
 
-                    <Col>
-                      <DropdownButton
-                        className="btn-block dropdown"
-                        data-testid="result-dropdown"
-                        title="Data Visulazation"
-                        onSelect={handleDropdownSelect}
-                        variant="secondary"
-                        style={dropdownStyle}
-                      >
-                        <Dropdown.Item eventKey="heatmap">
-                          Heatmap
-                        </Dropdown.Item>
-                        <Dropdown.Item disabled>
-                          Future Chart Opts...
-                        </Dropdown.Item>
-                      </DropdownButton>
-                    </Col>
+              <Col>
+                <DropdownButton
+                  className="btn-block dropdown"
+                  data-testid="result-dropdown"
+                  title="Data Visulazation"
+                  onSelect={handleDropdownSelect}
+                  variant="secondary"
+                  style={dropdownStyle}
+                >
+                  <Dropdown.Item eventKey="heatmap">Heatmap</Dropdown.Item>
+                  <Dropdown.Item disabled>Future Chart Opts...</Dropdown.Item>
+                </DropdownButton>
+              </Col>
 
-                    <Row>
-                      <DropdownButton
-                        className="btn-block dropdown"
-                        data-testid="color-dropdown"
-                        title="Color"
-                        onSelect={handleColorDropdown}
-                        variant="secondary"
-                        style={dropdownStyle}
-                      >
-                        <Dropdown.Item eventKey="blues">Blue</Dropdown.Item>
-                        <Dropdown.Item eventKey="reds">Red</Dropdown.Item>
-                        <Dropdown.Item eventKey="greens">Green</Dropdown.Item>
-                        <Dropdown.Item eventKey="greys">Grey</Dropdown.Item>
-                        <Dropdown.Item eventKey="yellow_orange_red">
-                          Yellow/Red
-                        </Dropdown.Item>
-                        <Dropdown.Item eventKey="red_blue">
-                          Red/Blue
-                        </Dropdown.Item>
-                        <Dropdown.Item eventKey="spectral">
-                          Spectral
-                        </Dropdown.Item>
-                        <Dropdown.Item eventKey="rainbow">
-                          Rainbow
-                        </Dropdown.Item>
-                      </DropdownButton>
-                    </Row>
-                  </Row>
-                </div>
-                <Heatmap
-                  results={results}
-                  setLoading={setLoading}
-                  color={color}
-                />
-              </>
-            )}
-
-            <Filters
-              show={showFiltering}
-              handleCloseFiltering={handleCloseFiltering}
-              handleFilterSubmit={handleFilterSubmit}
-            />
+              <Row>
+                <DropdownButton
+                  className="btn-block dropdown"
+                  data-testid="color-dropdown"
+                  title="Color"
+                  onSelect={handleColorDropdown}
+                  variant="secondary"
+                  style={dropdownStyle}
+                >
+                  <Dropdown.Item eventKey="blues">Blue</Dropdown.Item>
+                  <Dropdown.Item eventKey="reds">Red</Dropdown.Item>
+                  <Dropdown.Item eventKey="greens">Green</Dropdown.Item>
+                  <Dropdown.Item eventKey="greys">Grey</Dropdown.Item>
+                  <Dropdown.Item eventKey="yellow_orange_red">
+                    Yellow/Red
+                  </Dropdown.Item>
+                  <Dropdown.Item eventKey="red_blue">Red/Blue</Dropdown.Item>
+                  <Dropdown.Item eventKey="spectral">Spectral</Dropdown.Item>
+                  <Dropdown.Item eventKey="rainbow">Rainbow</Dropdown.Item>
+                </DropdownButton>
+              </Row>
+            </Row>
           </div>
-        </Container>
-      </div>
-    </section>
+          <Heatmap results={results} setLoading={setLoading} color={color} />
+        </>
+      )}
+
+      <Filters
+        show={showFiltering}
+        handleCloseFiltering={handleCloseFiltering}
+        handleFilterSubmit={handleFilterSubmit}
+      />
+    </div>
   );
+
+  return <Layout title="Results">{content}</Layout>;
 };
 
 export default Results;
