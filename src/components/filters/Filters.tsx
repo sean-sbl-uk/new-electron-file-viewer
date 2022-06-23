@@ -55,6 +55,7 @@ const Filters: React.FC<Props> = (props) => {
       centered
       show={show}
       onHide={handleCloseFiltering}
+      className="main-color"
     >
       <BootstrapModal.Header>
         <BootstrapModal.Title className="main-color font-bebas-neue">
@@ -146,7 +147,7 @@ const Filters: React.FC<Props> = (props) => {
               ))}
             </Form.Select>
           </Form.Group>
-          <Form.Group className="mb-3">
+          <Form.Group className="mb-3 main-color">
             <Form.Control
               name="hitThreshold"
               type="number"

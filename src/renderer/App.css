@@ -1,3 +1,11 @@
+/* body {
+  position: relative;
+  background: url('../img/pexels-johannes-plenio-1103970.jpg') no-repeat center
+    center/cover;
+  background-attachment: fixed;
+  height: 100vh;
+} */
+
 /* bebas-neue-regular - latin */
 @font-face {
   font-family: 'Bebas Neue';
