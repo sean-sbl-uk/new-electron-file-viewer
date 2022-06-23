@@ -5,7 +5,7 @@ import '@testing-library/jest-dom';
 describe('Layout', () => {
   it('should render with title and content', () => {
     const content = <div>content</div>;
-    const { getByTestId, getByText } = renderWithStore(
+    const { getByText } = renderWithStore(
       <Layout title={'test'}>{content}</Layout>
     );
 

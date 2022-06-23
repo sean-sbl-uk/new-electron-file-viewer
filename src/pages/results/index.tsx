@@ -4,7 +4,6 @@ import Loader from '../../components/loader/Loader';
 import store, { RootState } from '../../redux/store';
 import { filterResults, reformatData } from '../../utils';
 import Heatmap from '../../components/heatmap/Heatmap';
-import Container from '../../components/container/Container';
 import { Button, Row, Col, Dropdown, DropdownButton } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Filters from '../../components/filters/Filters';
@@ -96,7 +95,6 @@ const Results = () => {
     setShowFiltering(false);
   };
 
-  // TODO
   const handleFilterSubmit = async (filters: FilterData) => {
     setLoading(true);
     setShowFiltering(false);
@@ -134,8 +132,6 @@ const Results = () => {
       {loading && <Loader />}
       {results && !loading && (
         <>
-          {/* <h1 className="my-8 main-color page-title">Results</h1>
-      <hr /> */}
           <div className="mt-4 mb-4">
             <Row xs={1} md={6} lg={8} className="justify-content-start">
               <Col>
