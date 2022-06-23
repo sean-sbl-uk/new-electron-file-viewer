@@ -4,7 +4,7 @@ const Loader = () => {
   return (
     <div
       data-testid="loader"
-      className="container-inner d-flex align-items-center justify-content-center text-center"
+      className="container-inner d-flex align-items-center justify-content-center text-center loader"
     >
       {' '}
       <Spinner className="" animation="grow" variant="secondary" />
