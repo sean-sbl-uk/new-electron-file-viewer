@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../components/loader/Loader';
 import store, { RootState } from '../../redux/store';
-import { filterResults, reformatData } from '../../utils';
+import { filterResults, reformatData, groupData } from '../../utils';
 import Heatmap from '../../components/heatmap/Heatmap';
 import { Button, Row, Col, Dropdown, DropdownButton } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -13,9 +13,14 @@ import { setResultsData } from '../../redux/results';
 import { resetSpikeData } from '../../redux/spikes';
 import Layout from '../../layouts/Layout';
 
+import resultsCard from '../../components/resultsCard/ResultsCard';
+import ResultsCard from '../../components/resultsCard/ResultsCard';
+
 const Results = () => {
   const [loading, setLoading] = useState(true);
-  const [results, setResults] = useState<ReformatedData[]>();
+  // const [results, setResults] = useState<ReformatedData[]>();
+  const [groupedResults, setGroupedResults] =
+    useState<GroupedReformatedData[]>();
   const [showFiltering, setShowFiltering] = useState(false);
   const [dataVisualization, setDataVisualization] = useState<string>('heatmap');
   const [color, setColor] = useState<string>('blues');
@@ -52,12 +57,17 @@ const Results = () => {
       };
 
       //make spikes an optional parameter
-      let filtered = await filterResults(args, allSpikeData, filter);
+      // let filtered = await filterResults(args, allSpikeData, filter);
 
-      //After filtering add up all bacteria to set/unique list
-      let reformatedDataArray: ReformatedData[] = await format(args, filtered);
+      // //After filtering add up all bacteria to set/unique list
+      // let reformatedDataArray: ReformatedData[] = await format(args, filtered);
 
-      setResults(reformatedDataArray);
+      // setResults(reformatedDataArray);
+      // setLoading(false);
+
+      //group subj group
+      let groupedRes = await groupData(args, allSpikeData, filter);
+      setGroupedResults(groupedRes);
       setLoading(false);
     });
 
@@ -89,33 +99,33 @@ const Results = () => {
     navigate('/main', { replace: true });
   };
 
-  const handleOpenFiltering = () => {
-    setShowFiltering(true);
-  };
+  // const handleOpenFiltering = () => {
+  //   setShowFiltering(true);
+  // };
 
-  const handleCloseFiltering = () => {
-    setShowFiltering(false);
-  };
+  // const handleCloseFiltering = () => {
+  //   setShowFiltering(false);
+  // };
 
-  const handleFilterSubmit = async (filters: FilterData) => {
-    setLoading(true);
-    setShowFiltering(false);
+  // const handleFilterSubmit = async (filters: FilterData) => {
+  //   setLoading(true);
+  //   setShowFiltering(false);
 
-    const fullResults: ProcessedFileData[] = state?.results?.data;
-    const spikes: Spikes[] = state?.spikeData?.data;
+  //   const fullResults: ProcessedFileData[] = state?.results?.data;
+  //   const spikes: Spikes[] = state?.spikeData?.data;
 
-    if (fullResults) {
-      let filtered = await filterResults(fullResults, spikes, filters);
+  //   if (fullResults) {
+  //     let filtered = await filterResults(fullResults, spikes, filters);
 
-      let reformatedDataArray: ReformatedData[] = await format(
-        fullResults,
-        filtered
-      );
+  //     let reformatedDataArray: ReformatedData[] = await format(
+  //       fullResults,
+  //       filtered
+  //     );
 
-      setResults(reformatedDataArray);
-      setLoading(false);
-    }
-  };
+  //     setResults(reformatedDataArray);
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleDropdownSelect = (e: any) => {
     setDataVisualization(e);
@@ -132,22 +142,24 @@ const Results = () => {
   const content = (
     <div className="text-center results">
       {loading && <Loader />}
-      {results && !loading && (
+      {/* {results && !loading && ( */}
+      {groupedResults && !loading && (
         <>
           <FadeIn>
-            <div className="mt-4 mb-4">
-              <Row xs={1} md={6} lg={8} className="justify-content-start">
-                <Col>
-                  <Button
-                    className="btn-hover btn-block"
-                    variant="outline-secondary"
-                    onClick={handleBackOnClick}
-                    style={{ width: '100%' }}
-                  >
-                    Back
-                  </Button>{' '}
-                </Col>
-                <Col>
+            <>
+              <div className="mt-4 mb-4">
+                <Row xs={1} md={6} lg={8} className="justify-content-start">
+                  <Col>
+                    <Button
+                      className="btn-hover btn-block"
+                      variant="outline-secondary"
+                      onClick={handleBackOnClick}
+                      style={{ width: '100%' }}
+                    >
+                      Back
+                    </Button>{' '}
+                  </Col>
+                  {/* <Col>
                   <Button
                     className="mr-1 btn-block"
                     variant="secondary"
@@ -207,20 +219,25 @@ const Results = () => {
                     <Dropdown.Item eventKey="spectral">Spectral</Dropdown.Item>
                     <Dropdown.Item eventKey="rainbow">Rainbow</Dropdown.Item>
                   </DropdownButton>
+                </Row> */}
                 </Row>
-              </Row>
-            </div>
+              </div>
 
-            <Heatmap results={results} setLoading={setLoading} color={color} />
+              {/* After grouping map each to results card */}
+              {groupedResults.map((group) => {
+                <ResultsCard groupedData={group} setLoading={setLoading} />;
+              })}
+              {/* <Heatmap results={results} setLoading={setLoading} color={color} /> */}
+            </>
           </FadeIn>
         </>
       )}
 
-      <Filters
+      {/* <Filters
         show={showFiltering}
         handleCloseFiltering={handleCloseFiltering}
         handleFilterSubmit={handleFilterSubmit}
-      />
+      /> */}
     </div>
   );
 

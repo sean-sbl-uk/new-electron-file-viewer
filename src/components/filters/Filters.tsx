@@ -8,13 +8,14 @@ import {
 } from 'react-bootstrap';
 
 type Props = {
+  group: string;
   handleCloseFiltering: () => void;
   handleFilterSubmit: (filterData: any) => void;
   show: boolean;
 };
 
 const Filters: React.FC<Props> = (props) => {
-  const { handleCloseFiltering, handleFilterSubmit, show } = props;
+  const { handleCloseFiltering, handleFilterSubmit, show, group } = props;
 
   const [filterFormData, setFilterFormData] = useState<FilterData>({
     spikesOn: true,

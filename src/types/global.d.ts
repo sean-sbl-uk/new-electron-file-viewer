@@ -49,6 +49,12 @@ declare type ReformatedData = {
   data: FileWithBacteriaAmount[];
 };
 
+//Use array of this to map each group to separate heatmap
+declare type GroupedReformatedData = {
+  group: string;
+  data: ReformatedData[];
+};
+
 declare type FileWithBacteriaAmount = {
   fileName: string;
   amount: number;

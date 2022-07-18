@@ -354,3 +354,55 @@ const fillInGaps = (
 
   return dataArr;
 };
+
+export const groupData = async (
+  results: ProcessedFileData[],
+  spikes: Spikes[],
+  filters: FilterData
+): Promise<GroupedReformatedData[]> => {
+  const result: GroupedReformatedData[] = [];
+
+  let spike: ProcessedFileData[] = spikesOnFilter(spikes, results);
+  let spikeFiltered = await topHitsFilter(filters, spike);
+  let spikeFormatted = await format(results, spikeFiltered);
+
+  let spikeGroup: GroupedReformatedData = {
+    group: 'SPIKES',
+    data: spikeFormatted,
+  };
+
+  result.push(spikeGroup);
+
+  let bacteria: ProcessedFileData[] = bacteriaOnFilter(results);
+  let bacteriaFiltered = await topHitsFilter(filters, bacteria);
+  let bacteriaFormatted = await format(results, bacteriaFiltered);
+
+  let bacteriaGroup: GroupedReformatedData = {
+    group: 'BACTERIA',
+    data: bacteriaFormatted,
+  };
+
+  result.push(bacteriaGroup);
+
+  return result;
+};
+
+const format = async (
+  fullResults: ProcessedFileData[],
+  filtered: ProcessedFileData[]
+): Promise<ReformatedData[]> => {
+  let bacteriaSet: Set<Bacteria> = new Set();
+
+  filtered.forEach((file) => {
+    file.data.forEach((bacteria) => {
+      bacteriaSet.add(bacteria);
+    });
+  });
+
+  let reformatedDataArray: ReformatedData[] = await reformatData(
+    bacteriaSet,
+    fullResults
+  );
+
+  return reformatedDataArray;
+};
