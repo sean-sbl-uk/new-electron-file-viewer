@@ -121,25 +121,25 @@ export const processAllFiles = (
  * @param filters
  * @returns
  */
-export const filterResults = async (
-  results: ProcessedFileData[],
-  spikes: Spikes[],
-  filters: FilterData
-): Promise<ProcessedFileData[]> => {
-  let result: ProcessedFileData[] = [];
+// export const filterResults = async (
+//   results: ProcessedFileData[],
+//   spikes: Spikes[],
+//   filters: FilterData
+// ): Promise<ProcessedFileData[]> => {
+//   let result: ProcessedFileData[] = [];
 
-  result = await topHitsFilter(filters, results);
+//   result = await topHitsFilter(filters, results);
 
-  result =
-    filters.spikesOn && spikes ? result : await spikesOnFilter(spikes, result);
+//   result =
+//     filters.spikesOn && spikes ? result : await spikesOnFilter(spikes, result);
 
-  result = filters.bacteriaOn ? result : await bacteriaOnFilter(result);
-  result = filters.virusOn ? result : await virusOnFilter(result);
-  result = filters.plasmidOn ? result : await plasmidOnFilter(result);
-  result = filters.hostOn ? result : await hostOnFilter(result);
+//   result = filters.bacteriaOn ? result : await bacteriaOnFilter(result);
+//   result = filters.virusOn ? result : await virusOnFilter(result);
+//   result = filters.plasmidOn ? result : await plasmidOnFilter(result);
+//   result = filters.hostOn ? result : await hostOnFilter(result);
 
-  return Promise.resolve(result);
-};
+//   return Promise.resolve(result);
+// };
 
 // Make all checkbox filters async?
 /**
@@ -156,7 +156,8 @@ const spikesOnFilter = (
   let spikeTaxIds: string[] = spikes.map((spike) => spike.taxId);
   let result: ProcessedFileData[] = results.map((file) => {
     let data: Bacteria[] = file.data.filter((bacteria) => {
-      return !spikeTaxIds.includes(bacteria.taxId);
+      // return !spikeTaxIds.includes(bacteria.taxId);
+      return bacteria.subjectGroup === 'SPIKE';
     });
 
     return {
@@ -178,7 +179,7 @@ const bacteriaOnFilter = (
 ): ProcessedFileData[] | any[] => {
   let result: ProcessedFileData[] = results.map((file) => {
     let data: Bacteria[] = file.data.filter((bacteria) => {
-      return bacteria.subjectGroup !== 'BACTERIA';
+      return bacteria.subjectGroup === 'BACTERIA';
     });
 
     return {
@@ -186,6 +187,8 @@ const bacteriaOnFilter = (
       data: data,
     };
   });
+
+  // console.log(result);
   return result;
 };
 
@@ -194,7 +197,7 @@ const virusOnFilter = (
 ): ProcessedFileData[] | any[] => {
   let result: ProcessedFileData[] = results.map((file) => {
     let data: Bacteria[] = file.data.filter((bacteria) => {
-      return bacteria.subjectGroup !== 'VIRUS';
+      return bacteria.subjectGroup === 'VIRUS';
     });
 
     return {
@@ -215,7 +218,7 @@ const plasmidOnFilter = (
 ): ProcessedFileData[] | any[] => {
   let result: ProcessedFileData[] = results.map((file) => {
     let data: Bacteria[] = file.data.filter((bacteria) => {
-      return bacteria.subjectGroup !== 'PLASMID';
+      return bacteria.subjectGroup === 'PLASMID';
     });
 
     return {
@@ -236,7 +239,7 @@ const hostOnFilter = (
 ): ProcessedFileData[] | any[] => {
   let result: ProcessedFileData[] = results.map((file) => {
     let data: Bacteria[] = file.data.filter((bacteria) => {
-      return bacteria.subjectGroup !== 'HOST';
+      return bacteria.subjectGroup === 'HOST';
     });
 
     return {
@@ -370,11 +373,12 @@ export const groupData = async (
     group: 'SPIKES',
     data: spikeFormatted,
   };
-
   result.push(spikeGroup);
 
   let bacteria: ProcessedFileData[] = bacteriaOnFilter(results);
   let bacteriaFiltered = await topHitsFilter(filters, bacteria);
+
+  console.log(bacteriaFiltered);
   let bacteriaFormatted = await format(results, bacteriaFiltered);
 
   let bacteriaGroup: GroupedReformatedData = {

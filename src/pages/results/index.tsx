@@ -2,18 +2,16 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../components/loader/Loader';
 import store, { RootState } from '../../redux/store';
-import { filterResults, reformatData, groupData } from '../../utils';
-import Heatmap from '../../components/heatmap/Heatmap';
-import { Button, Row, Col, Dropdown, DropdownButton } from 'react-bootstrap';
+import { reformatData, groupData } from '../../utils';
+
+import { Button, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 // import { FadeIn } from 'react-slide-fade-in';
 import FadeIn from 'react-fade-in';
-import Filters from '../../components/filters/Filters';
+
 import { setResultsData } from '../../redux/results';
 import { resetSpikeData } from '../../redux/spikes';
 import Layout from '../../layouts/Layout';
-
-import resultsCard from '../../components/resultsCard/ResultsCard';
 import ResultsCard from '../../components/resultsCard/ResultsCard';
 
 const Results = () => {
@@ -67,6 +65,7 @@ const Results = () => {
 
       //group subj group
       let groupedRes = await groupData(args, allSpikeData, filter);
+
       setGroupedResults(groupedRes);
       setLoading(false);
     });
@@ -224,9 +223,11 @@ const Results = () => {
               </div>
 
               {/* After grouping map each to results card */}
-              {groupedResults.map((group) => {
-                <ResultsCard groupedData={group} setLoading={setLoading} />;
-              })}
+              {console.log(groupedResults)}
+              {groupedResults.map((group) => (
+                <ResultsCard groupedData={group} setLoading={setLoading} />
+              ))}
+
               {/* <Heatmap results={results} setLoading={setLoading} color={color} /> */}
             </>
           </FadeIn>

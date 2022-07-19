@@ -116,6 +116,7 @@ const ResultsCard: React.FC<Props> = (props) => {
         handleCloseFiltering={handleCloseFiltering}
         handleFilterSubmit={handleFilterSubmit}
       />
+      {/* <div>Results Card</div> */}
     </>
   );
 };
