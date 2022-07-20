@@ -82,7 +82,6 @@ const ResultsCard: React.FC<Props> = (props) => {
             <Dropdown.Item eventKey="blues">Blue</Dropdown.Item>
             <Dropdown.Item eventKey="reds">Red</Dropdown.Item>
             <Dropdown.Item eventKey="greens">Green</Dropdown.Item>
-            <Dropdown.Item eventKey="greys">Grey</Dropdown.Item>
             <Dropdown.Item eventKey="blue_purple">Blue/Purple</Dropdown.Item>
             <Dropdown.Item eventKey="purpleRed_green">
               Purple/Green
@@ -97,7 +96,6 @@ const ResultsCard: React.FC<Props> = (props) => {
             </Dropdown.Item>
             <Dropdown.Item eventKey="warm">Warm</Dropdown.Item>
             <Dropdown.Item eventKey="plasma">Plasma</Dropdown.Item>
-            <Dropdown.Item eventKey="turbo">Turbo</Dropdown.Item>
             <Dropdown.Item eventKey="spectral">Spectral</Dropdown.Item>
             <Dropdown.Item eventKey="rainbow">Rainbow</Dropdown.Item>
           </DropdownButton>
@@ -109,7 +107,12 @@ const ResultsCard: React.FC<Props> = (props) => {
   return (
     <div className="mb-5">
       {buttons}
-      <Heatmap color={color} setLoading={setLoading} results={data} />
+      <Heatmap
+        group={group}
+        color={color}
+        setLoading={setLoading}
+        results={data}
+      />
       <Filters
         group={group}
         show={showFiltering}

@@ -358,6 +358,9 @@ const fillInGaps = (
   return dataArr;
 };
 
+/**
+ * Separates data into their individual subject groups
+ */
 export const groupData = async (
   results: ProcessedFileData[],
   spikes: Spikes[],
@@ -365,28 +368,62 @@ export const groupData = async (
 ): Promise<GroupedReformatedData[]> => {
   const result: GroupedReformatedData[] = [];
 
-  let spike: ProcessedFileData[] = spikesOnFilter(spikes, results);
-  let spikeFiltered = await topHitsFilter(filters, spike);
-  let spikeFormatted = await format(results, spikeFiltered);
+  let allGroup = await groupDataHelper(results, results, filters, 'ALL');
+  result.push(allGroup);
 
-  let spikeGroup: GroupedReformatedData = {
-    group: 'SPIKES',
-    data: spikeFormatted,
-  };
+  let spike: ProcessedFileData[] = spikesOnFilter(spikes, results);
+  let spikeGroup = await groupDataHelper(results, spike, filters, 'SPIKES');
   result.push(spikeGroup);
 
+  let host: ProcessedFileData[] = hostOnFilter(results);
+  let hostGroup = await groupDataHelper(results, host, filters, 'HOST');
+  result.push(hostGroup);
+
   let bacteria: ProcessedFileData[] = bacteriaOnFilter(results);
-  let bacteriaFiltered = await topHitsFilter(filters, bacteria);
-
-  console.log(bacteriaFiltered);
-  let bacteriaFormatted = await format(results, bacteriaFiltered);
-
-  let bacteriaGroup: GroupedReformatedData = {
-    group: 'BACTERIA',
-    data: bacteriaFormatted,
-  };
-
+  let bacteriaGroup = await groupDataHelper(
+    results,
+    bacteria,
+    filters,
+    'BACTERIA'
+  );
   result.push(bacteriaGroup);
+
+  let plasmid: ProcessedFileData[] = plasmidOnFilter(results);
+  let plasmidGroup = await groupDataHelper(
+    results,
+    plasmid,
+    filters,
+    'PLASMID'
+  );
+  result.push(plasmidGroup);
+
+  let virus: ProcessedFileData[] = virusOnFilter(results);
+  let virusGroup = await groupDataHelper(results, virus, filters, 'VIRUS');
+  result.push(virusGroup);
+
+  return result;
+};
+
+/**
+ * Helper function to reduce code repetition
+ * @param fullResults
+ * @param groupResults
+ * @param filters
+ * @param subjectGroup
+ * @returns
+ */
+const groupDataHelper = async (
+  fullResults: ProcessedFileData[],
+  groupResults: ProcessedFileData[],
+  filters: FilterData,
+  subjectGroup: string
+): Promise<GroupedReformatedData> => {
+  let groupDataFiltered = await topHitsFilter(filters, groupResults);
+  let groupFormatted = await format(fullResults, groupDataFiltered);
+  let result: GroupedReformatedData = {
+    group: subjectGroup,
+    data: groupFormatted,
+  };
 
   return result;
 };

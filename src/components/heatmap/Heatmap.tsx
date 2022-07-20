@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { HeatMapCanvas } from '@nivo/heatmap';
+import { group } from 'console';
 
 interface DataObj {
   x: string;
@@ -12,6 +13,7 @@ interface HeatmapData {
 }
 
 type Props = {
+  group: string;
   results: ReformatedData[] | any;
   setLoading: (arg: boolean) => void;
   color: string;
@@ -38,7 +40,7 @@ const mapToHeatmapData = (results: ReformatedData[]): HeatmapData[] => {
 };
 
 const Heatmap: React.FC<Props> = (props: any) => {
-  const { results, setLoading, color } = props;
+  const { results, setLoading, color, group } = props;
   const [data, setData] = useState<HeatmapData[]>();
 
   useEffect(() => {
@@ -55,6 +57,7 @@ const Heatmap: React.FC<Props> = (props: any) => {
             className="text-center row m-auto chart-background"
             data-testid="heatmap"
           >
+            <h2 className="main-color page-title p-4">{group}</h2>
             <HeatMapCanvas
               data={data}
               forceSquare

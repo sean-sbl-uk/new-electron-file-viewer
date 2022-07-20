@@ -60,7 +60,7 @@ const Filters: React.FC<Props> = (props) => {
     >
       <BootstrapModal.Header>
         <BootstrapModal.Title className="main-color font-bebas-neue">
-          Filters
+          {`${group} Filters`}
         </BootstrapModal.Title>
       </BootstrapModal.Header>
       <Form onSubmit={handleSubmit}>
