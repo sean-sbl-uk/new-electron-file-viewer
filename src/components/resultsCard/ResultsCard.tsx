@@ -107,7 +107,7 @@ const ResultsCard: React.FC<Props> = (props) => {
   );
 
   return (
-    <>
+    <div className="mb-5">
       {buttons}
       <Heatmap color={color} setLoading={setLoading} results={data} />
       <Filters
@@ -116,8 +116,7 @@ const ResultsCard: React.FC<Props> = (props) => {
         handleCloseFiltering={handleCloseFiltering}
         handleFilterSubmit={handleFilterSubmit}
       />
-      {/* <div>Results Card</div> */}
-    </>
+    </div>
   );
 };
 
