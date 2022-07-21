@@ -100,6 +100,9 @@ const ResultsCard: React.FC<Props> = (props) => {
             <Dropdown.Item eventKey="rainbow">Rainbow</Dropdown.Item>
           </DropdownButton>
         </Row>
+        <Col>
+          <h2 className="main-color page-title">{group}</h2>
+        </Col>
       </Row>
     </div>
   );
