@@ -18,6 +18,7 @@ describe('filter modal', () => {
     const { getByTestId, getByText } = render(
       <Provider store={store}>
         <Filters
+          group="Test"
           handleCloseFiltering={mockFunc}
           handleFilterSubmit={mockFunc}
           show={true}
@@ -25,7 +26,7 @@ describe('filter modal', () => {
       </Provider>
     );
 
-    expect(getByText('Filters')).toBeInTheDocument();
+    expect(getByText('Test Filters')).toBeInTheDocument();
   });
 
   it('should show dropdown for top hits', () => {

@@ -65,7 +65,7 @@ const Filters: React.FC<Props> = (props) => {
       </BootstrapModal.Header>
       <Form onSubmit={handleSubmit}>
         <BootstrapModal.Body>
-          <Row xs={1} md={4} lg={4} className="justify-content">
+          {/* <Row xs={1} md={4} lg={4} className="justify-content">
             <Col>
               <Form.Check
                 name="spikesOn"
@@ -101,11 +101,11 @@ const Filters: React.FC<Props> = (props) => {
                 data-testid="virus-switch"
                 checked={filterFormData.virusOn}
               ></Form.Check>
-            </Col>
-            {/* </Row>
+            </Col> */}
+          {/* </Row>
 
           <Row xs={1} md={2} lg={4}> */}
-            <Col>
+          {/* <Col>
               <Form.Check
                 name="plasmidOn"
                 type="switch"
@@ -116,8 +116,8 @@ const Filters: React.FC<Props> = (props) => {
                 data-testid="plasmid-switch"
                 checked={filterFormData.plasmidOn}
               ></Form.Check>
-            </Col>
-            {/* <Col>
+            </Col> */}
+          {/* <Col>
               <Form.Check
                 name="hostOn"
                 type="switch"
@@ -129,7 +129,7 @@ const Filters: React.FC<Props> = (props) => {
                 checked={filterFormData.hostOn}
               ></Form.Check>
             </Col> */}
-          </Row>
+          {/* </Row> */}
 
           <Form.Group className="mb-3">
             <Form.Select

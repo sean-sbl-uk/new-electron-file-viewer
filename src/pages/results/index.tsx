@@ -163,8 +163,12 @@ const Results = () => {
 
               {/* After grouping map each to results card */}
               {console.log(groupedResults)}
-              {groupedResults.map((group) => (
-                <ResultsCard groupedData={group} setLoading={setLoading} />
+              {groupedResults.map((group, index) => (
+                <ResultsCard
+                  key={index}
+                  groupedData={group}
+                  setLoading={setLoading}
+                />
               ))}
             </>
           </FadeIn>
