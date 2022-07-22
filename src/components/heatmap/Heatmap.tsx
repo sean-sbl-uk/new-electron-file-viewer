@@ -57,7 +57,6 @@ const Heatmap: React.FC<Props> = (props: any) => {
             className="text-center row m-auto chart-background"
             data-testid="heatmap"
           >
-            {/* <h2 className="main-color page-title p-4">{group}</h2> */}
             <HeatMapCanvas
               data={data}
               forceSquare

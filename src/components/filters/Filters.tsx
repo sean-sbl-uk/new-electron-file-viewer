@@ -23,6 +23,9 @@ const Filters: React.FC<Props> = (props) => {
     virusOn: true,
     plasmidOn: true,
     hostOn: true,
+    archaeaOn: true,
+    fungiOn: true,
+    protozoaOn: true,
     topHits: '10',
     minHitThreshold: 1,
   });
@@ -65,71 +68,114 @@ const Filters: React.FC<Props> = (props) => {
       </BootstrapModal.Header>
       <Form onSubmit={handleSubmit}>
         <BootstrapModal.Body>
-          {/* <Row xs={1} md={4} lg={4} className="justify-content">
-            <Col>
-              <Form.Check
-                name="spikesOn"
-                type="switch"
-                id="spike-switch"
-                label="Spikes"
-                onChange={switchOnChange}
-                className="mb-3"
-                data-testid="spike-switch"
-                checked={filterFormData.spikesOn}
-              ></Form.Check>
-            </Col>
-            <Col>
-              <Form.Check
-                name="bacteriaOn"
-                type="switch"
-                id="bacteria-switch"
-                label="Bacteria"
-                onChange={switchOnChange}
-                className="mb-3"
-                data-testid="bacteria-switch"
-                checked={filterFormData.bacteriaOn}
-              ></Form.Check>
-            </Col>
-            <Col>
-              <Form.Check
-                name="virusOn"
-                type="switch"
-                id="virus-switch"
-                label="Virus"
-                onChange={switchOnChange}
-                className="mb-3"
-                data-testid="virus-switch"
-                checked={filterFormData.virusOn}
-              ></Form.Check>
-            </Col> */}
-          {/* </Row>
+          {group === 'ALL' && (
+            <>
+              <Row xs={1} md={4} lg={4} className="justify-content">
+                <Col>
+                  <Form.Check
+                    name="spikesOn"
+                    type="switch"
+                    id="spike-switch"
+                    label="Spikes"
+                    onChange={switchOnChange}
+                    className="mb-3"
+                    data-testid="spike-switch"
+                    checked={filterFormData.spikesOn}
+                  ></Form.Check>
+                </Col>
+                <Col>
+                  <Form.Check
+                    name="bacteriaOn"
+                    type="switch"
+                    id="bacteria-switch"
+                    label="Bacteria"
+                    onChange={switchOnChange}
+                    className="mb-3"
+                    data-testid="bacteria-switch"
+                    checked={filterFormData.bacteriaOn}
+                  ></Form.Check>
+                </Col>
+                <Col>
+                  <Form.Check
+                    name="virusOn"
+                    type="switch"
+                    id="virus-switch"
+                    label="Virus"
+                    onChange={switchOnChange}
+                    className="mb-3"
+                    data-testid="virus-switch"
+                    checked={filterFormData.virusOn}
+                  ></Form.Check>
+                </Col>
 
-          <Row xs={1} md={2} lg={4}> */}
-          {/* <Col>
-              <Form.Check
-                name="plasmidOn"
-                type="switch"
-                id="plasmid-switch"
-                label="Plasmids"
-                onChange={switchOnChange}
-                className="mb-3"
-                data-testid="plasmid-switch"
-                checked={filterFormData.plasmidOn}
-              ></Form.Check>
-            </Col> */}
-          {/* <Col>
-              <Form.Check
-                name="hostOn"
-                type="switch"
-                id="host-switch"
-                label="Host"
-                onChange={switchOnChange}
-                className="mb-3"
-                data-testid="host-switch"
-                checked={filterFormData.hostOn}
-              ></Form.Check>
-            </Col> */}
-          {/* </Row> */}
+                <Col>
+                  <Form.Check
+                    name="plasmidOn"
+                    type="switch"
+                    id="plasmid-switch"
+                    label="Plasmids"
+                    onChange={switchOnChange}
+                    className="mb-3"
+                    data-testid="plasmid-switch"
+                    checked={filterFormData.plasmidOn}
+                  ></Form.Check>
+                </Col>
+              </Row>
+              <Row xs={1} md={4} lg={4} className="justify-content">
+                <Col>
+                  <Form.Check
+                    name="hostOn"
+                    type="switch"
+                    id="host-switch"
+                    label="Host"
+                    onChange={switchOnChange}
+                    className="mb-3"
+                    data-testid="host-switch"
+                    checked={filterFormData.hostOn}
+                  ></Form.Check>
+                </Col>
+
+                <Col>
+                  <Form.Check
+                    name="archaeaOn"
+                    type="switch"
+                    id="archaea-switch"
+                    label="Archaea"
+                    onChange={switchOnChange}
+                    className="mb-3"
+                    data-testid="archaea-switch"
+                    checked={filterFormData.archaeaOn}
+                  ></Form.Check>
+                </Col>
+
+                <Col>
+                  <Form.Check
+                    name="fungiOn"
+                    type="switch"
+                    id="fungi-switch"
+                    label="Fungi"
+                    onChange={switchOnChange}
+                    className="mb-3"
+                    data-testid="fungi-switch"
+                    checked={filterFormData.fungiOn}
+                  ></Form.Check>
+                </Col>
+
+                <Col>
+                  <Form.Check
+                    name="protozoaOn"
+                    type="switch"
+                    id="protozoa-switch"
+                    label="Protozoa"
+                    onChange={switchOnChange}
+                    className="mb-3"
+                    data-testid="protozoa-switch"
+                    checked={filterFormData.protozoaOn}
+                  ></Form.Check>
+                </Col>
+              </Row>
+            </>
+          )}
 
           <Form.Group className="mb-3">
             <Form.Select

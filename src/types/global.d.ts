@@ -66,6 +66,9 @@ declare type FilterData = {
   virusOn: boolean;
   plasmidOn: boolean;
   hostOn: boolean;
+  archaeaOn: boolean;
+  fungiOn: boolean;
+  protozoaOn: boolean;
   topHits: string;
   minHitThreshold: number;
 };

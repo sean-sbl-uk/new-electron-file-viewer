@@ -6,7 +6,6 @@ import { getGroupedDataArray } from '../../utils';
 import { Button, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import FadeIn from 'react-fade-in';
-
 import { setResultsData } from '../../redux/results';
 import { resetSpikeData } from '../../redux/spikes';
 import Layout from '../../layouts/Layout';
@@ -17,7 +16,6 @@ const Results = () => {
   const [groupedResults, setGroupedResults] =
     useState<GroupedReformatedData[]>();
 
-  const allFileRecords = useSelector((state: RootState) => state.records.data);
   const allSpikeData = useSelector((state: RootState) => state.spikeData.data);
 
   const navigate = useNavigate();
@@ -44,6 +42,9 @@ const Results = () => {
         virusOn: true,
         plasmidOn: true,
         hostOn: true,
+        archaeaOn: true,
+        protozoaOn: true,
+        fungiOn: true,
         topHits: '10',
         minHitThreshold: 1,
       };
@@ -84,12 +85,10 @@ const Results = () => {
                 </Row>
               </div>
 
-              {/* After grouping map each to results card */}
-
-              {console.log(groupedResults)}
               {groupedResults.map((group, index) => (
                 <ResultsCard
                   key={index}
+                  colorIndex={index}
                   groupedData={group}
                   setLoading={setLoading}
                 />

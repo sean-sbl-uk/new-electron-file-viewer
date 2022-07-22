@@ -121,63 +121,44 @@ export const processAllFiles = (
  * @param filters
  * @returns
  */
-// export const filterResults = async (
-//   results: ProcessedFileData[],
-//   spikes: Spikes[],
-//   filters: FilterData
-// ): Promise<ProcessedFileData[]> => {
-//   let result: ProcessedFileData[] = [];
+export const filterFullResults = async (
+  results: ProcessedFileData[],
+  filters: FilterData
+): Promise<ProcessedFileData[]> => {
+  //Checkboxes
+  results = filters.bacteriaOn
+    ? results
+    : await groupOffFilter(results, 'BACTERIA');
+  results = filters.spikesOn ? results : await groupOffFilter(results, 'SPIKE');
+  results = filters.virusOn ? results : await groupOffFilter(results, 'VIRUS');
+  results = filters.plasmidOn
+    ? results
+    : await groupOffFilter(results, 'PLASMID');
+  results = filters.hostOn ? results : await groupOffFilter(results, 'HOST');
+  results = filters.archaeaOn
+    ? results
+    : await groupOffFilter(results, 'ARCHAEA');
+  results = filters.fungiOn ? results : await groupOffFilter(results, 'FUNGI');
+  results = filters.protozoaOn
+    ? results
+    : await groupOffFilter(results, 'PROTOZOA');
 
-//   result = await topHitsFilter(filters, results);
-
-// Checkbox removed from filter modal
-// result =
-//   filters.spikesOn && spikes ? result : await spikesOnFilter(spikes, result);
-
-// result = filters.bacteriaOn ? result : await bacteriaOnFilter(result);
-// result = filters.virusOn ? result : await virusOnFilter(result);
-// result = filters.plasmidOn ? result : await plasmidOnFilter(result);
-// result = filters.hostOn ? result : await hostOnFilter(result);
-
-//   return Promise.resolve(result);
-// };
-
-// Make all checkbox filters async?
-/**
- * Filters out spikes from results
- * @param filters
- * @param spikes
- * @param results
- * @returns
- */
-const spikesOnFilter = (
-  results: ProcessedFileData[]
-): ProcessedFileData[] | any[] => {
-  let result: ProcessedFileData[] = results.map((file) => {
-    let data: Bacteria[] = file.data.filter((bacteria) => {
-      return bacteria.subjectGroup === 'SPIKE';
-    });
-
-    return {
-      fileName: file.fileName,
-      data: data,
-    };
-  });
-
-  return result;
+  return Promise.resolve(results);
 };
 
 /**
- * Filters out bacteria
+ * Filters out subject group
  * @param results
+ * @param group
  * @returns
  */
-const bacteriaOnFilter = (
-  results: ProcessedFileData[]
-): ProcessedFileData[] | any[] => {
+const groupOffFilter = async (
+  results: ProcessedFileData[],
+  group: string
+): Promise<any[] | ProcessedFileData[]> => {
   let result: ProcessedFileData[] = results.map((file) => {
     let data: Bacteria[] = file.data.filter((bacteria) => {
-      return bacteria.subjectGroup === 'BACTERIA';
+      return bacteria.subjectGroup !== group;
     });
 
     return {
@@ -185,38 +166,22 @@ const bacteriaOnFilter = (
       data: data,
     };
   });
-
-  // console.log(result);
-  return result;
-};
-
-const virusOnFilter = (
-  results: ProcessedFileData[]
-): ProcessedFileData[] | any[] => {
-  let result: ProcessedFileData[] = results.map((file) => {
-    let data: Bacteria[] = file.data.filter((bacteria) => {
-      return bacteria.subjectGroup === 'VIRUS';
-    });
-
-    return {
-      fileName: file.fileName,
-      data: data,
-    };
-  });
-  return result;
+  return Promise.resolve(result);
 };
 
 /**
- *
+ * Filters out everything except subject group
  * @param results
+ * @param group
  * @returns
  */
-const plasmidOnFilter = (
-  results: ProcessedFileData[]
-): ProcessedFileData[] | any[] => {
+const groupOnFilter = async (
+  results: ProcessedFileData[],
+  group: string
+): Promise<any[] | ProcessedFileData[]> => {
   let result: ProcessedFileData[] = results.map((file) => {
     let data: Bacteria[] = file.data.filter((bacteria) => {
-      return bacteria.subjectGroup === 'PLASMID';
+      return bacteria.subjectGroup === group;
     });
 
     return {
@@ -224,28 +189,7 @@ const plasmidOnFilter = (
       data: data,
     };
   });
-  return result;
-};
-
-/**
- *
- * @param results
- * @returns
- */
-const hostOnFilter = (
-  results: ProcessedFileData[]
-): ProcessedFileData[] | any[] => {
-  let result: ProcessedFileData[] = results.map((file) => {
-    let data: Bacteria[] = file.data.filter((bacteria) => {
-      return bacteria.subjectGroup === 'HOST';
-    });
-
-    return {
-      fileName: file.fileName,
-      data: data,
-    };
-  });
-  return result;
+  return Promise.resolve(result);
 };
 
 /**
@@ -292,8 +236,6 @@ const topHitsFilter = (
   console.log(results);
   return Promise.resolve(results);
 };
-
-const hitThresholdFilter = () => {};
 
 /**
  * Reformats the processed data so bacteria name is id.
@@ -377,13 +319,14 @@ export const getGroupedDataArray = async (
   const result: GroupedReformatedData[] = [];
 
   let allGroup = await filterGroupData(results, filters, 'ALL');
+  console.log(allGroup);
   result.push(allGroup);
 
-  let spikeGroup = await filterGroupData(results, filters, 'SPIKES');
-  result.push(spikeGroup);
+  // let spikeGroup = await filterGroupData(results, filters, 'SPIKE');
+  // result.push(spikeGroup);
 
-  let hostGroup = await filterGroupData(results, filters, 'HOST');
-  result.push(hostGroup);
+  // let hostGroup = await filterGroupData(results, filters, 'HOST');
+  // result.push(hostGroup);
 
   let bacteriaGroup = await filterGroupData(results, filters, 'BACTERIA');
   result.push(bacteriaGroup);
@@ -410,26 +353,10 @@ export const filterGroupData = async (
   filters: FilterData,
   subjectGroup: string
 ): Promise<GroupedReformatedData> => {
-  let groupResults: ProcessedFileData[];
-  switch (subjectGroup) {
-    case 'SPIKES':
-      groupResults = spikesOnFilter(fullResults);
-      break;
-    case 'HOST':
-      groupResults = await hostOnFilter(fullResults);
-      break;
-    case 'BACTERIA':
-      groupResults = await bacteriaOnFilter(fullResults);
-      break;
-    case 'VIRUS':
-      groupResults = await virusOnFilter(fullResults);
-      break;
-    case 'PLASMID':
-      groupResults = await plasmidOnFilter(fullResults);
-      break;
-    default:
-      groupResults = fullResults;
-  }
+  let groupResults: ProcessedFileData[] =
+    subjectGroup === 'ALL'
+      ? await filterFullResults(fullResults, filters)
+      : await groupOnFilter(fullResults, subjectGroup);
 
   let groupDataFiltered = await topHitsFilter(filters, groupResults);
   let groupFormatted = await format(fullResults, groupDataFiltered);

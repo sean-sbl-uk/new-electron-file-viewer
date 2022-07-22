@@ -12,7 +12,16 @@ const dropdownStyle = {
 type Props = {
   groupedData: GroupedReformatedData;
   setLoading: (arg: boolean) => void;
+  colorIndex: number;
 };
+
+const colors: string[] = [
+  'green_blue',
+  'blue_purple',
+  'green',
+  'blue',
+  'plasma',
+];
 
 const ResultsCard: React.FC<Props> = (props) => {
   const [color, setColor] = useState<string>('blues');
@@ -20,7 +29,7 @@ const ResultsCard: React.FC<Props> = (props) => {
   const [showFiltering, setShowFiltering] = useState(false);
   const [data, setData] = useState<ReformatedData[]>([]);
 
-  const { groupedData, setLoading } = props;
+  const { groupedData, setLoading, colorIndex } = props;
   const group: string = groupedData.group;
   // const data: ReformatedData[] = groupedData.data;
 
@@ -28,6 +37,7 @@ const ResultsCard: React.FC<Props> = (props) => {
 
   useEffect(() => {
     setData(groupedData.data);
+    // setColor(colors[colorIndex]);
   }, []);
 
   const handleDropdownSelect = (e: any) => {
@@ -54,16 +64,6 @@ const ResultsCard: React.FC<Props> = (props) => {
     const spikes: Spikes[] = state?.spikeData?.data;
 
     if (fullResults) {
-      // let filtered = await filterResults(fullResults, spikes, filters);
-
-      // let reformatedDataArray: ReformatedData[] = await format(
-      //   fullResults,
-      //   filtered
-      // );
-
-      // setResults(reformatedDataArray);
-      console.log(filters);
-
       let results = await filterGroupData(fullResults, filters, group);
       setData(results.data);
     }
