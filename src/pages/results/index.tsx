@@ -2,11 +2,9 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '../../components/loader/Loader';
 import store, { RootState } from '../../redux/store';
-import { reformatData, groupData } from '../../utils';
-
+import { getGroupedDataArray } from '../../utils';
 import { Button, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-// import { FadeIn } from 'react-slide-fade-in';
 import FadeIn from 'react-fade-in';
 
 import { setResultsData } from '../../redux/results';
@@ -16,12 +14,8 @@ import ResultsCard from '../../components/resultsCard/ResultsCard';
 
 const Results = () => {
   const [loading, setLoading] = useState(true);
-  // const [results, setResults] = useState<ReformatedData[]>();
   const [groupedResults, setGroupedResults] =
     useState<GroupedReformatedData[]>();
-  const [showFiltering, setShowFiltering] = useState(false);
-  const [dataVisualization, setDataVisualization] = useState<string>('heatmap');
-  const [color, setColor] = useState<string>('blues');
 
   const allFileRecords = useSelector((state: RootState) => state.records.data);
   const allSpikeData = useSelector((state: RootState) => state.spikeData.data);
@@ -54,94 +48,23 @@ const Results = () => {
         minHitThreshold: 1,
       };
 
-      //make spikes an optional parameter
-      // let filtered = await filterResults(args, allSpikeData, filter);
+      let groupedDataArray = await getGroupedDataArray(args, filter);
 
-      // //After filtering add up all bacteria to set/unique list
-      // let reformatedDataArray: ReformatedData[] = await format(args, filtered);
-
-      // setResults(reformatedDataArray);
-      // setLoading(false);
-
-      //group subj group
-      let groupedRes = await groupData(args, allSpikeData, filter);
-
-      setGroupedResults(groupedRes);
+      setGroupedResults(groupedDataArray);
       setLoading(false);
     });
 
     ipcRenderer.sendMessage('analyse-files', args);
   }, []);
 
-  const format = async (
-    fullResults: ProcessedFileData[],
-    filtered: ProcessedFileData[]
-  ): Promise<ReformatedData[]> => {
-    let bacteriaSet: Set<Bacteria> = new Set();
-
-    filtered.forEach((file) => {
-      file.data.forEach((bacteria) => {
-        bacteriaSet.add(bacteria);
-      });
-    });
-
-    let reformatedDataArray: ReformatedData[] = await reformatData(
-      bacteriaSet,
-      fullResults
-    );
-
-    return reformatedDataArray;
-  };
-
   const handleBackOnClick = () => {
     dispatch(resetSpikeData());
     navigate('/main', { replace: true });
   };
 
-  // const handleOpenFiltering = () => {
-  //   setShowFiltering(true);
-  // };
-
-  // const handleCloseFiltering = () => {
-  //   setShowFiltering(false);
-  // };
-
-  // const handleFilterSubmit = async (filters: FilterData) => {
-  //   setLoading(true);
-  //   setShowFiltering(false);
-
-  //   const fullResults: ProcessedFileData[] = state?.results?.data;
-  //   const spikes: Spikes[] = state?.spikeData?.data;
-
-  //   if (fullResults) {
-  //     let filtered = await filterResults(fullResults, spikes, filters);
-
-  //     let reformatedDataArray: ReformatedData[] = await format(
-  //       fullResults,
-  //       filtered
-  //     );
-
-  //     setResults(reformatedDataArray);
-  //     setLoading(false);
-  //   }
-  // };
-
-  // const handleDropdownSelect = (e: any) => {
-  //   setDataVisualization(e);
-  // };
-
-  // const handleColorDropdown = (e: any) => {
-  //   setColor(e);
-  // };
-
-  // const dropdownStyle = {
-  //   width: '100%',
-  // };
-
   const content = (
     <div className="text-center results">
       {loading && <Loader />}
-      {/* {results && !loading && ( */}
       {groupedResults && !loading && (
         <>
           <FadeIn>
@@ -162,6 +85,7 @@ const Results = () => {
               </div>
 
               {/* After grouping map each to results card */}
+
               {console.log(groupedResults)}
               {groupedResults.map((group, index) => (
                 <ResultsCard

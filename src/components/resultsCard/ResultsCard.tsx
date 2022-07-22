@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Row, Col, Dropdown, DropdownButton } from 'react-bootstrap';
+import store, { RootState } from '../../redux/store';
+import { filterGroupData } from '../../utils';
 import Heatmap from '../heatmap/Heatmap';
 import Filters from '../filters/Filters';
 
@@ -16,10 +18,17 @@ const ResultsCard: React.FC<Props> = (props) => {
   const [color, setColor] = useState<string>('blues');
   const [dataVisualization, setDataVisualization] = useState<string>('heatmap');
   const [showFiltering, setShowFiltering] = useState(false);
+  const [data, setData] = useState<ReformatedData[]>([]);
 
   const { groupedData, setLoading } = props;
   const group: string = groupedData.group;
-  const data: ReformatedData[] = groupedData.data;
+  // const data: ReformatedData[] = groupedData.data;
+
+  const state = store.getState();
+
+  useEffect(() => {
+    setData(groupedData.data);
+  }, []);
 
   const handleDropdownSelect = (e: any) => {
     setDataVisualization(e);
@@ -40,11 +49,34 @@ const ResultsCard: React.FC<Props> = (props) => {
   const handleFilterSubmit = async (filters: FilterData) => {
     // setLoading(true);
     setShowFiltering(false);
+
+    const fullResults: ProcessedFileData[] = state?.results?.data;
+    const spikes: Spikes[] = state?.spikeData?.data;
+
+    if (fullResults) {
+      // let filtered = await filterResults(fullResults, spikes, filters);
+
+      // let reformatedDataArray: ReformatedData[] = await format(
+      //   fullResults,
+      //   filtered
+      // );
+
+      // setResults(reformatedDataArray);
+      console.log(filters);
+
+      let results = await filterGroupData(fullResults, filters, group);
+      setData(results.data);
+    }
   };
 
   const buttons = (
-    <div className="mt-4 mb-4">
-      <Row xs={1} md={6} lg={8} className="justify-content-start">
+    <div className="mt-5">
+      <Row
+        xs={1}
+        md={6}
+        lg={8}
+        className="justify-content-start align-items-center"
+      >
         <Col>
           <Button
             className="mr-1 btn-block"
