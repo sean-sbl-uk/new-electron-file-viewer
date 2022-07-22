@@ -358,6 +358,8 @@ export const filterGroupData = async (
       ? await filterFullResults(fullResults, filters)
       : await groupOnFilter(fullResults, subjectGroup);
 
+  //minHitThreshold here?
+
   let groupDataFiltered = await topHitsFilter(filters, groupResults);
   let groupFormatted = await format(fullResults, groupDataFiltered);
   let result: GroupedReformatedData = {
@@ -387,3 +389,16 @@ export const format = async (
 
   return reformatedDataArray;
 };
+
+// const minHitThreshold = async (filters: FilterData, groupData: ProcessedFileData[]) => {
+
+//   let result = groupData.map(file => {
+
+//     let data: Bacteria[] = file.data.filter((bacteria) => {
+//       return bacteria.estimatedTotalAmount >= filters.minHitThreshold
+//   }
+//   return {
+//     fileName: file.fileName,
+//     data: data
+//   }})
+// }}
