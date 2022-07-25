@@ -359,6 +359,9 @@ export const filterGroupData = async (
       : await groupOnFilter(fullResults, subjectGroup);
 
   //minHitThreshold here?
+  groupResults = await minHitThreshold(filters, groupResults);
+  console.log(filters);
+  console.log(groupResults);
 
   let groupDataFiltered = await topHitsFilter(filters, groupResults);
   let groupFormatted = await format(fullResults, groupDataFiltered);
@@ -390,15 +393,24 @@ export const format = async (
   return reformatedDataArray;
 };
 
-// const minHitThreshold = async (filters: FilterData, groupData: ProcessedFileData[]) => {
+/**
+ * Filters out reads that don't meet the min hit threshold
+ * @param filters
+ * @param groupData
+ */
+const minHitThreshold = async (
+  filters: FilterData,
+  groupData: ProcessedFileData[]
+): Promise<ProcessedFileData[]> => {
+  let result: ProcessedFileData[] = groupData.map((file) => {
+    let data: Bacteria[] = file.data.filter((bacteria) => {
+      return bacteria.estimatedTotalAmount >= filters.minHitThreshold;
+    });
 
-//   let result = groupData.map(file => {
-
-//     let data: Bacteria[] = file.data.filter((bacteria) => {
-//       return bacteria.estimatedTotalAmount >= filters.minHitThreshold
-//   }
-//   return {
-//     fileName: file.fileName,
-//     data: data
-//   }})
-// }}
+    return {
+      fileName: file.fileName,
+      data: data,
+    };
+  });
+  return Promise.resolve(result);
+};

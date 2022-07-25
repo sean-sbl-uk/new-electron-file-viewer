@@ -23,17 +23,34 @@ const colors: string[] = [
   'plasma',
 ];
 
+const defaultFilterData: FilterData = {
+  spikesOn: true,
+  bacteriaOn: true,
+  virusOn: true,
+  plasmidOn: true,
+  hostOn: true,
+  archaeaOn: true,
+  fungiOn: true,
+  protozoaOn: true,
+
+  topHits: '10',
+  minHitThreshold: 1,
+};
+
 const ResultsCard: React.FC<Props> = (props) => {
   const [color, setColor] = useState<string>('blues');
   const [dataVisualization, setDataVisualization] = useState<string>('heatmap');
   const [showFiltering, setShowFiltering] = useState(false);
   const [data, setData] = useState<ReformatedData[]>([]);
+  const [filterData, setFilterData] = useState<FilterData>(defaultFilterData);
 
   const { groupedData, setLoading, colorIndex } = props;
   const group: string = groupedData.group;
   // const data: ReformatedData[] = groupedData.data;
 
   const state = store.getState();
+
+  console.log(filterData);
 
   useEffect(() => {
     setData(groupedData.data);
@@ -61,11 +78,12 @@ const ResultsCard: React.FC<Props> = (props) => {
     setShowFiltering(false);
 
     const fullResults: ProcessedFileData[] = state?.results?.data;
-    const spikes: Spikes[] = state?.spikeData?.data;
+    // const spikes: Spikes[] = state?.spikeData?.data;
 
     if (fullResults) {
       let results = await filterGroupData(fullResults, filters, group);
       setData(results.data);
+      setFilterData(filters);
     }
   };
 
@@ -153,6 +171,7 @@ const ResultsCard: React.FC<Props> = (props) => {
         show={showFiltering}
         handleCloseFiltering={handleCloseFiltering}
         handleFilterSubmit={handleFilterSubmit}
+        filterData={filterData}
       />
     </div>
   );

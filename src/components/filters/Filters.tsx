@@ -12,25 +12,14 @@ type Props = {
   handleCloseFiltering: () => void;
   handleFilterSubmit: (filterData: any) => void;
   show: boolean;
+  filterData: FilterData;
 };
 
 const Filters: React.FC<Props> = (props) => {
-  const { handleCloseFiltering, handleFilterSubmit, show, group } = props;
+  const { handleCloseFiltering, handleFilterSubmit, show, group, filterData } =
+    props;
 
-  const [filterFormData, setFilterFormData] = useState<FilterData>({
-    spikesOn: true,
-    bacteriaOn: true,
-    virusOn: true,
-    plasmidOn: true,
-    hostOn: true,
-    archaeaOn: true,
-    fungiOn: true,
-    protozoaOn: true,
-    topHits: '10',
-    minHitThreshold: 1,
-  });
-
-  const selectOptions = ['10', '20', '50', 'All'];
+  const [filterFormData, setFilterFormData] = useState<FilterData>(filterData);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -53,6 +42,7 @@ const Filters: React.FC<Props> = (props) => {
     });
   };
 
+  let currentTopHits = filterFormData.topHits || 'DEFAULT';
   return (
     <BootstrapModal
       data-testid={'filter-modal'}
@@ -68,6 +58,7 @@ const Filters: React.FC<Props> = (props) => {
       </BootstrapModal.Header>
       <Form onSubmit={handleSubmit}>
         <BootstrapModal.Body>
+          {/* Checkboxes */}
           {group === 'ALL' && (
             <>
               <Row xs={1} md={4} lg={4} className="justify-content">
@@ -177,29 +168,31 @@ const Filters: React.FC<Props> = (props) => {
             </>
           )}
 
+          {/* Top hits */}
           <Form.Group className="mb-3">
             <Form.Select
-              defaultValue={'Top hits per cell'}
               onChange={onFormChange}
               name="topHits"
+              placeholder="Top hits/cells per ml"
+              aria-label="Top hits/cells per ml"
+              value={currentTopHits}
             >
-              <option className="d-none form-text" value="">
-                {' '}
-                Top hits/cells per ml
+              <option value="DEFAULT" disabled>
+                Top Hits/cells per ml...
               </option>
-              {selectOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+              <option value={'All'}>All</option>
             </Form.Select>
           </Form.Group>
+
+          {/* Hit threshold */}
           <Form.Group className="mb-3 main-color">
             <Form.Control
-              name="hitThreshold"
+              name="minHitThreshold"
               type="number"
               placeholder="Min hit Threshold"
-              disabled
               onChange={onFormChange}
             ></Form.Control>
           </Form.Group>
