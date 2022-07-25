@@ -14,18 +14,34 @@ describe('filter modal', () => {
   const handleCloseFiltering = jest.fn();
   const handleFilterSubmit = jest.fn();
 
+  const filterData = {
+    spikesOn: true,
+    bacteriaOn: true,
+    virusOn: true,
+    plasmidOn: true,
+    hostOn: true,
+    archaeaOn: true,
+    fungiOn: true,
+    protozoaOn: true,
+
+    topHits: '10',
+    minHitThreshold: 1,
+  };
+
   it('should render', () => {
     const { getByTestId, getByText } = render(
       <Provider store={store}>
         <Filters
+          group="Test"
           handleCloseFiltering={mockFunc}
           handleFilterSubmit={mockFunc}
           show={true}
+          filterData={filterData}
         />
       </Provider>
     );
 
-    expect(getByText('Filters')).toBeInTheDocument();
+    expect(getByText('Test Filters')).toBeInTheDocument();
   });
 
   it('should show dropdown for top hits', () => {
@@ -35,11 +51,12 @@ describe('filter modal', () => {
           handleCloseFiltering={mockFunc}
           handleFilterSubmit={mockFunc}
           show={true}
+          filterData={filterData}
         />
       </Provider>
     );
 
-    const dropdown = getByText('Top hits/cells per ml');
+    const dropdown = getByText('Top Hits/cells per ml...');
     fireEvent.click(dropdown);
 
     expect(getByText('20')).toBeInTheDocument();
@@ -53,6 +70,7 @@ describe('filter modal', () => {
         handleCloseFiltering={handleCloseFiltering}
         handleFilterSubmit={handleFilterSubmit}
         show={true}
+        filterData={filterData}
       />
     );
 
@@ -68,6 +86,7 @@ describe('filter modal', () => {
         handleCloseFiltering={handleCloseFiltering}
         handleFilterSubmit={handleFilterSubmit}
         show={true}
+        filterData={filterData}
       />
     );
 

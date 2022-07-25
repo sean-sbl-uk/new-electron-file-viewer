@@ -126,6 +126,7 @@ const Modal: React.FC<Props> = (props) => {
             placeholder="TaxId"
             onChange={onFormChange}
             defaultValue={defaultSpike ? defaultSpike.taxId : undefined}
+            className="main-color"
           ></Form.Control>
 
           <Form.Control.Feedback type="invalid">
@@ -143,6 +144,7 @@ const Modal: React.FC<Props> = (props) => {
             placeholder="Cells per ml"
             onChange={onFormChange}
             defaultValue={defaultSpike ? defaultSpike.cellsPerMl : undefined}
+            className="main-color"
           ></Form.Control>
           <Form.Control.Feedback type="invalid">
             Provide cells per ml
@@ -159,6 +161,7 @@ const Modal: React.FC<Props> = (props) => {
             placeholder="Genome Size"
             onChange={onFormChange}
             defaultValue={defaultSpike ? defaultSpike.genomeSize : undefined}
+            className="main-color"
           ></Form.Control>
           <Form.Control.Feedback type="invalid">
             Provide genome size
@@ -203,6 +206,7 @@ const Modal: React.FC<Props> = (props) => {
       centered
       show={show}
       onHide={handleCloseModal}
+      className="main-color"
     >
       <BootstrapModal.Header closeButton>
         <BootstrapModal.Title className="main-color font-bebas-neue">
