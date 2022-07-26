@@ -46,6 +46,8 @@ ipcMain.on(
       fileArray.map(async (fileObject: FileWithPath | any) => {
         let filePath = fileObject.path;
 
+        event.reply('feedback', `Reading File: ${filePath}`);
+
         //Read each file with csv parser
         let fileRecords = await new Promise<FileRecords>((res, rej) => {
           let recordArray: FileRecord[] = [];
@@ -63,6 +65,7 @@ ipcMain.on(
               recordArray.push(record);
             })
             .on('end', () => {
+              event.reply('feedback', `Returning all file records`);
               const result: FileRecords = {
                 fileName: filePath.trim(),
                 records: recordArray,
@@ -77,6 +80,7 @@ ipcMain.on(
     );
 
     //perform logic on array of file records
+    event.reply('feedback', `Processing Files`);
     let processedFileData: ProcessedFileData[] = await processAllFiles(
       results,
       allSpikeData
