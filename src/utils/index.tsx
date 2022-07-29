@@ -1,3 +1,5 @@
+import { FileWithPath } from 'react-dropzone';
+
 /**
  * Process each individual file with using multiple spikes
  * @param spikeData
@@ -204,8 +206,7 @@ const topHitsFilter = (
 ): Promise<ProcessedFileData[]> => {
   if (filters.topHits == 'All') {
     //REMOVE
-    console.log(filters.topHits);
-    console.log(results);
+
     return Promise.resolve(results);
   }
 
@@ -319,14 +320,8 @@ export const getGroupedDataArray = async (
   const result: GroupedReformatedData[] = [];
 
   let allGroup = await filterGroupData(results, filters, 'ALL');
-  console.log(allGroup);
+
   result.push(allGroup);
-
-  // let spikeGroup = await filterGroupData(results, filters, 'SPIKE');
-  // result.push(spikeGroup);
-
-  // let hostGroup = await filterGroupData(results, filters, 'HOST');
-  // result.push(hostGroup);
 
   let bacteriaGroup = await filterGroupData(results, filters, 'BACTERIA');
   result.push(bacteriaGroup);
@@ -360,8 +355,6 @@ export const filterGroupData = async (
 
   //minHitThreshold here?
   groupResults = await minHitThreshold(filters, groupResults);
-  console.log(filters);
-  console.log(groupResults);
 
   let groupDataFiltered = await topHitsFilter(filters, groupResults);
   let groupFormatted = await format(fullResults, groupDataFiltered);

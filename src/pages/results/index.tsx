@@ -15,6 +15,7 @@ const Results = () => {
   const [loading, setLoading] = useState(true);
   const [groupedResults, setGroupedResults] =
     useState<GroupedReformatedData[]>();
+  const [feedback, setFeedback] = useState<string>('');
 
   const allSpikeData = useSelector((state: RootState) => state.spikeData.data);
 
@@ -31,6 +32,11 @@ const Results = () => {
       fileArray,
       allSpikeData,
     };
+
+    ipcRenderer.on('feedback', (args) => {
+      console.log(args);
+      setFeedback(args);
+    });
 
     ipcRenderer.on('analyse-files-reply', async (args: ProcessedFileData[]) => {
       dispatch(setResultsData(args));
@@ -65,7 +71,9 @@ const Results = () => {
 
   const content = (
     <div className="text-center results">
-      {loading && <Loader />}
+
+      {loading && <Loader feedback={feedback} />}
+
       {groupedResults && !loading && (
         <>
           <FadeIn>
