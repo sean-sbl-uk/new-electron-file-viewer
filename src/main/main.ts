@@ -43,12 +43,10 @@ const readFile = (event: any, fileObject: FileWithPath | any) => {
       })
       .pipe(csvParser({ separator: '\t' }))
       .on('data', (row: any) => {
-        event.reply('feedback', `Parsing row: ${row.id}`);
+        // delete row.id;
+        // let record: FileRecord = row;
 
-        delete row.id;
-        let record: FileRecord = row;
-
-        recordArray.push(record);
+        recordArray.push(row);
       })
       .on('end', () => {
         event.reply(
@@ -83,60 +81,6 @@ ipcMain.on(
   'analyse-files',
   async (event: any, args: { fileArray: any[]; allSpikeData: Spikes[] }) => {
     const { fileArray, allSpikeData } = args;
-
-    //process each file
-    // let results = await Promise.all(
-    //   fileArray.map((fileObject: FileWithPath | any) => {
-    //     let filePath = fileObject.path;
-
-    //     event.reply('feedback', `Reading File: ${filePath}`); //
-
-    //     Read each file with csv parser
-    //     let fileRecords = new Promise<FileRecords>((res, rej) => {
-    //       let recordArray: FileRecord[] = [];
-
-    //       fs.createReadStream(filePath, 'utf8')
-    //         .on('error', (err: Error) => {
-    //           console.log(err);
-    //           rej(err);
-    //         })
-    //         .pipe(csvParser({ separator: '\t' }))
-    //         .on('data', (row: any) => {
-    //           delete row.id;
-    //           let record: FileRecord = row;
-
-    //           recordArray.push(record);
-    //         })
-    //         .on('end', () => {
-    //           event.reply(
-    //             'feedback',
-    //             `Creating records array for: ${filePath.trim()}`
-    //           ); //
-    //           const result: FileRecords = {
-    //             fileName: filePath.trim(),
-    //             records: recordArray,
-    //           };
-    //           event.reply(
-    //             'feedback',
-    //             `Resolving promise for: ${filePath.trim()}`
-    //           ); //
-    //           res(result);
-    //         });
-    //     });
-
-    //     event.reply(
-    //       'feedback',
-    //       `Returning all fileRecords from \n ${filePath.trim()}`
-    //     );
-    //     return fileRecords;
-    //   })
-    // );
-
-    // let results: FileRecords[] = [];
-    // await fileArray.forEach(async (file) => {
-    //   let element: FileRecords = await readFile(event, file);
-    //   results.push(element);
-    // });
 
     let results: FileRecords[] = [];
 

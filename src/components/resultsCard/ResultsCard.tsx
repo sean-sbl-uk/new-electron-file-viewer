@@ -50,11 +50,8 @@ const ResultsCard: React.FC<Props> = (props) => {
 
   const state = store.getState();
 
-  // console.log(filterData);
-
   useEffect(() => {
     setData(groupedData.data);
-    // setColor(colors[colorIndex]);
   }, []);
 
   const handleDropdownSelect = (e: any) => {
