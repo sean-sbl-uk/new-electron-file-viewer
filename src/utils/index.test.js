@@ -3,6 +3,8 @@ import {
   filterResults,
   processEachFileMultipleSpikes,
   reformatData,
+  filterFullResults,
+  filterGroupData,
 } from './index';
 
 describe('utils methods', () => {
@@ -66,6 +68,33 @@ describe('utils methods', () => {
     },
   ];
 
+  test('check filterGroupData', async () => {
+    let filter = {
+      spikesOn: true,
+      bacteriaOn: true,
+      virusOn: true,
+      plasmidOn: true,
+      hostOn: true,
+      archaeaOn: true,
+      protozoaOn: true,
+      fungiOn: true,
+      topHits: '10',
+      minHitThreshold: 4,
+      scaleOpt: 'logarithmic',
+    };
+
+    let results = await filterGroupData(processedFileDataArray, filter, 'ALL');
+
+    //Should filter out bacteria with estimatedTotalAmount lower than minHitThreshold
+    expect(results.data.length === 3);
+
+    filter.topHits = '2';
+    let results2 = await filterGroupData(processedFileDataArray, filter, 'ALL');
+
+    //Should leave only the top 2 highest scoring bacteria
+    expect(results.data.length === 2);
+  });
+
   test('check data reformatting', async () => {
     let bacteriaSet = new Set(bacteriaArray);
 
@@ -90,60 +119,6 @@ describe('utils methods', () => {
         }),
       ]);
     });
-  });
-
-  test('test filtering top hits with spikes included', async () => {
-    const filters = {
-      spikesOn: true,
-      topHits: '3',
-      minHitThreshold: 1,
-    };
-
-    const spikeBacteria = {
-      name: 'bacteria6',
-      taxId: '6',
-      recoveredAmount: 6,
-      estimatedTotalAmount: 6,
-      subjectLength: 6,
-    };
-
-    return filterResults(processedFileDataArray, spikes, filters).then(
-      (data) => {
-        data.forEach((file) => {
-          //tests the top hits
-          expect(file.data.length).toBe(3);
-
-          //checks spike is in result
-          expect(file.data).toEqual(
-            expect.arrayContaining([expect.objectContaining(spikeBacteria)])
-          );
-        });
-      }
-    );
-  });
-
-  test('test filtering out spikes', async () => {
-    const spikesOffFilter = {
-      spikesOn: false,
-      topHits: '3',
-      minHitThreshold: 1,
-    };
-
-    const spikeBacteria = {
-      name: 'bacteria1',
-      taxId: '1',
-      recoveredAmount: 1,
-      estimatedTotalAmount: 1,
-      subjectLength: 1,
-    };
-
-    return filterResults(processedFileDataArray, spikes, spikesOffFilter).then(
-      (data) => {
-        data.forEach((file) => {
-          expect(file.data).not.toContain(spikeBacteria);
-        });
-      }
-    );
   });
 
   test('test individual file processing returns correct data', () => {
