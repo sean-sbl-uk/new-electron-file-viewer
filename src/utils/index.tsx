@@ -208,6 +208,7 @@ const topHitsFilter = (
   results: ProcessedFileData[]
 ): Promise<ProcessedFileData[]> => {
   if (filters.topHits == 'All') {
+
     return Promise.resolve(results);
   }
 
@@ -233,6 +234,9 @@ const topHitsFilter = (
     return result;
   });
 
+  //REMOVE
+  console.log(filters.topHits);
+  console.log(results);
   return Promise.resolve(results);
 };
 
@@ -377,6 +381,7 @@ export const format = async (
   fullResults: ProcessedFileData[],
   filtered: ProcessedFileData[],
   scaleOpt: string
+
 ): Promise<ReformatedData[]> => {
   let bacteriaSet: Set<Bacteria> = new Set();
 

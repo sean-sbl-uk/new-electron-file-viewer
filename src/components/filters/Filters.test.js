@@ -26,6 +26,7 @@ describe('filter modal', () => {
     topHits: '10',
     minHitThreshold: 1,
     scaleOpt: 'logarithmic',
+
   };
 
   it('should render', () => {

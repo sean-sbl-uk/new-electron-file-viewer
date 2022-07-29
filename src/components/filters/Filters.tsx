@@ -43,7 +43,9 @@ const Filters: React.FC<Props> = (props) => {
   };
 
   let currentTopHits = filterFormData.topHits || 'DEFAULT';
+
   let currentScaleOpt = filterFormData.scaleOpt || 'DEAFAULT';
+
   return (
     <BootstrapModal
       data-testid={'filter-modal'}
