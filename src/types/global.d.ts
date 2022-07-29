@@ -28,6 +28,7 @@ declare type Bacteria = {
   taxId: string;
   recoveredAmount: number;
   estimatedTotalAmount: number;
+  estimatedTotalAmountLog10: number;
   subjectLength: number;
   subjectGroup: string;
 };
@@ -71,6 +72,7 @@ declare type FilterData = {
   protozoaOn: boolean;
   topHits: string;
   minHitThreshold: number;
+  scaleOpt: string;
 };
 
 interface Window {

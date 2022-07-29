@@ -32,9 +32,9 @@ const defaultFilterData: FilterData = {
   archaeaOn: true,
   fungiOn: true,
   protozoaOn: true,
-
   topHits: '10',
   minHitThreshold: 1,
+  scaleOpt: 'logarithmic',
 };
 
 const ResultsCard: React.FC<Props> = (props) => {
@@ -51,7 +51,6 @@ const ResultsCard: React.FC<Props> = (props) => {
   // const data: ReformatedData[] = groupedData.data;
 
   const state = store.getState();
-
 
   useEffect(() => {
     setData(groupedData.data);

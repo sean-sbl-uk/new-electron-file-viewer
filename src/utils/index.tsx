@@ -46,6 +46,7 @@ export const processEachFileMultipleSpikes = (
         subjectLength: Number(record.subjectLen),
         recoveredAmount: Number(record.queryLen),
         estimatedTotalAmount: 0,
+        estimatedTotalAmountLog10: 0,
         subjectGroup: record.subjectGroup,
       };
       bacteriaArray.push(newBacteria);
@@ -61,11 +62,13 @@ export const processEachFileMultipleSpikes = (
     }
   });
 
-  bacteriaArray.forEach(
-    (bacteria) =>
-      (bacteria.estimatedTotalAmount =
-        (bacteria.recoveredAmount * recoveryRatio) / bacteria.subjectLength)
-  );
+  bacteriaArray.forEach((bacteria) => {
+    bacteria.estimatedTotalAmount =
+      (bacteria.recoveredAmount * recoveryRatio) / bacteria.subjectLength;
+    bacteria.estimatedTotalAmountLog10 = Math.log10(
+      (bacteria.recoveredAmount * recoveryRatio) / bacteria.subjectLength
+    );
+  });
 
   //remove bad records
   bacteriaArray = bacteriaArray.filter(
@@ -205,7 +208,6 @@ const topHitsFilter = (
   results: ProcessedFileData[]
 ): Promise<ProcessedFileData[]> => {
   if (filters.topHits == 'All') {
-    //REMOVE
 
     return Promise.resolve(results);
   }
@@ -248,12 +250,17 @@ const topHitsFilter = (
  */
 export const reformatData = (
   bacteriaSet: Set<Bacteria>,
-  fullResults: ProcessedFileData[]
+  fullResults: ProcessedFileData[],
+  scaleOpt: string
 ): Promise<ReformatedData[]> => {
   let reformatedDataArray: ReformatedData[] = [];
 
   bacteriaSet.forEach((bacteria) => {
-    let dataArr: FileWithBacteriaAmount[] = fillInGaps(bacteria, fullResults);
+    let dataArr: FileWithBacteriaAmount[] = fillInGaps(
+      bacteria,
+      fullResults,
+      scaleOpt
+    );
 
     //create final obj
     let reformedDataElement: ReformatedData = {
@@ -276,9 +283,9 @@ export const reformatData = (
  */
 const fillInGaps = (
   bacteria: Bacteria,
-  fullResults: ProcessedFileData[]
+  fullResults: ProcessedFileData[],
+  scaleOptions: string
 ): FileWithBacteriaAmount[] => {
-  // const result: FileWithBacteriaAmount;
   let dataArr: FileWithBacteriaAmount[] = [];
 
   fullResults.forEach((fileData) => {
@@ -299,10 +306,12 @@ const fillInGaps = (
           }
         : {
             fileName: fileData.fileName,
-            amount: fileBacteriaObj.estimatedTotalAmount,
+            amount:
+              scaleOptions === 'linear'
+                ? fileBacteriaObj.estimatedTotalAmount
+                : fileBacteriaObj.estimatedTotalAmountLog10,
           };
 
-    //add to array
     dataArr.push(fileWithBacteriaAmount);
   });
 
@@ -353,11 +362,13 @@ export const filterGroupData = async (
       ? await filterFullResults(fullResults, filters)
       : await groupOnFilter(fullResults, subjectGroup);
 
-  //minHitThreshold here?
   groupResults = await minHitThreshold(filters, groupResults);
 
   let groupDataFiltered = await topHitsFilter(filters, groupResults);
-  let groupFormatted = await format(fullResults, groupDataFiltered);
+
+  let scaleOpt: string = filters.scaleOpt;
+  let groupFormatted = await format(fullResults, groupDataFiltered, scaleOpt);
+
   let result: GroupedReformatedData = {
     group: subjectGroup,
     data: groupFormatted,
@@ -368,7 +379,9 @@ export const filterGroupData = async (
 
 export const format = async (
   fullResults: ProcessedFileData[],
-  filtered: ProcessedFileData[]
+  filtered: ProcessedFileData[],
+  scaleOpt: string
+
 ): Promise<ReformatedData[]> => {
   let bacteriaSet: Set<Bacteria> = new Set();
 
@@ -380,7 +393,8 @@ export const format = async (
 
   let reformatedDataArray: ReformatedData[] = await reformatData(
     bacteriaSet,
-    fullResults
+    fullResults,
+    scaleOpt
   );
 
   return reformatedDataArray;

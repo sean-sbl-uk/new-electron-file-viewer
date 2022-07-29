@@ -23,9 +23,10 @@ describe('filter modal', () => {
     archaeaOn: true,
     fungiOn: true,
     protozoaOn: true,
-
     topHits: '10',
     minHitThreshold: 1,
+    scaleOpt: 'logarithmic',
+
   };
 
   it('should render', () => {
@@ -62,6 +63,25 @@ describe('filter modal', () => {
     expect(getByText('20')).toBeInTheDocument();
     expect(getByText('50')).toBeInTheDocument();
     expect(getByText('All')).toBeInTheDocument();
+  });
+
+  it('should show scale options', () => {
+    const { getByText, getByTestId } = render(
+      <Provider store={store}>
+        <Filters
+          handleCloseFiltering={mockFunc}
+          handleFilterSubmit={mockFunc}
+          show={true}
+          filterData={filterData}
+        />
+      </Provider>
+    );
+
+    const dropdown = getByTestId('scale-options');
+    fireEvent.click(dropdown);
+
+    expect(getByText('Logarithmic scale (base-10)'));
+    expect(getByText('Linear scale'));
   });
 
   it('should call filter submit method on submit', () => {

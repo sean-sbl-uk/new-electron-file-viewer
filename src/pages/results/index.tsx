@@ -53,6 +53,7 @@ const Results = () => {
         fungiOn: true,
         topHits: '10',
         minHitThreshold: 1,
+        scaleOpt: 'logarithmic',
       };
 
       let groupedDataArray = await getGroupedDataArray(args, filter);

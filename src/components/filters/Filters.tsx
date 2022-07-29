@@ -43,6 +43,9 @@ const Filters: React.FC<Props> = (props) => {
   };
 
   let currentTopHits = filterFormData.topHits || 'DEFAULT';
+
+  let currentScaleOpt = filterFormData.scaleOpt || 'DEAFAULT';
+
   return (
     <BootstrapModal
       data-testid={'filter-modal'}
@@ -195,6 +198,18 @@ const Filters: React.FC<Props> = (props) => {
               placeholder="Min hit Threshold"
               onChange={onFormChange}
             ></Form.Control>
+          </Form.Group>
+          <Form.Group>
+            <Form.Select
+              name="scaleOpt"
+              placeholder="Scale Options"
+              onChange={onFormChange}
+              value={currentScaleOpt}
+              data-testid="scale-options"
+            >
+              <option value="linear">Linear scale</option>
+              <option value="logarithmic">Logarithmic scale (base-10)</option>
+            </Form.Select>
           </Form.Group>
         </BootstrapModal.Body>
         <BootstrapModal.Footer>
