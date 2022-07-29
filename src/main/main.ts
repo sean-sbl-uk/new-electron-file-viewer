@@ -27,6 +27,47 @@ export default class AppUpdater {
   }
 }
 
+const readFile = (event: any, fileObject: FileWithPath | any) => {
+  let filePath = fileObject.path;
+
+  event.reply('feedback', `Reading File: ${filePath}`);
+
+  //Read each file with csv parser
+  let fileRecords = new Promise<FileRecords>((res, rej) => {
+    let recordArray: FileRecord[] = [];
+
+    fs.createReadStream(filePath, 'utf8')
+      .on('error', (err: Error) => {
+        console.log(err);
+        rej(err);
+      })
+      .pipe(csvParser({ separator: '\t' }))
+      .on('data', (row: any) => {
+        // delete row.id;
+        // let record: FileRecord = row;
+
+        recordArray.push(row);
+      })
+      .on('end', () => {
+        event.reply(
+          'feedback',
+          `Creating records array for: ${filePath.trim()}`
+        );
+        const result: FileRecords = {
+          fileName: filePath.trim(),
+          records: recordArray,
+        };
+        event.reply(
+          'feedback',
+          `Returning all fileRecords from \n ${filePath.trim()}`
+        );
+        res(result);
+      });
+  });
+
+  return fileRecords;
+};
+
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
@@ -41,46 +82,20 @@ ipcMain.on(
   async (event: any, args: { fileArray: any[]; allSpikeData: Spikes[] }) => {
     const { fileArray, allSpikeData } = args;
 
-    //process each file
-    let results = await Promise.all(
-      fileArray.map(async (fileObject: FileWithPath | any) => {
-        let filePath = fileObject.path;
+    let results: FileRecords[] = [];
 
-        //Read each file with csv parser
-        let fileRecords = await new Promise<FileRecords>((res, rej) => {
-          let recordArray: FileRecord[] = [];
-
-          fs.createReadStream(filePath, 'utf8')
-            .on('error', (err: Error) => {
-              console.log(err);
-              rej(err);
-            })
-            .pipe(csvParser({ separator: '\t' }))
-            .on('data', (row: any) => {
-              delete row.id;
-              let record: FileRecord = row;
-
-              recordArray.push(record);
-            })
-            .on('end', () => {
-              const result: FileRecords = {
-                fileName: filePath.trim(),
-                records: recordArray,
-              };
-
-              res(result);
-            });
-        });
-
-        return fileRecords;
-      })
-    );
+    for (let file of fileArray) {
+      let element: FileRecords = await readFile(event, file);
+      results.push(element);
+    }
 
     //perform logic on array of file records
+    event.reply('feedback', `Calculating results`); // Not slow
     let processedFileData: ProcessedFileData[] = await processAllFiles(
       results,
       allSpikeData
     );
+    event.reply('feedback', 'Responding with processed file data');
 
     event.reply('analyse-files-reply', processedFileData);
   }

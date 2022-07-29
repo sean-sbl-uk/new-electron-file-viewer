@@ -28,6 +28,7 @@ declare type Bacteria = {
   taxId: string;
   recoveredAmount: number;
   estimatedTotalAmount: number;
+  estimatedTotalAmountLog10: number;
   subjectLength: number;
   subjectGroup: string;
 };
@@ -49,6 +50,12 @@ declare type ReformatedData = {
   data: FileWithBacteriaAmount[];
 };
 
+//Use array of this to map each group to separate heatmap
+declare type GroupedReformatedData = {
+  group: string;
+  data: ReformatedData[];
+};
+
 declare type FileWithBacteriaAmount = {
   fileName: string;
   amount: number;
@@ -60,8 +67,12 @@ declare type FilterData = {
   virusOn: boolean;
   plasmidOn: boolean;
   hostOn: boolean;
+  archaeaOn: boolean;
+  fungiOn: boolean;
+  protozoaOn: boolean;
   topHits: string;
   minHitThreshold: number;
+  scaleOpt: string;
 };
 
 interface Window {
