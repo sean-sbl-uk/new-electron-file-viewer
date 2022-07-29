@@ -204,8 +204,8 @@ const topHitsFilter = (
 ): Promise<ProcessedFileData[]> => {
   if (filters.topHits == 'All') {
     //REMOVE
-    console.log(filters.topHits);
-    console.log(results);
+    // console.log(filters.topHits);
+    // console.log(results);
     return Promise.resolve(results);
   }
 
@@ -232,8 +232,8 @@ const topHitsFilter = (
   });
 
   //REMOVE
-  console.log(filters.topHits);
-  console.log(results);
+  // console.log(filters.topHits);
+  // console.log(results);
   return Promise.resolve(results);
 };
 
@@ -319,7 +319,7 @@ export const getGroupedDataArray = async (
   const result: GroupedReformatedData[] = [];
 
   let allGroup = await filterGroupData(results, filters, 'ALL');
-  console.log(allGroup);
+  // console.log(allGroup);
   result.push(allGroup);
 
   // let spikeGroup = await filterGroupData(results, filters, 'SPIKE');
@@ -360,8 +360,8 @@ export const filterGroupData = async (
 
   //minHitThreshold here?
   groupResults = await minHitThreshold(filters, groupResults);
-  console.log(filters);
-  console.log(groupResults);
+  // console.log(filters);
+  // console.log(groupResults);
 
   let groupDataFiltered = await topHitsFilter(filters, groupResults);
   let groupFormatted = await format(fullResults, groupDataFiltered);
