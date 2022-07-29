@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { HeatMapCanvas } from '@nivo/heatmap';
+import { group } from 'console';
 
 interface DataObj {
   x: string;

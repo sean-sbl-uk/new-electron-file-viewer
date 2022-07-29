@@ -206,8 +206,7 @@ const topHitsFilter = (
 ): Promise<ProcessedFileData[]> => {
   if (filters.topHits == 'All') {
     //REMOVE
-    // console.log(filters.topHits);
-    // console.log(results);
+
     return Promise.resolve(results);
   }
 
@@ -233,6 +232,9 @@ const topHitsFilter = (
     return result;
   });
 
+  //REMOVE
+  console.log(filters.topHits);
+  console.log(results);
   return Promise.resolve(results);
 };
 
@@ -318,7 +320,7 @@ export const getGroupedDataArray = async (
   const result: GroupedReformatedData[] = [];
 
   let allGroup = await filterGroupData(results, filters, 'ALL');
-  // console.log(allGroup);
+
   result.push(allGroup);
 
   let bacteriaGroup = await filterGroupData(results, filters, 'BACTERIA');

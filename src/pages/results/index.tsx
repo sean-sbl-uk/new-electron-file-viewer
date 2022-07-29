@@ -71,7 +71,9 @@ const Results = () => {
 
   const content = (
     <div className="text-center results">
+
       {loading && <Loader feedback={feedback} />}
+
       {groupedResults && !loading && (
         <>
           <FadeIn>

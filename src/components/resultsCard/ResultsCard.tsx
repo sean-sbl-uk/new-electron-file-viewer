@@ -38,7 +38,9 @@ const defaultFilterData: FilterData = {
 };
 
 const ResultsCard: React.FC<Props> = (props) => {
+
   const [color, setColor] = useState<string>('green_blue');
+
   const [dataVisualization, setDataVisualization] = useState<string>('heatmap');
   const [showFiltering, setShowFiltering] = useState(false);
   const [data, setData] = useState<ReformatedData[]>([]);
@@ -50,8 +52,10 @@ const ResultsCard: React.FC<Props> = (props) => {
 
   const state = store.getState();
 
+
   useEffect(() => {
     setData(groupedData.data);
+
   }, []);
 
   const handleDropdownSelect = (e: any) => {
